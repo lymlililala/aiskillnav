@@ -7,11 +7,7 @@ export const metadata = {
 
 export default function Page() {
   return (
-    <PageContainer
-      scrollable
-      pageTitle='Multi-Step Form'
-      pageDescription='Multi-step wizard form pattern.'
-    >
+    <PageContainer pageTitle='Multi-Step Form' pageDescription='Multi-step wizard form pattern.'>
       <FormsShowcasePage />
     </PageContainer>
   );

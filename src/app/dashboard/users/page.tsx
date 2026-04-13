@@ -19,7 +19,6 @@ export default async function UsersPage(props: PageProps) {
 
   return (
     <PageContainer
-      scrollable={false}
       pageTitle='Users'
       pageDescription='Manage users (React Query + nuqs table pattern.)'
       infoContent={usersInfoContent}

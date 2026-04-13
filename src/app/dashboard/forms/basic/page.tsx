@@ -8,7 +8,6 @@ export const metadata = {
 export default function Page() {
   return (
     <PageContainer
-      scrollable
       pageTitle='Basic Form'
       pageDescription='A comprehensive form demo with all field types.'
     >

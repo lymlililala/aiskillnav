@@ -8,7 +8,6 @@ export const metadata = {
 export default function Page() {
   return (
     <PageContainer
-      scrollable
       pageTitle='Advanced Form Patterns'
       pageDescription='Linked fields, async validation, dynamic rows, nested objects, cross-field validation, and form-level errors.'
     >

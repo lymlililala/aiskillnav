@@ -61,7 +61,6 @@ export default function NotificationsPage() {
 
   return (
     <PageContainer
-      scrollable
       pageTitle='Notifications'
       pageDescription='View and manage all your notifications.'
       pageHeaderAction={

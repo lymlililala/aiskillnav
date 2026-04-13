@@ -22,7 +22,6 @@ export default async function Page(props: pageProps) {
 
   return (
     <PageContainer
-      scrollable={false}
       pageTitle='Products'
       pageDescription='Manage products (React Query + nuqs table pattern.)'
       infoContent={productInfoContent}

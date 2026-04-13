@@ -8,7 +8,6 @@ export const metadata = {
 export default function Page() {
   return (
     <PageContainer
-      scrollable
       pageTitle='Sheet & Dialog Forms'
       pageDescription='Form patterns inside sheets and dialogs with external submit buttons.'
     >

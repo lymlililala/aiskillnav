@@ -19,7 +19,6 @@ export default function ReactQueryPage() {
 
   return (
     <PageContainer
-      scrollable
       pageTitle='React Query'
       pageDescription='Server prefetch + client hydration + suspense query pattern.'
       infoContent={reactQueryInfoContent}
