@@ -224,8 +224,7 @@ function Infobar({
   variant?: 'sidebar' | 'floating' | 'inset';
   collapsible?: 'offcanvas' | 'icon' | 'none';
 }) {
-  const { isMobile, state, open, setOpen, openMobile, setOpenMobile, isPathnameChanging } =
-    useInfobar();
+  const { isMobile, state, setOpen, openMobile, setOpenMobile, isPathnameChanging } = useInfobar();
 
   if (collapsible === 'none') {
     return (
