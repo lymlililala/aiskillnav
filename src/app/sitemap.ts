@@ -290,6 +290,50 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.91
     },
+    // Tutorials 详情页 — 新增（2026-05-18）SEO/GEO 优化批次
+    {
+      url: `${BASE_URL}/tutorials/claude-code-complete-tutorial-2026`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.94
+    },
+    {
+      url: `${BASE_URL}/tutorials/windsurf-vs-cursor-vs-claude-code-2026`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.93
+    },
+    {
+      url: `${BASE_URL}/tutorials/ai-agent-workflow-automation-2026`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.93
+    },
+    {
+      url: `${BASE_URL}/tutorials/openai-o3-practical-guide-2026`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.92
+    },
+    {
+      url: `${BASE_URL}/tutorials/autogen-multi-agent-tutorial-2026`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.91
+    },
+    // News 详情页 — 新增（2026-05-18）SEO/GEO 优化批次
+    {
+      url: `${BASE_URL}/news/ai-agent-security-risks-2026`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.93
+    },
+    {
+      url: `${BASE_URL}/news/best-ai-coding-tools-2026-comprehensive`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.94
+    },
     // 通用页面
     {
       url: `${BASE_URL}/about`,
