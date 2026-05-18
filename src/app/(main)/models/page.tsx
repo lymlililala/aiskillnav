@@ -154,11 +154,31 @@ export default async function ModelsPage() {
     getModelStats()
   ]);
 
+  // ItemList 结构化数据
+  const itemListJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'AI 模型对比 — 主流大模型横向评测',
+    url: 'https://aiskillnav.com/models',
+    description: '主流 AI 模型横向对比：能力评分、价格、上下文窗口与 Benchmark 排名',
+    numberOfItems: models.length,
+    itemListElement: models.map((m, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: m.url,
+      name: m.name
+    }))
+  };
+
   return (
     <PageContainer
       pageTitle='AI 模型对比'
       pageDescription='主流 AI 模型横向对比：能力评分、价格、上下文窗口与 Benchmark 排名'
     >
+      <script
+        type='application/ld+json'
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
+      />
       <div className='space-y-8'>
         {/* Stats */}
         <div className='grid grid-cols-2 gap-3 sm:grid-cols-4'>

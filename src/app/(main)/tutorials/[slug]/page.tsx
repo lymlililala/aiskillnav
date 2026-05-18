@@ -77,8 +77,60 @@ export default async function TutorialDetailPage({ params }: Props) {
   const level = LEVEL_CONFIG[tutorial.level];
   const html = renderMarkdown(tutorial.content);
 
+  // Article 结构化数据
+  const articleJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: tutorial.title,
+    description: tutorial.summary,
+    keywords: tutorial.tags.join(', '),
+    author: {
+      '@type': 'Organization',
+      name: 'AI Skill Navigation',
+      url: 'https://aiskillnav.com'
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'AI Skill Navigation',
+      url: 'https://aiskillnav.com'
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `https://aiskillnav.com/tutorials/${slug}`
+    }
+  };
+
+  // BreadcrumbList 结构化数据
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: '首页', item: 'https://aiskillnav.com' },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: '教程中心',
+        item: 'https://aiskillnav.com/tutorials'
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: tutorial.title,
+        item: `https://aiskillnav.com/tutorials/${slug}`
+      }
+    ]
+  };
+
   return (
     <PageContainer pageTitle={tutorial.title} pageDescription={tutorial.subtitle}>
+      <script
+        type='application/ld+json'
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
+      <script
+        type='application/ld+json'
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <div className='mx-auto max-w-3xl space-y-8'>
         <Link
           href='/tutorials'

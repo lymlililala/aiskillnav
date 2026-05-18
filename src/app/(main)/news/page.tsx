@@ -72,11 +72,36 @@ export default async function NewsPage({ searchParams }: PageProps) {
 
   const totalPages = Math.ceil(total_items / limit);
 
+  // ItemList 结构化数据 — 仅首页（page=1）时输出，避免分页重复
+  const itemListJsonLd =
+    page === 1
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'ItemList',
+          name: 'AI Agent News — 最新行业资讯',
+          url: 'https://aiskillnav.com/news',
+          description: '实时追踪 AI Agent 赛道的重大事件、融资动向、模型发布和技术突破',
+          numberOfItems: total_items,
+          itemListElement: news.slice(0, 10).map((item, i) => ({
+            '@type': 'ListItem',
+            position: i + 1,
+            url: `https://aiskillnav.com/news/${item.slug}`,
+            name: item.title
+          }))
+        }
+      : null;
+
   return (
     <PageContainer
       pageTitle='AI Agent News'
       pageDescription='实时追踪 AI Agent 赛道的重大事件、融资动向、模型发布和技术突破'
     >
+      {itemListJsonLd && (
+        <script
+          type='application/ld+json'
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
+        />
+      )}
       <div className='space-y-10'>
         {/* Hero */}
         <div className='space-y-3'>
@@ -84,7 +109,7 @@ export default async function NewsPage({ searchParams }: PageProps) {
             <Icons.trendingUp className='h-5 w-5 text-primary' />
             <span className='text-sm font-semibold text-primary'>AI Agent 动态</span>
           </div>
-          <h1 className='text-3xl font-bold tracking-tight md:text-4xl'>最新行业资讯</h1>
+          <h2 className='text-3xl font-bold tracking-tight md:text-4xl'>最新行业资讯</h2>
           <p className='max-w-2xl text-muted-foreground'>
             实时追踪 AI Agent 赛道的重大事件、融资动向、模型发布和技术突破
           </p>

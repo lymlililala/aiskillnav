@@ -58,13 +58,43 @@ export default async function NewsDetailPage({ params }: Props) {
   const item = await getNewsBySlug(slug);
   if (!item) notFound();
 
+  // Article 结构化数据（完善版，含 author/publisher）
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'NewsArticle',
     headline: item.title,
     description: item.summary,
     datePublished: item.published_at,
-    keywords: item.tags.join(', ')
+    keywords: item.tags.join(', '),
+    author: {
+      '@type': 'Organization',
+      name: item.source_name
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'AI Skill Navigation',
+      url: 'https://aiskillnav.com'
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `https://aiskillnav.com/news/${slug}`
+    }
+  };
+
+  // BreadcrumbList 结构化数据
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: '首页', item: 'https://aiskillnav.com' },
+      { '@type': 'ListItem', position: 2, name: 'AI News', item: 'https://aiskillnav.com/news' },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: item.title,
+        item: `https://aiskillnav.com/news/${slug}`
+      }
+    ]
   };
 
   const catColor = CATEGORY_COLOR[item.category] ?? CATEGORY_COLOR['Agent'];
@@ -74,6 +104,10 @@ export default async function NewsDetailPage({ params }: Props) {
       <script
         type='application/ld+json'
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type='application/ld+json'
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <article className='mx-auto max-w-3xl space-y-8'>
         <Link

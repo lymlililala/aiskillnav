@@ -21,6 +21,15 @@ type PageProps = {
   searchParams: Promise<SearchParams>;
 };
 
+// ItemList 结构化数据（静态）
+const agentsItemListJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Agent Hub — 全球顶级 AI Agent 工具导航',
+  url: 'https://aiskillnav.com/agents',
+  description: '汇聚 Manus、Devin、OpenClaw、Dify 等全球顶级 AI Agent 工具，支持类型筛选和对比。'
+};
+
 export default async function AgentsPage(props: PageProps) {
   const searchParams = await props.searchParams;
   searchParamsCache.parse(searchParams);
@@ -30,6 +39,10 @@ export default async function AgentsPage(props: PageProps) {
       pageTitle='Agent Hub'
       pageDescription='汇聚全球优秀 AI Agent — 通用自主、深度研究、构建平台、电脑操控、垂直创意、主动感知'
     >
+      <script
+        type='application/ld+json'
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(agentsItemListJsonLd) }}
+      />
       <AgentListingPage />
     </PageContainer>
   );

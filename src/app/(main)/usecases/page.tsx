@@ -157,11 +157,36 @@ export default async function UseCasesPage({ searchParams }: PageProps) {
     getUseCaseStats()
   ]);
 
+  // ItemList 结构化数据 — 仅无筛选时输出
+  const itemListJsonLd =
+    industry === 'all' && !difficulty
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'ItemList',
+          name: '场景库 — AI Agent 真实落地场景',
+          url: 'https://aiskillnav.com/usecases',
+          description:
+            'AI Agent 真实落地场景，从营销到编程，从研究到效率工具，附推荐工具组合和实现步骤',
+          numberOfItems: usecases.length,
+          itemListElement: usecases.slice(0, 20).map((uc, i) => ({
+            '@type': 'ListItem',
+            position: i + 1,
+            name: uc.title
+          }))
+        }
+      : null;
+
   return (
     <PageContainer
       pageTitle='场景库'
       pageDescription='AI Agent 真实落地场景，从营销到编程，从研究到效率工具，附推荐工具组合和实现步骤'
     >
+      {itemListJsonLd && (
+        <script
+          type='application/ld+json'
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
+        />
+      )}
       <div className='space-y-8'>
         {/* Industry stats */}
         <div className='grid grid-cols-2 gap-3 sm:grid-cols-5'>
