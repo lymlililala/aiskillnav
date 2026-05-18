@@ -92,11 +92,31 @@ export default async function TutorialsPage({ searchParams }: PageProps) {
     getFeaturedTutorials()
   ]);
 
+  // ItemList 结构化数据 — 提升 Google 列表富结果
+  const itemListJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: '教程中心 — AI Agent 实战教程',
+    url: 'https://aiskillnav.com/tutorials',
+    description: 'AI Agent 从入门到实战：概念理解、MCP 使用、平台实操、工作流自动化',
+    numberOfItems: all.length,
+    itemListElement: all.slice(0, 20).map((t, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: `https://aiskillnav.com/tutorials/${t.slug}`,
+      name: t.title
+    }))
+  };
+
   return (
     <PageContainer
       pageTitle='教程中心'
       pageDescription='AI Agent 从入门到实战：概念理解、MCP 使用、平台实操、工作流自动化'
     >
+      <script
+        type='application/ld+json'
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
+      />
       <div className='space-y-8'>
         {/* Quick stats */}
         <div className='grid grid-cols-3 gap-3'>

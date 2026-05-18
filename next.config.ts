@@ -4,6 +4,17 @@ import { withSentryConfig } from '@sentry/nextjs';
 // Define the base Next.js configuration
 const baseConfig: NextConfig = {
   output: process.env.BUILD_STANDALONE === 'true' ? 'standalone' : undefined,
+  // 将 www 子域名永久重定向到不带 www 的主域名（与 canonical/sitemap 保持一致）
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'www.aiskillnav.com' }],
+        destination: 'https://aiskillnav.com/:path*',
+        permanent: true
+      }
+    ];
+  },
   images: {
     remotePatterns: [
       {
