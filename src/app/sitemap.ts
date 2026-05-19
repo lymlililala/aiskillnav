@@ -334,6 +334,56 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.94
     },
+    // Tutorials — 新增（2026-05-19）SEO/GEO 优化批次
+    {
+      url: `${BASE_URL}/tutorials/gemini-2-5-pro-complete-guide-2026`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.93
+    },
+    {
+      url: `${BASE_URL}/tutorials/llamaindex-practical-guide-2026`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.92
+    },
+    {
+      url: `${BASE_URL}/tutorials/llm-api-cost-optimization-guide-2026`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.93
+    },
+    {
+      url: `${BASE_URL}/tutorials/cursor-rules-best-practices-2026`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.92
+    },
+    {
+      url: `${BASE_URL}/tutorials/ai-agent-2026-mid-year-trends`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.93
+    },
+    // News — 新增（2026-05-19）SEO/GEO 优化批次
+    {
+      url: `${BASE_URL}/news/gpt-5-release-what-we-know-2026`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.95
+    },
+    {
+      url: `${BASE_URL}/news/anthropic-claude-4-opus-2026-analysis`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.94
+    },
+    {
+      url: `${BASE_URL}/news/ai-no-code-tools-2026-roundup`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.92
+    },
     // 通用页面
     {
       url: `${BASE_URL}/about`,
