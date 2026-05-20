@@ -30,12 +30,6 @@ function batchPrefetch(urls: string[]) {
 
 const PAGE_SIZE = 24;
 
-/**
- * agent_source → 后端 url_group 过滤
- * 'app'    → url_group=1（应用产品，非 GitHub 非内测）
- * 'github' → url_group=2（开源项目，GitHub）
- * 'all'    → 不过滤
- */
 function sourceToUrlGroup(source: string): string | undefined {
   if (source === 'app') return '1';
   if (source === 'github') return '2';
@@ -65,42 +59,40 @@ export function AgentGrid() {
   const { data } = useSuspenseQuery(agentsQueryOptions(filters));
   const totalPages = Math.ceil(data.total_items / PAGE_SIZE);
 
-  // 数据加载后批量预热当前页所有外链域名
   useEffect(() => {
     batchPrefetch(data.items.map((a) => a.url));
   }, [data.items]);
 
-  const visibleItems = data.items;
-
   const hasFilter =
     params.agent_type !== 'all' || params.agent_source !== 'all' || params.agent_search !== '';
 
-  if (visibleItems.length === 0) {
+  if (data.items.length === 0) {
     return (
-      <div className='flex flex-col items-center justify-center py-16 text-center'>
-        <div className='mb-3 flex h-12 w-12 items-center justify-center rounded-xl border bg-muted/50'>
-          <Icons.search className='h-5 w-5 text-muted-foreground' />
+      <div className='flex flex-col items-center justify-center py-20 text-center'>
+        <div className='mb-3 flex h-11 w-11 items-center justify-center rounded-xl border border-border/60 bg-muted/40'>
+          <Icons.search className='h-4.5 w-4.5 text-muted-foreground/60' />
         </div>
-        <p className='text-sm font-medium'>未找到相关 Agent</p>
+        <p className='text-sm font-medium text-foreground'>未找到相关 Agent</p>
         <p className='mt-1 text-xs text-muted-foreground'>尝试调整搜索词或分类筛选</p>
       </div>
     );
   }
 
   return (
-    <div className='space-y-6'>
-      <p className='text-xs text-muted-foreground'>
+    <div className='space-y-5'>
+      {/* 计数行 */}
+      <p className='text-[11px] text-muted-foreground'>
         共 <span className='font-medium text-foreground'>{data.total_items}</span> 个 Agent
-        {hasFilter && <span>（已过滤）</span>}
+        {hasFilter && <span className='ml-1 text-muted-foreground/60'>（已过滤）</span>}
       </p>
 
-      {/* 混合展示，所有卡片在同一个 grid 连续排列，无分组截断 */}
-      <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-3'>
-        {visibleItems.map((agent) => (
+      <div className='grid gap-3 sm:grid-cols-2 lg:grid-cols-3'>
+        {data.items.map((agent) => (
           <AgentCard key={agent.id} agent={agent} />
         ))}
       </div>
 
+      {/* 分页 */}
       {totalPages > 1 && (
         <div className='flex items-center justify-center gap-1 pt-2'>
           <Button
@@ -161,9 +153,9 @@ export function AgentGrid() {
 
 export function AgentGridSkeleton() {
   return (
-    <div className='space-y-4'>
-      <div className='h-4 w-24 animate-pulse rounded bg-muted' />
-      <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-3'>
+    <div className='space-y-5'>
+      <div className='h-3.5 w-24 animate-pulse rounded bg-muted' />
+      <div className='grid gap-3 sm:grid-cols-2 lg:grid-cols-3'>
         {Array.from({ length: 12 }).map((_, i) => (
           <AgentCardSkeleton key={i} />
         ))}

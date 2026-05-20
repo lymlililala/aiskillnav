@@ -43,9 +43,9 @@ export default function AgentListingPage() {
         </Suspense>
 
         <div className='flex items-center gap-3'>
-          <div className='h-px flex-1 bg-border' />
-          <span className='text-xs font-medium text-muted-foreground'>全部收录 Agent</span>
-          <div className='h-px flex-1 bg-border' />
+          <div className='h-px flex-1 bg-border/50' />
+          <span className='text-[11px] text-muted-foreground/60'>全部收录</span>
+          <div className='h-px flex-1 bg-border/50' />
         </div>
 
         <AgentFilters />
