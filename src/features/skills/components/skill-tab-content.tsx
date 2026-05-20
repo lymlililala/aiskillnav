@@ -12,7 +12,7 @@ import { FeaturedSkills, FeaturedSkillsSkeleton } from './featured-skills';
 import { Icons } from '@/components/icons';
 
 export function SkillTabContent() {
-  const [tab] = useQueryState('skill_tab', parseAsString.withDefault('sites'));
+  const [tab] = useQueryState('skill_tab', parseAsString.withDefault('tools'));
   const isTools = tab === 'tools';
 
   return (
