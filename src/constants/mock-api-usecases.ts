@@ -527,6 +527,108 @@ const USECASE_DATA: Omit<UseCase, 'id'>[] = [
     ],
     tags: ['教育科技', '个性化学习', '练习题', '考试备考', 'AI家教'],
     is_featured: true
+  },
+
+  // ── 小说生成 ──────────────────────────────────────────────────────────────
+  {
+    title: 'AI 长篇小说全流程生成（世界观→人物→章节）',
+    description:
+      '借助 AI Agent 从零搭建一部完整小说：先用 story-writer MCP 建立人物档案和世界观知识库，再通过 Claude/GPT-4 按章节生成连贯内容。关键在于「长程一致性」——Agent 每次生成前都读取已有内容摘要，确保人物性格、情节逻辑不断档。可适配网文、轻小说、都市、仙侠多种风格，适合专业写手提升效率或创意工作者快速出版。',
+    tools: ['Claude', 'story-writer MCP', 'filesystem MCP', 'Notion'],
+    industry: 'productivity',
+    difficulty: 2,
+    estimated_time: '3小时搭建，生成一章约15分钟',
+    steps: [
+      '创建人物档案：用表格记录主角/配角的外貌、性格、能力、背景故事',
+      '建立世界观文档：地图、势力、魔法体系/科技设定等核心规则',
+      '编写故事大纲：分幕结构（开篇-发展-转折-高潮-结局），每章100字摘要',
+      '配置 story-writer MCP 将上述文档作为 AI 的长期记忆',
+      '逐章生成：每次调用时自动附带前情摘要+人物/世界观约束',
+      '用 filesystem MCP 自动保存每章内容，生成章节索引'
+    ],
+    tags: ['小说生成', '长篇创作', '世界观', '人物设定', '网文', 'AI写作'],
+    is_featured: true
+  },
+
+  // ── 简历生成 ──────────────────────────────────────────────────────────────
+  {
+    title: '精准匹配岗位的 AI 简历一键生成器',
+    description:
+      '把「海投简历」变成「精准投递」：将目标岗位 JD 和个人经历输入 AI Agent，Agent 自动分析岗位核心要求关键词，对照你的工作经历提炼最匹配的成就亮点，生成 ATS 评分更高的定制简历。同一份经历，不同岗位生成不同侧重点的版本，面试通过率显著提升。支持中英文双版本输出，并可同步生成配套求职信。',
+    tools: ['Claude', 'resume-builder MCP', 'filesystem MCP'],
+    industry: 'productivity',
+    difficulty: 1,
+    estimated_time: '30分钟',
+    steps: [
+      '准备原始素材：完整工作经历（STAR法则）、项目列表、技能清单',
+      '粘贴目标岗位 JD，让 AI 提取核心要求关键词',
+      'AI 分析你的经历与 JD 的匹配度，识别可强化的亮点',
+      '生成 ATS 优化的简历草稿（突出相关经历，弱化不相关项）',
+      '人工审核后一键导出 PDF，同时生成配套求职信'
+    ],
+    tags: ['简历生成', 'ATS优化', '求职信', '岗位匹配', '职场', '求职'],
+    is_featured: true
+  },
+
+  // ── 周报生成 ──────────────────────────────────────────────────────────────
+  {
+    title: '自动拉取工作记录生成结构化周报',
+    description:
+      '告别每周五下班前焦虑写周报：weekly-report MCP 自动读取本周 Git commits（写了什么代码）、完成的 Jira/Linear 任务、日历上的会议记录，AI 将散碎信息整合成「本周工作亮点→遇到的挑战→下周计划」三段式结构。领导最在意什么（业务价值/技术突破/风险预警）可以通过提示词自定义，30秒生成一份专业周报。',
+    tools: ['Claude', 'weekly-report MCP', 'github MCP', 'google-calendar'],
+    industry: 'productivity',
+    difficulty: 1,
+    estimated_time: '20分钟配置，之后每周自动运行',
+    steps: [
+      '连接数据源：GitHub Token（代码提交）+ 任务系统 API + 日历授权',
+      '设置周报模板：本周成果/数据指标/风险与挑战/下周计划',
+      '配置「老板视角」提示词：突出业务影响和可量化结果',
+      'weekly-report MCP 每周五下午自动汇总，输出 Markdown 草稿',
+      '人工 5 分钟微调后复制粘贴，或直接通过飞书/企微 Bot 发送'
+    ],
+    tags: ['周报生成', '工作汇报', '自动化', 'Git提交', '效率工具', '职场'],
+    is_featured: true
+  },
+
+  // ── 漫剧生成 ──────────────────────────────────────────────────────────────
+  {
+    title: 'AI 全流程漫剧制作（脚本→分镜→成品）',
+    description:
+      '不会画画也能出漫剧：第一步用 AI 写剧本和分镜脚本，每格描述构图、人物情绪、对话；第二步用 Stable Diffusion/Midjourney 生成每格插图（关键是保持角色外貌一致性，通过 LoRA 微调实现）；第三步用 FFmpeg MCP 将图片拼成条漫格式或短视频格式。适合内容创作者、动漫爱好者快速产出高频内容，也可用于品牌漫画营销物料制作。',
+    tools: ['Claude', 'stable-diffusion MCP', 'openai-image MCP', 'ffmpeg MCP'],
+    industry: 'marketing',
+    difficulty: 3,
+    estimated_time: '每集（15-20格）约2-3小时',
+    steps: [
+      '编写故事大纲和人物形象描述（包含服装、发型、特征等视觉细节）',
+      '生成分镜脚本：每格写明构图角度/人物动作/对话/表情',
+      '训练/选择角色 LoRA 模型，确保跨格人物外貌一致',
+      '批量生成每格图片，用统一风格 Prompt 保持画面一致性',
+      '添加对话气泡和文字排版，用 FFmpeg 拼合成条漫/短视频格式'
+    ],
+    tags: ['漫剧生成', 'AI漫画', '分镜脚本', '角色一致性', 'Stable Diffusion', '内容创作'],
+    is_featured: true
+  },
+
+  // ── 短视频生成 ────────────────────────────────────────────────────────────
+  {
+    title: 'AI 短视频批量生产流水线（脚本→配音→成片）',
+    description:
+      '一套 AI 流水线让短视频产量翻 5 倍：输入选题关键词，Claude 自动生成符合平台调性的爆款脚本（抖音 30s/B站 3min）；ElevenLabs MCP 生成真人级别配音；HeyGen 生成数字人口播或用 Kling AI 文生视频；FFmpeg MCP 负责合并字幕+配乐。全程 AI 执行，人工只需在关键节点审核。内容团队用这套方法可以同时维护 3-5 个账号的日更节奏。',
+    tools: ['Claude', 'elevenlabs MCP', 'youtube-transcript MCP', 'ffmpeg MCP', 'Kling AI'],
+    industry: 'marketing',
+    difficulty: 2,
+    estimated_time: '2小时搭建，生成一条视频约20分钟',
+    steps: [
+      '用 youtube-transcript MCP 分析同类爆款视频的脚本结构',
+      'Claude 基于爆款规律生成符合平台调性的视频脚本',
+      'ElevenLabs MCP 生成指定声线的高质量 AI 配音',
+      '上传脚本和配音到 Kling AI/HeyGen 生成视频画面',
+      'FFmpeg MCP 自动合并视频+音频+字幕+背景音乐',
+      '输出平台适配的分辨率/时长格式（9:16竖屏/16:9横屏）'
+    ],
+    tags: ['短视频生成', '批量制作', '配音', '数字人', '抖音', '内容营销', 'AI视频'],
+    is_featured: true
   }
 ];
 

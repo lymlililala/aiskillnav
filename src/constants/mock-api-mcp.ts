@@ -22,7 +22,9 @@ export type McpCategory =
   | 'knowledge' // 知识管理
   | 'finance' // 金融
   | 'memory' // 记忆/存储
-  | 'reasoning'; // 推理
+  | 'reasoning' // 推理
+  | 'creative' // 创意内容生成（小说/简历/周报/漫画/视频）
+  | 'media'; // 媒体/视频/音频处理
 
 export type McpServer = {
   id: number;
@@ -483,6 +485,130 @@ const MCP_DATA: Omit<McpServer, 'id' | 'created_at'>[] = [
     install_cmd: 'npx arxiv-mcp-server',
     tags: ['arXiv', '论文搜索', '学术研究', '科研'],
     stars: 650,
+    is_featured: false
+  },
+
+  // ── 创意内容生成（小说/简历/周报） ─────────────────────────────────────
+  {
+    slug: 'openai-image',
+    name: 'openai-image',
+    description: '调用 OpenAI DALL-E 3 生成图像，支持自然语言描述直接生成漫画插图、封面等创意图片',
+    url: 'https://github.com/InSpatial-Labs/openai-image-mcp',
+    category: 'creative',
+    is_official: false,
+    install_cmd: 'npx openai-image-mcp',
+    tags: ['DALL-E', '图像生成', '漫画插图', '创意图片', 'OpenAI'],
+    stars: 2100,
+    is_featured: true
+  },
+  {
+    slug: 'stable-diffusion',
+    name: 'stable-diffusion',
+    description: '本地运行 Stable Diffusion，AI 可直接生成高质量图像用于漫剧插图、小说封面等创意内容',
+    url: 'https://github.com/binarynoir/mcp-server-stable-diffusion',
+    category: 'creative',
+    is_official: false,
+    install_cmd: 'npx mcp-stable-diffusion',
+    tags: ['Stable Diffusion', '本地图像', '漫画插图', '小说封面', '开源'],
+    stars: 1800,
+    is_featured: true
+  },
+  {
+    slug: 'writesonic',
+    name: 'writesonic',
+    description: 'Writesonic AI 写作 MCP，支持博客文章、短视频脚本、简历文案等多场景内容生成，集成 SEO 优化',
+    url: 'https://github.com/writesonic/writesonic-mcp',
+    category: 'creative',
+    is_official: false,
+    install_cmd: 'npx writesonic-mcp',
+    tags: ['AI写作', '短视频脚本', '博客文章', '简历文案', 'SEO'],
+    stars: 980,
+    is_featured: false
+  },
+  {
+    slug: 'resume-builder',
+    name: 'resume-builder',
+    description: '简历生成 MCP Server，输入工作经历和目标岗位，自动生成 ATS 优化的 Markdown/JSON 格式简历',
+    url: 'https://github.com/mcp-community/resume-builder-mcp',
+    category: 'creative',
+    is_official: false,
+    install_cmd: 'npx resume-builder-mcp',
+    tags: ['简历生成', 'ATS优化', '求职', 'Markdown', 'JSON简历'],
+    stars: 1240,
+    is_featured: true
+  },
+  {
+    slug: 'weekly-report',
+    name: 'weekly-report',
+    description: '周报自动生成 MCP，读取 Git commits、任务系统、日历事件，自动汇总生成结构化工作周报',
+    url: 'https://github.com/mcp-community/weekly-report-mcp',
+    category: 'creative',
+    is_official: false,
+    install_cmd: 'npx weekly-report-mcp',
+    tags: ['周报生成', 'Git提交', '工作汇总', '自动化', '任务系统'],
+    stars: 870,
+    is_featured: true
+  },
+  {
+    slug: 'story-writer',
+    name: 'story-writer',
+    description: '小说/故事写作辅助 MCP，维护人物设定、世界观、情节线索等上下文，支持长篇小说连续创作',
+    url: 'https://github.com/mcp-community/story-writer-mcp',
+    category: 'creative',
+    is_official: false,
+    install_cmd: 'npx story-writer-mcp',
+    tags: ['小说写作', '人物设定', '世界观', '情节', '长篇创作'],
+    stars: 1560,
+    is_featured: true
+  },
+
+  // ── 媒体/视频/音频 ──────────────────────────────────────────
+  {
+    slug: 'elevenlabs',
+    name: 'elevenlabs',
+    description: 'ElevenLabs 语音合成 MCP，AI 可直接调用生成逅真语音，适合短视频配音、有声小说、口播内容制作',
+    url: 'https://github.com/elevenlabs/elevenlabs-mcp',
+    category: 'media',
+    is_official: false,
+    install_cmd: 'npx elevenlabs-mcp',
+    tags: ['语音合成', 'TTS', '短视频配音', '有声小说', 'ElevenLabs'],
+    stars: 4200,
+    is_featured: true
+  },
+  {
+    slug: 'ffmpeg',
+    name: 'ffmpeg',
+    description: '通过 FFmpeg MCP 直接处理视频/音频文件，支持格式转换、剪辑、合并、加字幕等操作，短视频制作必备',
+    url: 'https://github.com/mcp-community/ffmpeg-mcp',
+    category: 'media',
+    is_official: false,
+    install_cmd: 'npx ffmpeg-mcp',
+    tags: ['FFmpeg', '视频处理', '音频处理', '格式转换', '短视频制作'],
+    stars: 3100,
+    is_featured: true
+  },
+  {
+    slug: 'youtube-transcript',
+    name: 'youtube-transcript',
+    description: '获取 YouTube 视频字幕/转录文本，适合提取第品视频内容、生成短视频脚本参考或学习材料',
+    url: 'https://github.com/kimtaeyoon83/mcp-server-youtube-transcript',
+    category: 'media',
+    is_official: false,
+    install_cmd: 'npx mcp-server-youtube-transcript',
+    tags: ['YouTube', '视频字幕', '内容提取', '短视频脚本', '转录'],
+    stars: 2800,
+    is_featured: false
+  },
+  {
+    slug: 'midjourney-mcp',
+    name: 'midjourney-mcp',
+    description: '通过 API 调用 Midjourney 生成艺术风格图像，适合漫剧配图、小说插图、短视频封面制作',
+    url: 'https://github.com/mcp-community/midjourney-mcp',
+    category: 'media',
+    is_official: false,
+    install_cmd: 'npx midjourney-mcp',
+    tags: ['Midjourney', '艺术插图', '漫剧配图', '短视频封面', '图像生成'],
+    stars: 2450,
     is_featured: false
   }
 ];

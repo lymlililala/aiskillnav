@@ -12,8 +12,17 @@ const TYPE_TABS = [
   { value: 'research', label: '🔍 深度研究' },
   { value: 'builder', label: '🏗️ 构建平台' },
   { value: 'computer', label: '🖥️ 电脑操控' },
-  { value: 'creative', label: '🎨 垂直创意' },
+  { value: 'creative', label: '🎨 创意生成' },
   { value: 'proactive', label: '🔮 主动感知' }
+];
+
+/** 热门场景快捷筛选（仅在 creative 或 all 时显示） */
+const SCENE_TAGS = [
+  { label: '📖 小说生成', query: '小说' },
+  { label: '📄 简历生成', query: '简历' },
+  { label: '📊 周报生成', query: '周报' },
+  { label: '🎭 漫剧生成', query: '漫剧' },
+  { label: '🎬 短视频生成', query: '短视频' }
 ];
 
 /** 应用 / 开源 来源分类 */
@@ -36,6 +45,9 @@ export function AgentFilters() {
   const hasActive =
     params.agent_search !== '' || params.agent_type !== 'all' || params.agent_source !== 'all';
 
+  const showSceneTags =
+    (params.agent_type === 'all' || params.agent_type === 'creative') && !params.agent_search;
+
   return (
     <div className='space-y-3'>
       {/* Search */}
@@ -56,6 +68,24 @@ export function AgentFilters() {
           </button>
         )}
       </div>
+
+      {/* 热门场景快捷筛选 */}
+      {showSceneTags && (
+        <div className='flex flex-wrap gap-1.5'>
+          <span className='self-center text-[11px] text-muted-foreground'>热门需求：</span>
+          {SCENE_TAGS.map((tag) => (
+            <button
+              key={tag.query}
+              onClick={() =>
+                setParams({ ...params, agent_search: tag.query, agent_type: 'creative' })
+              }
+              className='rounded-full border bg-muted/40 px-2.5 py-1 text-[11px] font-medium text-muted-foreground transition-all hover:border-primary/30 hover:bg-primary/5 hover:text-foreground'
+            >
+              {tag.label}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* 第一行：功能分类 */}
       <div className='flex flex-wrap gap-1.5'>

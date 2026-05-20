@@ -492,6 +492,225 @@ const AGENT_DATA: Omit<Agent, 'id' | 'created_at' | 'updated_at'>[] = [
     tags: ['图像生成', 'Discord', '艺术风格', '专业设计'],
     is_featured: false,
     status: 'published'
+  },
+
+  // ── 小说生成 ────────────────────────────────────────────────────────────────
+  {
+    name: 'Sudowrite',
+    url: 'https://sudowrite.com',
+    description: '专为小说创作设计的 AI 写作助手，支持故事拓展、人物对白润色、章节续写，被纽约时报报道的专业写作工具',
+    agent_type: 'creative',
+    open_source: 'closed',
+    region: 'global',
+    tags: ['小说写作', '故事生成', '人物对白', '创意写作', '章节续写'],
+    is_featured: true,
+    status: 'published'
+  },
+  {
+    name: 'NovelAI',
+    url: 'https://novelai.net',
+    description: 'AI 小说创作+图像生成一体化平台，支持多种写作风格模式，深受轻小说/奇幻小说作者喜爱，也可生成配套插图',
+    agent_type: 'creative',
+    open_source: 'closed',
+    region: 'global',
+    tags: ['小说生成', '轻小说', '图像生成', '风格模式', '日式奇幻'],
+    is_featured: true,
+    status: 'published'
+  },
+  {
+    name: '彩云小梦',
+    url: 'https://if.caiyunai.com',
+    description: '中国领先的 AI 小说续写平台，理解中文语境和网文风格，支持仙侠、都市、言情等多种类型，月活用户超百万',
+    agent_type: 'creative',
+    open_source: 'closed',
+    region: 'cn',
+    tags: ['中文小说', '网文续写', '仙侠', '言情', '都市'],
+    is_featured: true,
+    status: 'published'
+  },
+  {
+    name: 'Fictive AI',
+    url: 'https://fictive.ai',
+    description: '多 Agent 协作的互动小说创作平台，编辑 Agent、风格 Agent、情节 Agent 分工协作，生成连贯长篇故事',
+    agent_type: 'creative',
+    open_source: 'closed',
+    region: 'global',
+    tags: ['互动小说', '多Agent', '长篇故事', '情节设计', '角色扮演'],
+    is_featured: false,
+    status: 'published'
+  },
+
+  // ── 简历生成 ────────────────────────────────────────────────────────────────
+  {
+    name: 'Teal',
+    url: 'https://tealhq.com',
+    description: 'AI 求职全流程平台：简历一键生成 + ATS 优化 + 岗位匹配打分，帮助用户提升面试通过率，已服务超 100 万求职者',
+    agent_type: 'creative',
+    open_source: 'closed',
+    region: 'global',
+    tags: ['简历生成', 'ATS优化', '求职', '岗位匹配', '职场'],
+    is_featured: true,
+    status: 'published'
+  },
+  {
+    name: 'Kickresume',
+    url: 'https://kickresume.com',
+    description: 'AI 驱动的简历+求职信生成器，提供 20+ 专业模板，GPT-4 优化内容表达，支持导出 PDF/Word',
+    agent_type: 'creative',
+    open_source: 'closed',
+    region: 'global',
+    tags: ['简历模板', '求职信', 'GPT-4', 'PDF导出', '求职辅助'],
+    is_featured: false,
+    status: 'published'
+  },
+  {
+    name: '超级简历',
+    url: 'https://www.wondercv.com',
+    description: '中国主流 AI 简历制作平台，一键 AI 优化措辞、智能填充工作经历、适配国内主流招聘平台格式',
+    agent_type: 'creative',
+    open_source: 'closed',
+    region: 'cn',
+    tags: ['中文简历', 'AI优化', '招聘平台', '求职', '职场中国'],
+    is_featured: true,
+    status: 'published'
+  },
+
+  // ── 周报生成 ────────────────────────────────────────────────────────────────
+  {
+    name: 'Notion AI',
+    url: 'https://notion.so/product/ai',
+    description: 'Notion 内置 AI 写作助手，可基于工作记录自动汇总生成周报/月报，支持中文，与 Notion 数据库深度集成',
+    agent_type: 'creative',
+    open_source: 'closed',
+    region: 'global',
+    tags: ['周报生成', '工作汇总', 'Notion', '写作助手', '效率工具'],
+    is_featured: true,
+    status: 'published'
+  },
+  {
+    name: 'WorkWeek',
+    url: 'https://workweek.ai',
+    description: '专为职场人设计的 AI 周报助手，连接日历/邮件/任务系统，自动提炼本周工作亮点，生成老板最爱看的汇报格式',
+    agent_type: 'creative',
+    open_source: 'closed',
+    region: 'global',
+    tags: ['周报自动生成', '工作汇报', '日历集成', '邮件分析', '职场效率'],
+    is_featured: false,
+    status: 'published'
+  },
+  {
+    name: '飞书妙记',
+    url: 'https://www.feishu.cn/product/minutes',
+    description: '字节跳动飞书出品，AI 会议记录+总结工具，自动将会议内容提炼成结构化周报/会议纪要，国内企业广泛使用',
+    agent_type: 'creative',
+    open_source: 'closed',
+    region: 'cn',
+    tags: ['会议纪要', '周报', '飞书', '字节跳动', '企业协作'],
+    is_featured: true,
+    status: 'published'
+  },
+
+  // ── 漫剧生成 ────────────────────────────────────────────────────────────────
+  {
+    name: 'Webtoon Originals AI',
+    url: 'https://webtoons.com',
+    description: 'Webtoon 官方 AI 辅助创作工具，帮助漫画作者快速生成背景、分镜和对话气泡，降低漫剧制作门槛',
+    agent_type: 'creative',
+    open_source: 'closed',
+    region: 'global',
+    tags: ['漫画生成', 'Webtoon', '分镜', '漫剧', '背景生成'],
+    is_featured: false,
+    status: 'published'
+  },
+  {
+    name: 'ComicsMaker.ai',
+    url: 'https://comicsmaker.ai',
+    description: 'AI 漫画/漫剧一站式生成平台，文字描述即可生成多格漫画，支持角色一致性保持和对话框自动排版',
+    agent_type: 'creative',
+    open_source: 'closed',
+    region: 'global',
+    tags: ['漫画AI', '多格漫画', '角色一致性', '对话框', '漫剧生成'],
+    is_featured: true,
+    status: 'published'
+  },
+  {
+    name: 'Clip Studio Paint AI',
+    url: 'https://clipstudio.net',
+    description: '专业漫画创作软件内置 AI 功能，支持 AI 着色、背景生成、线稿修复，是全球漫画师最常用的创作工具之一',
+    agent_type: 'creative',
+    open_source: 'closed',
+    region: 'global',
+    tags: ['漫画软件', 'AI着色', '线稿', '背景生成', '专业漫画'],
+    is_featured: false,
+    status: 'published'
+  },
+  {
+    name: '触站 AI 漫画',
+    url: 'https://www.chuzhang.com',
+    description: '国内领先的 AI 漫剧制作平台，支持国风/日漫/写实多种风格，内置分镜脚本生成和角色一致性控制',
+    agent_type: 'creative',
+    open_source: 'closed',
+    region: 'cn',
+    tags: ['AI漫画', '国风漫画', '分镜脚本', '角色一致性', '中文漫剧'],
+    is_featured: true,
+    status: 'published'
+  },
+
+  // ── 短视频生成 ──────────────────────────────────────────────────────────────
+  {
+    name: 'Kling AI',
+    url: 'https://klingai.com',
+    description: '快手旗下 AI 视频生成平台，文字/图片转视频质量领先，支持 5s/10s 视频，在国际市场赢得大量用户',
+    agent_type: 'creative',
+    open_source: 'closed',
+    region: 'cn',
+    tags: ['短视频生成', '快手', '文生视频', '图生视频', 'AI视频'],
+    is_featured: true,
+    status: 'published'
+  },
+  {
+    name: 'Runway Gen-3',
+    url: 'https://runwayml.com',
+    description: 'Hollywood 级 AI 视频生成工具，Gen-3 Alpha 版本画质大幅提升，已被多个商业广告和电影项目采用',
+    agent_type: 'creative',
+    open_source: 'closed',
+    region: 'global',
+    tags: ['AI视频', 'Gen-3', '商业广告', '电影制作', '短视频'],
+    is_featured: true,
+    status: 'published'
+  },
+  {
+    name: 'Pika Labs',
+    url: 'https://pika.art',
+    description: 'AI 短视频生成平台，以动态效果和物体变形见长，Discord 社区超 50 万创作者，适合创意短片制作',
+    agent_type: 'creative',
+    open_source: 'closed',
+    region: 'global',
+    tags: ['短视频', '动态效果', 'Discord', '创意短片', 'AI动画'],
+    is_featured: false,
+    status: 'published'
+  },
+  {
+    name: 'HeyGen',
+    url: 'https://heygen.com',
+    description: 'AI 数字人短视频生成平台，上传照片即可生成会说话的数字人，支持 40+ 语言配音，企业营销视频首选',
+    agent_type: 'creative',
+    open_source: 'closed',
+    region: 'global',
+    tags: ['数字人', '短视频', '多语言配音', '企业营销', 'AI主播'],
+    is_featured: true,
+    status: 'published'
+  },
+  {
+    name: '即梦 AI',
+    url: 'https://jimeng.jianying.com',
+    description: '字节跳动剪映旗下 AI 视频生成工具，深度集成抖音生态，支持文生视频/图生视频/口播视频，国内短视频创作者必备',
+    agent_type: 'creative',
+    open_source: 'closed',
+    region: 'cn',
+    tags: ['短视频', '抖音', '剪映', '文生视频', '口播视频', '字节跳动'],
+    is_featured: true,
+    status: 'published'
   }
 ];
 
