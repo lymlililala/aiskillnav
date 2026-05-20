@@ -25,8 +25,8 @@ export function SkillTabSwitcher() {
         className={cn(
           'pointer-events-none absolute inset-0 transition-all duration-500',
           isSites
-            ? 'bg-[radial-gradient(ellipse_at_top_left,hsl(var(--primary)/0.04),transparent_60%)]'
-            : 'bg-[radial-gradient(ellipse_at_top_right,hsl(263_70%_50%/0.05),transparent_60%)]'
+            ? 'bg-[radial-gradient(ellipse_at_top_left,hsl(var(--primary)/0.12),transparent_60%)]'
+            : 'bg-[radial-gradient(ellipse_at_top_right,hsl(263_70%_50%/0.14),transparent_60%)]'
         )}
       />
 
@@ -44,8 +44,8 @@ export function SkillTabSwitcher() {
             className={cn(
               'group relative flex flex-col gap-2 overflow-hidden rounded-xl border p-4 text-left transition-all duration-200',
               isSites
-                ? 'border-primary/30 bg-primary/5 shadow-sm'
-                : 'border-border bg-background/50 text-muted-foreground hover:border-border hover:bg-accent/50'
+                ? 'border-primary/40 bg-primary/10 shadow-sm'
+                : 'border-border bg-muted/30 text-muted-foreground hover:border-border hover:bg-muted/50'
             )}
           >
             {/* 激活时的高亮条 */}
@@ -120,8 +120,8 @@ export function SkillTabSwitcher() {
             className={cn(
               'group relative flex flex-col gap-2 overflow-hidden rounded-xl border p-4 text-left transition-all duration-200',
               isTools
-                ? 'border-violet-500/30 bg-violet-500/5 shadow-sm'
-                : 'border-border bg-background/50 text-muted-foreground hover:border-border hover:bg-accent/50'
+                ? 'border-violet-500/40 bg-violet-500/10 shadow-sm'
+                : 'border-border bg-muted/30 text-muted-foreground hover:border-border hover:bg-muted/50'
             )}
           >
             {/* 激活时的高亮条 */}
@@ -193,27 +193,13 @@ export function SkillTabSwitcher() {
           </button>
         </div>
 
-        {/* 底部提示语 — 随 tab 切换 */}
-        <div
-          className={cn(
-            'mt-3 flex items-center gap-2 rounded-lg px-3 py-2 text-[11px] transition-all duration-300',
-            isSites
-              ? 'bg-primary/5 text-primary/70'
-              : 'bg-violet-500/5 text-violet-600/70 dark:text-violet-400/70'
-          )}
-        >
-          {isSites ? (
-            <>
-              <Icons.externalLink className='h-3 w-3 shrink-0' />
-              <span>点击卡片将在新标签页打开目标网站 — 你是在「发现和跳转」</span>
-            </>
-          ) : (
-            <>
-              <Icons.terminal className='h-3 w-3 shrink-0' />
-              <span>复制安装命令，配置到本地 AI Agent — 你是在「安装和使用」</span>
-            </>
-          )}
-        </div>
+        {/* 底部提示语 — 仅 Skills 市场显示 */}
+        {isTools && (
+          <div className='mt-3 flex items-center gap-2 rounded-lg bg-violet-500/8 px-3 py-2 text-[11px] text-violet-600/70 dark:text-violet-400/70 transition-all duration-300'>
+            <Icons.terminal className='h-3 w-3 shrink-0' />
+            <span>复制安装命令，配置到本地 AI Agent — 你是在「安装和使用」</span>
+          </div>
+        )}
       </div>
     </div>
   );
