@@ -24,10 +24,22 @@ function prefetchExternalUrl(url: string) {
   }
 }
 
-/** 从 URL 获取 favicon */
+/**
+ * DuckDuckGo favicon API — 比 Google 快，无需代理，全球 CDN
+ * 失败兜底：直接访问 /favicon.ico
+ */
 function getFaviconUrl(url: string): string {
   try {
-    const origin = new URL(url).origin;
+    const { hostname } = new URL(url);
+    return `https://icons.duckduckgo.com/ip3/${hostname}.ico`;
+  } catch {
+    return '';
+  }
+}
+
+function getFaviconFallbackUrl(url: string): string {
+  try {
+    const { origin } = new URL(url);
     return `${origin}/favicon.ico`;
   } catch {
     return '';
@@ -53,15 +65,50 @@ interface SiteCardProps {
 }
 
 /**
+ * Favicon 图标组件 — 三层降级策略：
+ * 1. DuckDuckGo favicon API（快，全球 CDN）
+ * 2. 直接 /favicon.ico
+ * 3. 首字母占位块
+ */
+function SiteFavicon({ site }: { site: Site }) {
+  // 0 = 用 duckduckgo, 1 = 用 /favicon.ico, 2 = 用首字母
+  const [fallbackLevel, setFallbackLevel] = useState(0);
+
+  const primaryUrl = getFaviconUrl(site.url);
+  const fallbackUrl = getFaviconFallbackUrl(site.url);
+  const currentSrc = fallbackLevel === 0 ? primaryUrl : fallbackUrl;
+
+  if (fallbackLevel >= 2 || !primaryUrl) {
+    return (
+      <div className='flex h-9 w-9 items-center justify-center rounded-lg bg-muted text-sm font-bold text-muted-foreground'>
+        {site.name.charAt(0).toUpperCase()}
+      </div>
+    );
+  }
+
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={currentSrc}
+      alt={site.name}
+      width={36}
+      height={36}
+      loading='lazy'
+      decoding='async'
+      className='h-9 w-9 rounded-lg object-contain'
+      onError={() => setFallbackLevel((l) => l + 1)}
+    />
+  );
+}
+
+/**
  * Hub 导航站卡片
  * 设计语言：紧凑横向、Favicon 大图标优先、整卡可点、hover 显示跳转箭头
  */
 export function SkillCard({ site }: SiteCardProps) {
   const badge = PLATFORM_BADGE[site.platform] ?? { label: '其他', color: 'text-muted-foreground' };
   const region = REGION_CONFIG[site.region] ?? { label: '', flag: '🌐' };
-  const faviconUrl = getFaviconUrl(site.url);
 
-  const [faviconError, setFaviconError] = useState(false);
   const [clicking, setClicking] = useState(false);
   const resetTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -92,22 +139,7 @@ export function SkillCard({ site }: SiteCardProps) {
     >
       {/* Favicon / Logo 图标区 */}
       <div className='relative h-9 w-9 shrink-0'>
-        {!faviconError && faviconUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={faviconUrl}
-            alt={site.name}
-            width={36}
-            height={36}
-            className='h-9 w-9 rounded-lg object-contain'
-            onError={() => setFaviconError(true)}
-          />
-        ) : (
-          /* favicon 加载失败时的占位：首字母 */
-          <div className='flex h-9 w-9 items-center justify-center rounded-lg bg-muted text-sm font-bold text-muted-foreground'>
-            {site.name.charAt(0).toUpperCase()}
-          </div>
-        )}
+        <SiteFavicon site={site} />
 
         {/* 精选角标 */}
         {site.is_featured && (
