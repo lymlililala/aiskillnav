@@ -5,7 +5,14 @@
 import { delay } from './mock-api';
 
 export type TutorialLevel = 'beginner' | 'intermediate' | 'advanced';
-export type TutorialCategory = 'concept' | 'hands-on' | 'mcp' | 'agent' | 'workflow';
+export type TutorialCategory =
+  | 'concept'
+  | 'hands-on'
+  | 'mcp'
+  | 'agent'
+  | 'workflow'
+  | 'creative'
+  | 'productivity';
 
 export type Tutorial = {
   id: number;

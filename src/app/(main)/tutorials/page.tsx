@@ -31,12 +31,17 @@ const CATEGORY_CONFIG: Record<TutorialCategory, { label: string }> = {
   'hands-on': { label: '实操教程' },
   mcp: { label: 'MCP' },
   agent: { label: 'Agent' },
-  workflow: { label: '工作流' }
+  workflow: { label: '工作流' },
+  creative: { label: '创意生成' },
+  productivity: { label: '效率工具' }
 };
 
+const CATEGORY_FALLBACK = { label: '其他' };
+const LEVEL_FALLBACK = { label: '未知', color: 'text-muted-foreground bg-muted/30' };
+
 function TutorialCard({ tutorial }: { tutorial: Tutorial }) {
-  const level = LEVEL_CONFIG[tutorial.level];
-  const cat = CATEGORY_CONFIG[tutorial.category];
+  const level = LEVEL_CONFIG[tutorial.level] ?? LEVEL_FALLBACK;
+  const cat = CATEGORY_CONFIG[tutorial.category] ?? CATEGORY_FALLBACK;
   return (
     <Link
       href={`/tutorials/${tutorial.slug}`}
