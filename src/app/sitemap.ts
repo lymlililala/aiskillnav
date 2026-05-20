@@ -384,6 +384,56 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.92
     },
+    // Tutorials — 新增（2026-05-20）SEO/GEO 优化批次
+    {
+      url: `${BASE_URL}/tutorials/perplexity-ai-complete-guide-2026`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.92
+    },
+    {
+      url: `${BASE_URL}/tutorials/github-copilot-advanced-tips-2026`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.92
+    },
+    {
+      url: `${BASE_URL}/tutorials/ai-agent-system-prompt-engineering-2026`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.94
+    },
+    {
+      url: `${BASE_URL}/tutorials/vercel-ai-sdk-nextjs-tutorial-2026`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.93
+    },
+    {
+      url: `${BASE_URL}/tutorials/ai-writing-humanize-techniques-2026`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.91
+    },
+    // News — 新增（2026-05-20）SEO/GEO 优化批次
+    {
+      url: `${BASE_URL}/news/openai-o3-mini-release-price-performance-2026`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.95
+    },
+    {
+      url: `${BASE_URL}/news/google-notebooklm-plus-enterprise-2026`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.93
+    },
+    {
+      url: `${BASE_URL}/news/ai-engineer-job-market-skills-2026`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.94
+    },
     // 通用页面
     {
       url: `${BASE_URL}/about`,
