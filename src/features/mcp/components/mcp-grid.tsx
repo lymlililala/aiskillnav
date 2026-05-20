@@ -117,6 +117,18 @@ const CATEGORY_CONFIG: Record<
     icon: Icons.sparkles,
     color: 'text-rose-600 dark:text-rose-400',
     bg: 'bg-rose-500/10'
+  },
+  creative: {
+    label: '创意内容',
+    icon: Icons.palette,
+    color: 'text-fuchsia-600 dark:text-fuchsia-400',
+    bg: 'bg-fuchsia-500/10'
+  },
+  media: {
+    label: '媒体/视频',
+    icon: Icons.video,
+    color: 'text-orange-600 dark:text-orange-400',
+    bg: 'bg-orange-500/10'
   }
 };
 
