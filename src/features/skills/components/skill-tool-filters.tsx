@@ -10,10 +10,15 @@ import { cn } from '@/lib/utils';
 // OpenClaw Skills 分类
 const CATEGORY_TABS = [
   { value: 'all', label: '全部' },
+  { value: '小说生成', label: '📖 小说生成' },
+  { value: '简历生成', label: '📄 简历生成' },
+  { value: '周报生成', label: '📊 周报生成' },
+  { value: '漫剧生成', label: '🎨 漫剧生成' },
+  { value: '短视频生成', label: '🎬 短视频生成' },
+  { value: '内容生成', label: '✍️ 内容生成' },
   { value: '开发工具', label: '🛠️ 开发工具' },
   { value: '效率与协作', label: '📋 效率与协作' },
   { value: '中文平台', label: '🇨🇳 中文平台' },
-  { value: '内容生成', label: '🎨 内容生成' },
   { value: 'AI Agent', label: '🤖 AI Agent' },
   { value: '网页与浏览器', label: '🌐 网页与浏览器' },
   { value: '邮件与通信', label: '📧 邮件与通信' },
@@ -23,23 +28,30 @@ const CATEGORY_TABS = [
 
 // 语义搜索示例
 const SEARCH_EXAMPLES = [
+  '帮我写小说续集',
+  '一键生成漂亮简历',
+  '周报自动生成',
+  '漫画分镜生成',
+  '短视频脚本创作',
   '能发邮件的 Skill',
   '我想让 AI 帮我审查代码',
   '帮我生成图片',
   '微信自动化',
   '跨 Agent 共享记忆',
-  '论文检索',
   '抖音内容生产',
   '安全漏洞检测'
 ];
 
 // 快捷场景标签
 const QUICK_TAGS = [
+  { label: '📖 小说续写', query: '小说' },
+  { label: '📄 简历', query: '简历' },
+  { label: '📊 周报', query: '周报' },
+  { label: '🎬 短视频', query: '短视频' },
+  { label: '🎨 漫画', query: '漫画' },
   { label: '📝 代码审查', query: '代码' },
   { label: '🖼️ 图像生成', query: '图像' },
-  { label: '📧 邮件自动化', query: '邮件' },
-  { label: '🤖 Agent 记忆', query: '记忆' },
-  { label: '🇨🇳 微信', query: '微信' }
+  { label: '📧 邮件自动化', query: '邮件' }
 ];
 
 export function SkillToolFilters() {

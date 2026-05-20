@@ -434,6 +434,56 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.94
     },
+    // Tutorials — 新增（2026-05-20）热门需求分类文章
+    {
+      url: `${BASE_URL}/tutorials/ai-novel-writing-complete-guide-2026`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.93
+    },
+    {
+      url: `${BASE_URL}/tutorials/ai-resume-builder-guide-2026`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.93
+    },
+    {
+      url: `${BASE_URL}/tutorials/ai-weekly-report-automation-2026`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.92
+    },
+    {
+      url: `${BASE_URL}/tutorials/ai-comic-manga-creation-guide-2026`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.92
+    },
+    {
+      url: `${BASE_URL}/tutorials/ai-short-video-production-pipeline-2026`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.94
+    },
+    // News — 新增（2026-05-20）热门需求分类文章
+    {
+      url: `${BASE_URL}/news/ai-creative-content-tools-roundup-2026`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.93
+    },
+    {
+      url: `${BASE_URL}/news/ai-video-generation-kling-runway-pika-2026`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.94
+    },
+    {
+      url: `${BASE_URL}/news/mcp-creative-tools-novel-resume-video-2026`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.92
+    },
     // 通用页面
     {
       url: `${BASE_URL}/about`,

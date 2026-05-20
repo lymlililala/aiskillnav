@@ -8,6 +8,8 @@ import { cn } from '@/lib/utils';
 
 const CATEGORY_TABS = [
   { value: 'all', label: '全部' },
+  { value: 'creative', label: '🎨 创意内容' },
+  { value: 'media', label: '🎬 媒体/视频' },
   { value: 'utility', label: '🔧 通用工具' },
   { value: 'devtools', label: '💻 开发工具' },
   { value: 'productivity', label: '⚡ 效率工具' },
