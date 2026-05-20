@@ -24,16 +24,14 @@ export function SkillTabContent() {
       <div
         className={cn(
           'relative overflow-hidden rounded-2xl border transition-all duration-500',
-          isTools
-            ? 'border-violet-500/20 bg-[radial-gradient(ellipse_at_top_right,hsl(263_70%_50%/0.04),transparent_50%)]'
-            : 'border-border bg-[radial-gradient(ellipse_at_top_left,hsl(var(--primary)/0.03),transparent_50%)]'
+          isTools ? 'border-violet-500/30 bg-violet-500/5' : 'border-primary/20 bg-primary/5'
         )}
       >
         {/* 顶部分区指示条 */}
         <div
           className={cn(
             'flex items-center gap-2 border-b px-4 py-2.5 transition-all duration-300',
-            isTools ? 'border-violet-500/15 bg-violet-500/5' : 'border-border bg-primary/3'
+            isTools ? 'border-violet-500/20 bg-violet-500/8' : 'border-primary/15 bg-primary/8'
           )}
         >
           {isTools ? (
@@ -49,9 +47,9 @@ export function SkillTabContent() {
           ) : (
             <>
               <Icons.skillsHub className='h-3.5 w-3.5 text-primary/70' />
-              <span className='text-[11px] font-semibold text-primary/80'>Hub 导航站</span>
+              <span className='text-[11px] font-semibold text-primary/80'>收录平台</span>
               <span className='text-[10px] text-muted-foreground/60'>
-                — 发现全球优质 AI Skill 平台，点击直达
+                — 按官方 / 社区 / 工作流分区展示，点击卡片直达平台
               </span>
             </>
           )}
