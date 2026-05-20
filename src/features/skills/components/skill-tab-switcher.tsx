@@ -9,7 +9,7 @@ import { siteStatsOptions, skillToolStatsOptions } from '../api/queries';
 export function SkillTabSwitcher() {
   const [tab, setTab] = useQueryState(
     'skill_tab',
-    parseAsString.withDefault('sites').withOptions({ shallow: true })
+    parseAsString.withDefault('tools').withOptions({ shallow: true })
   );
 
   const { data: siteStats } = useSuspenseQuery(siteStatsOptions());
