@@ -2,46 +2,92 @@
 
 import { parseAsString, useQueryState } from 'nuqs';
 import { Suspense } from 'react';
+import { cn } from '@/lib/utils';
 import { SkillFilters } from './skill-filters';
 import { SkillGrid, SkillGridSkeleton } from './skill-grid';
 import { SkillToolFilters } from './skill-tool-filters';
 import { SkillToolGrid, SkillToolGridSkeleton } from './skill-tool-grid';
 import { SkillTabSwitcher } from './skill-tab-switcher';
 import { FeaturedSkills, FeaturedSkillsSkeleton } from './featured-skills';
+import { Icons } from '@/components/icons';
 
 export function SkillTabContent() {
   const [tab] = useQueryState('skill_tab', parseAsString.withDefault('sites'));
+  const isTools = tab === 'tools';
 
   return (
     <div className='space-y-6'>
-      {/* Tab 切换器 — 紧接统计数据 */}
+      {/* Tab 切换器 */}
       <SkillTabSwitcher />
 
-      {tab === 'tools' ? (
-        <>
-          <SkillToolFilters />
-          <Suspense fallback={<SkillToolGridSkeleton />}>
-            <SkillToolGrid />
-          </Suspense>
-        </>
-      ) : (
-        <>
-          {/* 精选 Hub 站点分区 — 仅在 Hub 导航站 Tab 显示 */}
-          <Suspense fallback={<FeaturedSkillsSkeleton />}>
-            <FeaturedSkills />
-          </Suspense>
+      {/* 内容区 — 根据 tab 切换整体氛围 */}
+      <div
+        className={cn(
+          'relative overflow-hidden rounded-2xl border transition-all duration-500',
+          isTools
+            ? 'border-violet-500/20 bg-[radial-gradient(ellipse_at_top_right,hsl(263_70%_50%/0.04),transparent_50%)]'
+            : 'border-border bg-[radial-gradient(ellipse_at_top_left,hsl(var(--primary)/0.03),transparent_50%)]'
+        )}
+      >
+        {/* 顶部分区指示条 */}
+        <div
+          className={cn(
+            'flex items-center gap-2 border-b px-4 py-2.5 transition-all duration-300',
+            isTools ? 'border-violet-500/15 bg-violet-500/5' : 'border-border bg-primary/3'
+          )}
+        >
+          {isTools ? (
+            <>
+              <Icons.terminal className='h-3.5 w-3.5 text-violet-500' />
+              <span className='text-[11px] font-semibold text-violet-600 dark:text-violet-400'>
+                Skills 市场
+              </span>
+              <span className='text-[10px] text-muted-foreground/60'>
+                — 安装原子化 AI 能力到你的本地 Agent
+              </span>
+            </>
+          ) : (
+            <>
+              <Icons.skillsHub className='h-3.5 w-3.5 text-primary/70' />
+              <span className='text-[11px] font-semibold text-primary/80'>Hub 导航站</span>
+              <span className='text-[10px] text-muted-foreground/60'>
+                — 发现全球优质 AI Skill 平台，点击直达
+              </span>
+            </>
+          )}
+        </div>
 
-          <div className='flex items-center gap-3'>
-            <div className='h-px flex-1 bg-border' />
-            <span className='text-xs font-medium text-muted-foreground'>全部收录站点</span>
-            <div className='h-px flex-1 bg-border' />
-          </div>
-          <SkillFilters />
-          <Suspense fallback={<SkillGridSkeleton />}>
-            <SkillGrid />
-          </Suspense>
-        </>
-      )}
+        {/* 实际内容 */}
+        <div className='p-4'>
+          {isTools ? (
+            <div className='space-y-4'>
+              <SkillToolFilters />
+              <Suspense fallback={<SkillToolGridSkeleton />}>
+                <SkillToolGrid />
+              </Suspense>
+            </div>
+          ) : (
+            <div className='space-y-5'>
+              {/* 精选 Hub 站点分区 */}
+              <Suspense fallback={<FeaturedSkillsSkeleton />}>
+                <FeaturedSkills />
+              </Suspense>
+
+              <div className='flex items-center gap-3'>
+                <div className='h-px flex-1 bg-border' />
+                <span className='text-xs font-medium text-muted-foreground'>全部收录站点</span>
+                <div className='h-px flex-1 bg-border' />
+              </div>
+
+              <SkillFilters />
+
+              <Suspense fallback={<SkillGridSkeleton />}>
+                <SkillGrid />
+              </Suspense>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

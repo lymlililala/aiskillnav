@@ -15,96 +15,206 @@ export function SkillTabSwitcher() {
   const { data: siteStats } = useSuspenseQuery(siteStatsOptions());
   const { data: toolStats } = useSuspenseQuery(skillToolStatsOptions());
 
-  const TABS = [
-    {
-      value: 'sites',
-      label: 'Hub 导航站',
-      icon: Icons.skillsHub,
-      count: siteStats.total,
-      desc: '聚合平台 · 发现优质来源',
-      color: 'text-blue-600 dark:text-blue-400',
-      activeBg: 'bg-blue-500/8 border-blue-500/30'
-    },
-    {
-      value: 'tools',
-      label: 'OpenClaw Skills',
-      icon: Icons.sparkles,
-      count: toolStats.total,
-      desc: 'clawhub.ai · 原子化能力库',
-      color: 'text-violet-600 dark:text-violet-400',
-      activeBg: 'bg-violet-500/8 border-violet-500/30'
-    }
-  ];
+  const isSites = tab === 'sites';
+  const isTools = tab === 'tools';
 
   return (
-    <div className='flex gap-2'>
-      {TABS.map((t) => {
-        const Icon = t.icon;
-        const active = tab === t.value;
-        return (
+    <div className='relative overflow-hidden rounded-2xl border bg-card shadow-sm'>
+      {/* 背景底纹 — 根据当前 Tab 切换 */}
+      <div
+        className={cn(
+          'pointer-events-none absolute inset-0 transition-all duration-500',
+          isSites
+            ? 'bg-[radial-gradient(ellipse_at_top_left,hsl(var(--primary)/0.04),transparent_60%)]'
+            : 'bg-[radial-gradient(ellipse_at_top_right,hsl(263_70%_50%/0.05),transparent_60%)]'
+        )}
+      />
+
+      <div className='relative p-4'>
+        {/* 顶部说明文字 */}
+        <p className='mb-3 text-[11px] font-medium uppercase tracking-wider text-muted-foreground/60'>
+          选择内容频道
+        </p>
+
+        {/* Tab 分段控制器 */}
+        <div className='grid grid-cols-2 gap-2'>
+          {/* Hub 导航站 Tab */}
           <button
-            key={t.value}
-            onClick={() => setTab(t.value)}
+            onClick={() => setTab('sites')}
             className={cn(
-              'group flex flex-1 items-center gap-3 rounded-xl border px-4 py-3 text-left transition-all duration-150',
-              active
-                ? cn('shadow-sm', t.activeBg)
-                : 'bg-card text-muted-foreground hover:bg-accent hover:text-foreground'
+              'group relative flex flex-col gap-2 overflow-hidden rounded-xl border p-4 text-left transition-all duration-200',
+              isSites
+                ? 'border-primary/30 bg-primary/5 shadow-sm'
+                : 'border-border bg-background/50 text-muted-foreground hover:border-border hover:bg-accent/50'
             )}
           >
-            <div
-              className={cn(
-                'flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-colors',
-                active ? cn(t.color, 'bg-current/10') : 'bg-muted/50'
-              )}
-            >
-              <Icon
+            {/* 激活时的高亮条 */}
+            {isSites && (
+              <div className='absolute left-0 top-0 h-full w-1 rounded-l-xl bg-primary' />
+            )}
+
+            <div className='flex items-start justify-between'>
+              <div
                 className={cn(
-                  'h-4 w-4 transition-colors',
-                  active ? t.color : 'text-muted-foreground group-hover:text-foreground'
+                  'flex h-10 w-10 items-center justify-center rounded-xl transition-all duration-200',
+                  isSites ? 'bg-primary/10' : 'bg-muted/60 group-hover:bg-muted'
                 )}
-              />
+              >
+                <Icons.skillsHub
+                  className={cn(
+                    'h-5 w-5 transition-colors',
+                    isSites ? 'text-primary' : 'text-muted-foreground group-hover:text-foreground'
+                  )}
+                />
+              </div>
+              <div
+                className={cn(
+                  'flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold transition-colors',
+                  isSites ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
+                )}
+              >
+                {siteStats.total}
+              </div>
             </div>
-            <div className='min-w-0 flex-1'>
-              <div className='flex items-center gap-2'>
-                <span
-                  className={cn(
-                    'text-sm font-semibold transition-colors',
-                    active ? 'text-foreground' : 'text-muted-foreground group-hover:text-foreground'
-                  )}
-                >
-                  {t.label}
-                </span>
-                <span
-                  className={cn(
-                    'rounded-full px-1.5 py-0.5 text-[10px] font-semibold',
-                    active
-                      ? cn(
-                          'text-white',
-                          t.color
-                            .replace('text-', 'bg-')
-                            .replace(' dark:text-', ' dark:bg-')
-                            .split(' ')[0]
-                        )
-                      : 'bg-muted text-muted-foreground'
-                  )}
-                >
-                  {t.count}
-                </span>
+
+            <div>
+              <div
+                className={cn(
+                  'flex items-center gap-1.5 text-sm font-semibold transition-colors',
+                  isSites ? 'text-foreground' : 'text-muted-foreground group-hover:text-foreground'
+                )}
+              >
+                🌐 Hub 导航站
               </div>
               <p
                 className={cn(
-                  'truncate text-[11px] transition-colors',
-                  active ? 'text-muted-foreground' : 'text-muted-foreground/60'
+                  'mt-0.5 text-[11px] leading-relaxed transition-colors',
+                  isSites ? 'text-muted-foreground' : 'text-muted-foreground/50'
                 )}
               >
-                {t.desc}
+                发现优质 AI Skill 资源平台，一键直达
               </p>
             </div>
-            {active && <Icons.chevronRight className={cn('h-4 w-4 shrink-0', t.color)} />}
+
+            {/* 底部标签 */}
+            <div className='flex flex-wrap gap-1 pt-0.5'>
+              {['聚合平台', '跳转导航', '开箱即用'].map((tag) => (
+                <span
+                  key={tag}
+                  className={cn(
+                    'rounded-md px-1.5 py-0.5 text-[9px] font-medium transition-colors',
+                    isSites
+                      ? 'bg-primary/8 text-primary/80'
+                      : 'bg-muted/60 text-muted-foreground/60'
+                  )}
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
           </button>
-        );
-      })}
+
+          {/* OpenClaw Skills Tab */}
+          <button
+            onClick={() => setTab('tools')}
+            className={cn(
+              'group relative flex flex-col gap-2 overflow-hidden rounded-xl border p-4 text-left transition-all duration-200',
+              isTools
+                ? 'border-violet-500/30 bg-violet-500/5 shadow-sm'
+                : 'border-border bg-background/50 text-muted-foreground hover:border-border hover:bg-accent/50'
+            )}
+          >
+            {/* 激活时的高亮条 */}
+            {isTools && (
+              <div className='absolute left-0 top-0 h-full w-1 rounded-l-xl bg-violet-500' />
+            )}
+
+            <div className='flex items-start justify-between'>
+              <div
+                className={cn(
+                  'flex h-10 w-10 items-center justify-center rounded-xl transition-all duration-200',
+                  isTools ? 'bg-violet-500/10' : 'bg-muted/60 group-hover:bg-muted'
+                )}
+              >
+                <Icons.sparkles
+                  className={cn(
+                    'h-5 w-5 transition-colors',
+                    isTools
+                      ? 'text-violet-600 dark:text-violet-400'
+                      : 'text-muted-foreground group-hover:text-foreground'
+                  )}
+                />
+              </div>
+              <div
+                className={cn(
+                  'flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold transition-colors',
+                  isTools ? 'bg-violet-500 text-white' : 'bg-muted text-muted-foreground'
+                )}
+              >
+                {toolStats.total}
+              </div>
+            </div>
+
+            <div>
+              <div
+                className={cn(
+                  'flex items-center gap-1.5 text-sm font-semibold transition-colors',
+                  isTools ? 'text-foreground' : 'text-muted-foreground group-hover:text-foreground'
+                )}
+              >
+                🧩 Skills 市场
+              </div>
+              <p
+                className={cn(
+                  'mt-0.5 text-[11px] leading-relaxed transition-colors',
+                  isTools ? 'text-muted-foreground' : 'text-muted-foreground/50'
+                )}
+              >
+                原子化能力库，复制命令即可安装到本地 Agent
+              </p>
+            </div>
+
+            {/* 底部标签 */}
+            <div className='flex flex-wrap gap-1 pt-0.5'>
+              {['安装部署', '极客工具', 'clawhub.ai'].map((tag) => (
+                <span
+                  key={tag}
+                  className={cn(
+                    'rounded-md px-1.5 py-0.5 text-[9px] font-medium transition-colors',
+                    isTools
+                      ? 'bg-violet-500/8 text-violet-600/70 dark:text-violet-400/70'
+                      : 'bg-muted/60 text-muted-foreground/60'
+                  )}
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </button>
+        </div>
+
+        {/* 底部提示语 — 随 tab 切换 */}
+        <div
+          className={cn(
+            'mt-3 flex items-center gap-2 rounded-lg px-3 py-2 text-[11px] transition-all duration-300',
+            isSites
+              ? 'bg-primary/5 text-primary/70'
+              : 'bg-violet-500/5 text-violet-600/70 dark:text-violet-400/70'
+          )}
+        >
+          {isSites ? (
+            <>
+              <Icons.externalLink className='h-3 w-3 shrink-0' />
+              <span>点击卡片将在新标签页打开目标网站 — 你是在「发现和跳转」</span>
+            </>
+          ) : (
+            <>
+              <Icons.terminal className='h-3 w-3 shrink-0' />
+              <span>复制安装命令，配置到本地 AI Agent — 你是在「安装和使用」</span>
+            </>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

@@ -90,7 +90,10 @@ import {
   IconUsers,
   IconVideo,
   IconCrown,
-  IconX
+  IconX,
+  IconTerminal2,
+  IconCopy,
+  IconCopyCheck
 } from '@tabler/icons-react';
 
 export type Icon = React.ComponentType<IconProps>;
@@ -225,5 +228,8 @@ export const Icons = {
   galleryVerticalEnd: IconStack2,
   moreHorizontal: IconDots,
   skillsHub: IconApps,
-  briefcase: IconBriefcase
+  briefcase: IconBriefcase,
+  terminal: IconTerminal2,
+  copy: IconCopy,
+  copyCheck: IconCopyCheck
 };
