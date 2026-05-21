@@ -484,6 +484,55 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.92
     },
+    // Tutorials + News — 新增（2026-05-21）SEO/GEO 优化批次
+    {
+      url: `${BASE_URL}/tutorials/langgraph-vs-langchain-agent-framework-guide`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.93
+    },
+    {
+      url: `${BASE_URL}/tutorials/gmail-ai-automation-n8n-complete-guide`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.92
+    },
+    {
+      url: `${BASE_URL}/tutorials/openai-assistants-api-complete-guide-2026`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.93
+    },
+    {
+      url: `${BASE_URL}/tutorials/mcp-server-security-best-practices-2026`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.94
+    },
+    {
+      url: `${BASE_URL}/tutorials/ai-content-marketing-sop-2026`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.92
+    },
+    {
+      url: `${BASE_URL}/news/ai-agent-market-2026-mid-year-review`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.94
+    },
+    {
+      url: `${BASE_URL}/news/best-ai-developer-tools-may-2026`,
+      lastModified: now,
+      changeFrequency: 'weekly',
+      priority: 0.93
+    },
+    {
+      url: `${BASE_URL}/news/llm-hallucination-mitigation-techniques-2026`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.92
+    },
     // 通用页面
     {
       url: `${BASE_URL}/about`,
