@@ -484,6 +484,55 @@ const NEWS_DATA: Omit<NewsItem, 'id' | 'created_at' | 'updated_at'>[] = [
     status: 'published',
     is_featured: true,
     published_at: '2026-05-21T12:00:00Z'
+  },
+  // ── 新增（2026-05-24）SEO/GEO 优化批次 ──────────────────────────────────
+  {
+    slug: 'ai-search-revolution-perplexity-vs-google-sge-2026',
+    title: 'AI 搜索正在取代 Google 吗？Perplexity、SearchGPT 和 Google SGE 的真实对比',
+    summary:
+      '2026年，"AI 搜索"不再是概念。Perplexity 月活超过 1 亿，SearchGPT 内置进 ChatGPT，Google 的 AI Overviews（前身 SGE）覆盖超过 40% 的搜索结果。很多人在问：我还需要用 Google 吗？本文从实际使用角度对比三种 AI 搜索工具——哪种信息最准确、哪种最快、哪种在查什么类型问题时有明显优势——同时分析这场搜索革命对内容创作者和 SEO 从业者意味着什么。Perplexity 的直接回答模式确实在减少某些类型的 Google 查询，但 Google 凭借全面的索引和购物/地图生态还没有被取代。对于内容创作者：结构清晰、有明确引用来源的内容，在 AI 搜索时代被引用的概率更高，而不是消失。',
+    source_url: 'https://aiskillnav.com/news',
+    source_name: 'AI Skill Nav 编辑部',
+    category: '工具',
+    tags: [
+      'AI搜索',
+      'Perplexity',
+      'Google SGE',
+      'SearchGPT',
+      'AI Overviews',
+      'SEO',
+      '搜索引擎',
+      'GEO'
+    ],
+    status: 'published',
+    is_featured: true,
+    published_at: '2026-05-24T08:00:00Z'
+  },
+  {
+    slug: 'cursor-free-vs-paid-is-it-worth-upgrading-2026',
+    title: 'Cursor 免费版够用吗？2026 年付费版值不值得升级的真实分析',
+    summary:
+      'Cursor 是目前最受欢迎的 AI 编程 IDE，但很多开发者都在纠结一个问题：免费版到底能用到什么程度，什么时候应该升级到 $20/月的 Pro？本文基于真实的日常开发使用场景，分析免费版的次数限制、Pro 的主要优势（无限快速请求、更强的 Claude 模型、Background Agent），以及什么样的开发者最应该升级。结论是：如果你每天工作时间超过 4 小时用 Cursor，Pro 版的 ROI 非常高；如果你是业余项目或学习用途，免费版配合 API Key 自带也可以节省不少费用。文章还对比了 Cursor Pro vs GitHub Copilot Individual，帮助你在两者之间做选择。',
+    source_url: 'https://aiskillnav.com/news',
+    source_name: 'AI Skill Nav 编辑部',
+    category: '工具',
+    tags: ['Cursor', 'Cursor Pro', 'AI编程', 'AI IDE', 'GitHub Copilot', '工具评测'],
+    status: 'published',
+    is_featured: true,
+    published_at: '2026-05-24T09:00:00Z'
+  },
+  {
+    slug: 'china-ai-market-h1-2026-report',
+    title: '2026 年上半年中国 AI 产业报告：大模型洗牌期，谁还在增长？',
+    summary:
+      '2026年上半年，中国 AI 大模型市场进入深度整合期。融资明显收缩，但头部公司的营收在加速增长——市场正在从"烧钱扩张"转向"找到真实商业模式"。本报告梳理几个核心趋势：DeepSeek 凭借开源策略在全球开发者社区占据重要位置，豆包/通义千问在企业端获得大量落地案例，垂直行业大模型（法律、医疗、教育）开始出现盈利的商业化路径。与此同时，通用大模型的 API 价格战让很多中小创业公司面临压力——当 DeepSeek-V3 的 API 成本降到 GPT-4 的 1/50，"模型能力"本身很难成为护城河。最值得关注的是"AI 工具化"趋势：钉钉、飞书、WPS 等企业软件通过内嵌 AI 功能快速获得大量 B 端用户，对独立 AI 工具产品形成竞争压力。',
+    source_url: 'https://aiskillnav.com/news',
+    source_name: 'AI Skill Nav 编辑部',
+    category: '综合',
+    tags: ['中国AI', '大模型', 'DeepSeek', '豆包', '通义千问', 'AI行业报告', '2026趋势', '国产AI'],
+    status: 'published',
+    is_featured: true,
+    published_at: '2026-05-24T10:00:00Z'
   }
 ];
 
