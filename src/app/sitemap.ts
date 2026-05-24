@@ -1,12 +1,13 @@
 import type { MetadataRoute } from 'next';
+import { getSupabaseAdmin } from '@/lib/supabase';
 
 const BASE_URL = 'https://aiskillnav.com';
 
 /**
- * 动态生成 sitemap.xml
+ * 动态生成 sitemap.xml — 静态页面 + 从 Supabase 读取全量文章
  * 访问地址: /sitemap.xml
  */
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 
   // 静态页面 — 高优先级
@@ -533,6 +534,43 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.92
     },
+    // Tutorials + News — 新增（2026-05-24）SEO/GEO 优化批次
+    {
+      url: `${BASE_URL}/tutorials/chatgpt-plus-vs-claude-pro-worth-it-2026`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.94
+    },
+    {
+      url: `${BASE_URL}/tutorials/best-free-ai-tools-complete-guide-2026`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.95
+    },
+    {
+      url: `${BASE_URL}/tutorials/dify-build-knowledge-base-complete-tutorial-2026`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.93
+    },
+    {
+      url: `${BASE_URL}/news/ai-search-revolution-perplexity-vs-google-sge-2026`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.93
+    },
+    {
+      url: `${BASE_URL}/news/cursor-free-vs-paid-is-it-worth-upgrading-2026`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.94
+    },
+    {
+      url: `${BASE_URL}/news/china-ai-market-h1-2026-report`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.93
+    },
     // 通用页面
     {
       url: `${BASE_URL}/about`,
@@ -554,5 +592,46 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }
   ];
 
-  return staticPages;
+  // 动态页面 — 从 Supabase 读取全量 tutorials 和 news
+  let dynamicPages: MetadataRoute.Sitemap = [];
+  try {
+    const supabase = getSupabaseAdmin();
+
+    // 查询所有教程
+    const { data: tutorials } = await supabase
+      .from('tutorials')
+      .select('slug, published_at')
+      .order('published_at', { ascending: false });
+
+    // 查询所有已发布新闻
+    const { data: newsItems } = await supabase
+      .from('news')
+      .select('slug, published_at')
+      .eq('status', 'published')
+      .order('published_at', { ascending: false });
+
+    const tutorialPages: MetadataRoute.Sitemap = (tutorials ?? []).map((t) => ({
+      url: `${BASE_URL}/tutorials/${t.slug}`,
+      lastModified: new Date(t.published_at),
+      changeFrequency: 'monthly' as const,
+      priority: 0.88
+    }));
+
+    const newsPages: MetadataRoute.Sitemap = (newsItems ?? []).map((n) => ({
+      url: `${BASE_URL}/news/${n.slug}`,
+      lastModified: new Date(n.published_at),
+      changeFrequency: 'monthly' as const,
+      priority: 0.87
+    }));
+
+    dynamicPages = [...tutorialPages, ...newsPages];
+  } catch {
+    // Supabase 不可用时静默降级，只返回静态页面
+  }
+
+  // 合并：静态页面优先，动态页面去重（静态中已有的 slug 不重复添加）
+  const staticUrls = new Set(staticPages.map((p) => p.url));
+  const uniqueDynamic = dynamicPages.filter((p) => !staticUrls.has(p.url));
+
+  return [...staticPages, ...uniqueDynamic];
 }
