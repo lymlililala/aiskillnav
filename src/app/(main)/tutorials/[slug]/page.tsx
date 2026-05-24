@@ -13,10 +13,36 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const t = await getTutorialBySlug(slug);
   if (!t) return { title: '教程不存在' };
+  const url = `https://aiskillnav.com/tutorials/${slug}`;
   return {
     title: `${t.title} | 教程中心`,
     description: t.summary,
-    alternates: { canonical: `https://aiskillnav.com/tutorials/${slug}` }
+    keywords: t.tags,
+    alternates: { canonical: url },
+    openGraph: {
+      type: 'article',
+      url,
+      title: t.title,
+      description: t.summary,
+      siteName: 'AI Skill Navigation',
+      locale: 'zh_CN',
+      publishedTime: t.published_at,
+      authors: ['AI Skill Navigation'],
+      images: [
+        {
+          url: '/og-image.png',
+          width: 1200,
+          height: 630,
+          alt: t.title
+        }
+      ]
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: t.title,
+      description: t.summary,
+      images: ['/og-image.png']
+    }
   };
 }
 
