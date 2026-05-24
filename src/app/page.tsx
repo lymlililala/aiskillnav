@@ -6,8 +6,12 @@ import { getAgentStats } from '@/features/agents/api/service';
 import { getMcpStats } from '@/features/mcp/api/service';
 import { getModelStats } from '@/features/models/api/service';
 import { getUseCaseStats } from '@/features/usecases/api/service';
-import { getTutorialStats } from '@/features/tutorials/api/service';
-import { getNewsStats } from '@/features/news/api/service';
+import {
+  getTutorialStats,
+  getFeaturedTutorials,
+  getTutorials
+} from '@/features/tutorials/api/service';
+import { getNewsStats, getPublishedNews } from '@/features/news/api/service';
 
 export const metadata: Metadata = {
   title: 'AI Skill Navigation — AI Agent 工具导航',
@@ -166,6 +170,27 @@ async function getLiveStats() {
   return { agents, mcp, models, usecases, tutorials, news };
 }
 
+async function getHomePageContent() {
+  const [featuredTutorials, latestTutorials, latestNewsResp] = await Promise.all([
+    getFeaturedTutorials().catch(() => []),
+    getTutorials().catch(() => []),
+    getPublishedNews({ page: 1, limit: 6, sort: 'newest' }).catch(() => ({
+      items: [] as import('@/constants/mock-api-news').NewsItem[],
+      total_items: 0
+    }))
+  ]);
+
+  // 精选 4 篇教程用于首页展示（优先 featured，不足从最新补充）
+  const featuredSet = new Set(featuredTutorials.map((t) => t.id));
+  const supplemental = latestTutorials.filter((t) => !featuredSet.has(t.id)).slice(0, 4);
+  const displayTutorials = [...featuredTutorials, ...supplemental].slice(0, 4);
+
+  return {
+    displayTutorials,
+    latestNews: latestNewsResp.items.slice(0, 6)
+  };
+}
+
 function buildStats(live: Awaited<ReturnType<typeof getLiveStats>>) {
   return [
     { value: `${live.agents.total}+`, label: 'AI Agent', icon: Icons.sparkles },
@@ -227,7 +252,7 @@ const jsonLd = {
 };
 
 export default async function HomePage() {
-  const liveStats = await getLiveStats();
+  const [liveStats, content] = await Promise.all([getLiveStats(), getHomePageContent()]);
   const STATS = buildStats(liveStats);
   const dynamicModules = patchModuleBadges(liveStats);
   return (
@@ -385,6 +410,94 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ── Featured Tutorials ── */}
+      {content.displayTutorials.length > 0 && (
+        <section className='py-14 md:py-16'>
+          <div className='mx-auto max-w-6xl px-4 md:px-6'>
+            <div className='mb-8 flex items-center justify-between'>
+              <div>
+                <h2 className='text-xl font-bold tracking-tight md:text-2xl'>精选教程</h2>
+                <p className='mt-1 text-sm text-muted-foreground'>
+                  AI Agent 从入门到实战，手把手教你用好每个工具
+                </p>
+              </div>
+              <Link
+                href='/tutorials'
+                className='flex items-center gap-1 text-xs text-primary hover:underline'
+              >
+                查看全部 <Icons.chevronRight className='h-3.5 w-3.5' />
+              </Link>
+            </div>
+            <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-4'>
+              {content.displayTutorials.map((t) => (
+                <Link
+                  key={t.id}
+                  href={`/tutorials/${t.slug}`}
+                  className='group flex flex-col gap-2 rounded-xl border bg-card p-4 shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 hover:border-primary/30'
+                >
+                  <h3 className='text-sm font-semibold leading-snug group-hover:text-primary transition-colors line-clamp-2'>
+                    {t.title}
+                  </h3>
+                  <p className='flex-1 line-clamp-2 text-xs leading-relaxed text-muted-foreground'>
+                    {t.summary}
+                  </p>
+                  <div className='flex items-center gap-1 text-[11px] text-muted-foreground'>
+                    <Icons.clock className='h-3 w-3' />约 {t.estimated_minutes} 分钟
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── Latest News ── */}
+      {content.latestNews.length > 0 && (
+        <section className='border-t bg-muted/20 py-14 md:py-16'>
+          <div className='mx-auto max-w-6xl px-4 md:px-6'>
+            <div className='mb-8 flex items-center justify-between'>
+              <div>
+                <h2 className='text-xl font-bold tracking-tight md:text-2xl'>最新资讯</h2>
+                <p className='mt-1 text-sm text-muted-foreground'>
+                  追踪 AI Agent 赛道最新动态与深度分析
+                </p>
+              </div>
+              <Link
+                href='/news'
+                className='flex items-center gap-1 text-xs text-primary hover:underline'
+              >
+                查看全部 <Icons.chevronRight className='h-3.5 w-3.5' />
+              </Link>
+            </div>
+            <div className='grid gap-3 sm:grid-cols-2 lg:grid-cols-3'>
+              {content.latestNews.map((n) => (
+                <Link
+                  key={n.id}
+                  href={`/news/${n.slug}`}
+                  className='group flex flex-col gap-2 rounded-xl border bg-card p-4 shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 hover:border-primary/30'
+                >
+                  <h3 className='text-sm font-semibold leading-snug group-hover:text-primary transition-colors line-clamp-2'>
+                    {n.title}
+                  </h3>
+                  <p className='flex-1 line-clamp-2 text-xs leading-relaxed text-muted-foreground'>
+                    {n.summary}
+                  </p>
+                  <div className='flex items-center justify-between'>
+                    <span className='text-[11px] text-muted-foreground'>{n.source_name}</span>
+                    <span className='text-[11px] text-muted-foreground'>
+                      {new Date(n.published_at).toLocaleDateString('zh-CN', {
+                        month: 'short',
+                        day: 'numeric'
+                      })}
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ── CTA ── */}
       <section className='py-16 md:py-20'>

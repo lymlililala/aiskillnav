@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getTutorialBySlug, getTutorials } from '@/features/tutorials/api/service';
+import type { Tutorial } from '@/features/tutorials/api/service';
 import { Icons } from '@/components/icons';
 import { Badge } from '@/components/ui/badge';
 import PageContainer from '@/components/layout/page-container';
@@ -71,8 +72,21 @@ function renderMarkdown(md: string): string {
 
 export default async function TutorialDetailPage({ params }: Props) {
   const { slug } = await params;
-  const tutorial = await getTutorialBySlug(slug);
+  const [tutorial, allTutorials] = await Promise.all([
+    getTutorialBySlug(slug),
+    getTutorials().catch(() => [] as Tutorial[])
+  ]);
   if (!tutorial) notFound();
+
+  // 相关教程：同类别优先，排除当前文章，取前 3 篇
+  const related = allTutorials
+    .filter((t) => t.slug !== slug)
+    .sort((a, b) => {
+      const sameA = a.category === tutorial.category ? 1 : 0;
+      const sameB = b.category === tutorial.category ? 1 : 0;
+      return sameB - sameA;
+    })
+    .slice(0, 3);
 
   const level = LEVEL_CONFIG[tutorial.level];
   const html = renderMarkdown(tutorial.content);
@@ -182,6 +196,30 @@ export default async function TutorialDetailPage({ params }: Props) {
                 </span>
               ))}
             </div>
+          </div>
+        )}
+
+        {/* 相关教程推荐 — 增强内链网络，提升 Google 抓取深度 */}
+        {related.length > 0 && (
+          <div className='rounded-xl border bg-muted/30 p-5 space-y-3'>
+            <p className='text-xs font-semibold text-muted-foreground uppercase tracking-wide'>
+              相关教程
+            </p>
+            {related.map((t) => (
+              <Link
+                key={t.slug}
+                href={`/tutorials/${t.slug}`}
+                className='flex items-start gap-3 rounded-lg border bg-card px-4 py-3 text-sm hover:border-primary/30 hover:bg-accent transition-colors group'
+              >
+                <div className='flex-1 min-w-0'>
+                  <span className='font-medium line-clamp-1 group-hover:text-primary transition-colors'>
+                    {t.title}
+                  </span>
+                  <p className='text-xs text-muted-foreground mt-0.5 line-clamp-1'>{t.subtitle}</p>
+                </div>
+                <Icons.chevronRight className='h-4 w-4 shrink-0 text-muted-foreground mt-0.5' />
+              </Link>
+            ))}
           </div>
         )}
 
