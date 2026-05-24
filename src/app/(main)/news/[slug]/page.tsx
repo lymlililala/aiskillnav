@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import PageContainer from '@/components/layout/page-container';
 import { getNewsBySlug, getPublishedNews } from '@/features/news/api/service';
+import type { NewsItem } from '@/features/news/api/types';
 import { Icons } from '@/components/icons';
 import { Badge } from '@/components/ui/badge';
 
@@ -55,8 +56,27 @@ const CATEGORY_COLOR: Record<string, string> = {
 
 export default async function NewsDetailPage({ params }: Props) {
   const { slug } = await params;
-  const item = await getNewsBySlug(slug);
+  const [item, allNewsResp] = await Promise.all([
+    getNewsBySlug(slug),
+    getPublishedNews({ limit: 50 }).catch(() => ({
+      items: [] as NewsItem[],
+      total: 0,
+      page: 1,
+      limit: 50,
+      totalPages: 0
+    }))
+  ]);
   if (!item) notFound();
+
+  // 相关资讯：同类别优先，排除当前文章，取前 3 篇
+  const relatedNews = allNewsResp.items
+    .filter((n) => n.slug !== slug)
+    .sort((a, b) => {
+      const sameA = a.category === item.category ? 1 : 0;
+      const sameB = b.category === item.category ? 1 : 0;
+      return sameB - sameA;
+    })
+    .slice(0, 3);
 
   // Article 结构化数据（完善版，含 author/publisher）
   const jsonLd = {
@@ -183,7 +203,37 @@ export default async function NewsDetailPage({ params }: Props) {
           </Link>
         </div>
 
-        {/* Related */}
+        {/* Related News — 增强内链网络，提升 Google 抓取深度 */}
+        {relatedNews.length > 0 && (
+          <div className='rounded-xl border bg-muted/30 p-5 space-y-3'>
+            <p className='text-xs font-semibold text-muted-foreground uppercase tracking-wide'>
+              相关资讯
+            </p>
+            {relatedNews.map((n) => (
+              <Link
+                key={n.slug}
+                href={`/news/${n.slug}`}
+                className='flex items-start gap-3 rounded-lg border bg-card px-4 py-3 text-sm hover:border-primary/30 hover:bg-accent transition-colors group'
+              >
+                <div className='flex-1 min-w-0'>
+                  <span className='font-medium line-clamp-1 group-hover:text-primary transition-colors'>
+                    {n.title}
+                  </span>
+                  <p className='text-xs text-muted-foreground mt-0.5 line-clamp-1'>
+                    {new Date(n.published_at).toLocaleDateString('zh-CN', {
+                      month: 'short',
+                      day: 'numeric'
+                    })}{' '}
+                    · {n.source_name}
+                  </p>
+                </div>
+                <Icons.chevronRight className='h-4 w-4 shrink-0 text-muted-foreground mt-0.5' />
+              </Link>
+            ))}
+          </div>
+        )}
+
+        {/* Related Resources */}
         <div className='rounded-xl border bg-muted/30 p-5 space-y-2'>
           <p className='text-xs font-semibold text-muted-foreground uppercase tracking-wide'>
             相关资源
