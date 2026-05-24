@@ -40,7 +40,8 @@ const CATEGORY_CONFIG: Record<NewsCategory, { color: string; bg: string }> = {
     bg: 'bg-orange-500/10 border-orange-500/20'
   },
   融资: { color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-500/10 border-amber-500/20' },
-  研究: { color: 'text-pink-600 dark:text-pink-400', bg: 'bg-pink-500/10 border-pink-500/20' }
+  研究: { color: 'text-pink-600 dark:text-pink-400', bg: 'bg-pink-500/10 border-pink-500/20' },
+  综合: { color: 'text-sky-600 dark:text-sky-400', bg: 'bg-sky-500/10 border-sky-500/20' }
 };
 
 function formatDate(dateStr: string) {
