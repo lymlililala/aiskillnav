@@ -5,7 +5,7 @@
 import { matchSorter } from 'match-sorter';
 import { delay } from './mock-api';
 
-export type NewsCategory = 'Agent' | '框架' | '模型' | '工具' | '融资' | '研究';
+export type NewsCategory = 'Agent' | '框架' | '模型' | '工具' | '融资' | '研究' | '综合';
 export type NewsStatus = 'published' | 'draft' | 'archived';
 
 export type NewsItem = {
