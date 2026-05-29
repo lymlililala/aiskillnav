@@ -2840,32 +2840,52 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   ];
 
-  // 动态页面 — 从 Supabase 读取全量 tutorials 和 news
+  // 动态页面 — 从 Supabase 分页读取全量 tutorials 和 news
+  // Supabase JS 客户端默认上限 1000 条，需分页循环取全量
   let dynamicPages: MetadataRoute.Sitemap = [];
   try {
     const supabase = getSupabaseAdmin();
+    const PAGE = 1000;
 
-    // 查询所有教程
-    const { data: tutorials } = await supabase
-      .from('tutorials')
-      .select('slug, published_at')
-      .order('published_at', { ascending: false });
+    // 分页查询所有教程
+    const allTutorials: { slug: string; published_at: string }[] = [];
+    let tutOffset = 0;
+    while (true) {
+      const { data, error } = await supabase
+        .from('tutorials')
+        .select('slug, published_at')
+        .order('published_at', { ascending: false })
+        .range(tutOffset, tutOffset + PAGE - 1);
+      if (error || !data || data.length === 0) break;
+      allTutorials.push(...data);
+      if (data.length < PAGE) break;
+      tutOffset += PAGE;
+    }
 
-    // 查询所有已发布新闻
-    const { data: newsItems } = await supabase
-      .from('news')
-      .select('slug, published_at')
-      .eq('status', 'published')
-      .order('published_at', { ascending: false });
+    // 分页查询所有已发布新闻
+    const allNews: { slug: string; published_at: string }[] = [];
+    let newsOffset = 0;
+    while (true) {
+      const { data, error } = await supabase
+        .from('news')
+        .select('slug, published_at')
+        .eq('status', 'published')
+        .order('published_at', { ascending: false })
+        .range(newsOffset, newsOffset + PAGE - 1);
+      if (error || !data || data.length === 0) break;
+      allNews.push(...data);
+      if (data.length < PAGE) break;
+      newsOffset += PAGE;
+    }
 
-    const tutorialPages: MetadataRoute.Sitemap = (tutorials ?? []).map((t) => ({
+    const tutorialPages: MetadataRoute.Sitemap = allTutorials.map((t) => ({
       url: `${BASE_URL}/tutorials/${t.slug}`,
       lastModified: new Date(t.published_at),
       changeFrequency: 'monthly' as const,
       priority: 0.88
     }));
 
-    const newsPages: MetadataRoute.Sitemap = (newsItems ?? []).map((n) => ({
+    const newsPages: MetadataRoute.Sitemap = allNews.map((n) => ({
       url: `${BASE_URL}/news/${n.slug}`,
       lastModified: new Date(n.published_at),
       changeFrequency: 'monthly' as const,
