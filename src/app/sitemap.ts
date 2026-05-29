@@ -1,6 +1,11 @@
 import type { MetadataRoute } from 'next';
 import { getSupabaseAdmin } from '@/lib/supabase';
 
+// 声明为动态路由，避免 build 时尝试静态生成（会触发 Supabase 查询超时）
+// sitemap 每次请求时动态生成，Googlebot 抓取时拿到最新数据
+export const dynamic = 'force-dynamic';
+export const revalidate = 3600; // 可选：CDN 级别 1h 缓存
+
 const BASE_URL = 'https://aiskillnav.com';
 
 /**

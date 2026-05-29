@@ -6,11 +6,11 @@ import { getAgentStats } from '@/features/agents/api/service';
 import { getMcpStats } from '@/features/mcp/api/service';
 import { getModelStats } from '@/features/models/api/service';
 import { getUseCaseStats } from '@/features/usecases/api/service';
-import {
-  getTutorialStats,
-  getFeaturedTutorials,
-  getTutorials
-} from '@/features/tutorials/api/service';
+import { getTutorialStats, getFeaturedTutorials } from '@/features/tutorials/api/service';
+
+// ISR: 按需渲染，1 小时内复用缓存
+export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 import { getNewsStats, getPublishedNews } from '@/features/news/api/service';
 
 export const metadata: Metadata = {
@@ -171,19 +171,16 @@ async function getLiveStats() {
 }
 
 async function getHomePageContent() {
-  const [featuredTutorials, latestTutorials, latestNewsResp] = await Promise.all([
+  const [featuredTutorials, latestNewsResp] = await Promise.all([
     getFeaturedTutorials().catch(() => []),
-    getTutorials().catch(() => []),
     getPublishedNews({ page: 1, limit: 6, sort: 'newest' }).catch(() => ({
       items: [] as import('@/constants/mock-api-news').NewsItem[],
       total_items: 0
     }))
   ]);
 
-  // 精选 4 篇教程用于首页展示（优先 featured，不足从最新补充）
-  const featuredSet = new Set(featuredTutorials.map((t) => t.id));
-  const supplemental = latestTutorials.filter((t) => !featuredSet.has(t.id)).slice(0, 4);
-  const displayTutorials = [...featuredTutorials, ...supplemental].slice(0, 4);
+  // 精选教程用于首页展示（最多 4 篇）
+  const displayTutorials = featuredTutorials.slice(0, 4);
 
   return {
     displayTutorials,
