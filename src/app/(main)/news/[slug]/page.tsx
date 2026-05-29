@@ -28,14 +28,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export async function generateStaticParams() {
-  try {
-    const { items } = await getPublishedNews({ limit: 100 });
-    return items.map((n) => ({ slug: n.slug }));
-  } catch {
-    return [];
-  }
-}
+// 动态渲染 + ISR：按需渲染，首次访问后缓存 1 小时
+// 移除 generateStaticParams 以避免 build 时预渲染 1000+ 篇新闻导致构建超时
+export const dynamic = 'force-dynamic';
+export const revalidate = 3600; // 1 小时 ISR 缓存
 
 function formatDate(s: string) {
   return new Date(s).toLocaleDateString('zh-CN', {

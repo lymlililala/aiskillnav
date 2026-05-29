@@ -21,12 +21,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export async function generateStaticParams() {
-  const result = await fakeMcpServers.getMcpServers({ limit: 200 });
-  return result.items
-    .filter((s) => typeof s.slug === 'string' && s.slug.length > 0)
-    .map((s) => ({ slug: s.slug }));
-}
+// 动态渲染 + ISR：按需渲染，首次访问后缓存 1 小时
+export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 const CATEGORY_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
   filesystem: {
