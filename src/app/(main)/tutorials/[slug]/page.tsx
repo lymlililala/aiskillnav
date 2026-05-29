@@ -46,14 +46,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export async function generateStaticParams() {
-  try {
-    const tutorials = await getTutorials();
-    return tutorials.map((t) => ({ slug: t.slug }));
-  } catch {
-    return [];
-  }
-}
+// 动态渲染 + ISR：按需渲染，首次访问后缓存 1 小时
+// 移除 generateStaticParams 以避免 build 时预渲染 2000+ 篇文章导致构建超时
+export const dynamic = 'force-dynamic';
+export const revalidate = 3600; // 1 小时 ISR 缓存
 
 const LEVEL_CONFIG: Record<string, { label: string; color: string }> = {
   beginner: { label: '入门', color: 'text-emerald-600 bg-emerald-500/10 border-emerald-500/20' },
