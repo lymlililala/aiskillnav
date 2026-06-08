@@ -63,14 +63,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (allTutorials[0]?.published_at) newestTutorialDate = new Date(allTutorials[0].published_at);
     if (allNews[0]?.published_at) newestNewsDate = new Date(allNews[0].published_at);
 
-    const tutorialPages: MetadataRoute.Sitemap = allTutorials.map((t) => ({
+    // 按 slug 去重，避免数据库中重复 slug 产生重复 URL
+    const uniqTutorials = Array.from(new Map(allTutorials.map((t) => [t.slug, t])).values());
+    const uniqNews = Array.from(new Map(allNews.map((n) => [n.slug, n])).values());
+
+    const tutorialPages: MetadataRoute.Sitemap = uniqTutorials.map((t) => ({
       url: `${BASE_URL}/tutorials/${t.slug}`,
       lastModified: new Date(t.published_at),
       changeFrequency: 'monthly' as const,
       priority: 0.88
     }));
 
-    const newsPages: MetadataRoute.Sitemap = allNews.map((n) => ({
+    const newsPages: MetadataRoute.Sitemap = uniqNews.map((n) => ({
       url: `${BASE_URL}/news/${n.slug}`,
       lastModified: new Date(n.published_at),
       changeFrequency: 'monthly' as const,
