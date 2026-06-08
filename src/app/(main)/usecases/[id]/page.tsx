@@ -5,6 +5,7 @@ import PageContainer from '@/components/layout/page-container';
 import { Icons } from '@/components/icons';
 import { Badge } from '@/components/ui/badge';
 import { getUseCaseById, getRelatedUseCases } from '@/features/usecases/api/service';
+import { getAgentSlugSet } from '@/features/agents/api/service';
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -46,7 +47,10 @@ export default async function UseCaseDetailPage({ params }: Props) {
   const uc = await getUseCaseById(Number(id));
   if (!uc) notFound();
 
-  const related = await getRelatedUseCases({ id: uc.id, industry: uc.industry }, 6);
+  const [related, agentSlugSet] = await Promise.all([
+    getRelatedUseCases({ id: uc.id, industry: uc.industry }, 6),
+    getAgentSlugSet()
+  ]);
   const url = `https://aiskillnav.com/usecases/${uc.id}`;
 
   // HowTo 结构化数据（steps 天然命中"怎么做 X"搜索）
@@ -129,15 +133,22 @@ export default async function UseCaseDetailPage({ params }: Props) {
           <section className='space-y-3'>
             <h2 className='text-base font-semibold'>推荐工具栈</h2>
             <div className='flex flex-wrap gap-2'>
-              {uc.tools.map((tool) => (
-                <Link
-                  key={tool}
-                  href={`/agents?agent_search=${encodeURIComponent(tool)}`}
-                  className='rounded-lg border bg-card px-3 py-1.5 text-xs font-medium hover:border-primary/30 hover:text-primary transition-colors'
-                >
-                  {tool}
-                </Link>
-              ))}
+              {uc.tools.map((tool) => {
+                const agentSlug = agentSlugSet.get(tool.toLowerCase());
+                return (
+                  <Link
+                    key={tool}
+                    href={
+                      agentSlug
+                        ? `/agents/${agentSlug}`
+                        : `/agents?agent_search=${encodeURIComponent(tool)}`
+                    }
+                    className='rounded-lg border bg-card px-3 py-1.5 text-xs font-medium hover:border-primary/30 hover:text-primary transition-colors'
+                  >
+                    {tool}
+                  </Link>
+                );
+              })}
             </div>
           </section>
         )}

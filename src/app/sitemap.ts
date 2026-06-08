@@ -96,6 +96,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       if (data) allModels.push(...data);
     }
 
+    // 查询所有已发布 agents（详情页 /agents/{slugify(name)}）
+    const allAgents: { name: string }[] = [];
+    {
+      const { data } = await supabase.from('agents').select('name').eq('status', 'published');
+      if (data) allAgents.push(...data);
+    }
+
     // 文章已按 published_at 降序，首条即最新
     if (allTutorials[0]?.published_at) newestTutorialDate = new Date(allTutorials[0].published_at);
     if (allNews[0]?.published_at) newestNewsDate = new Date(allNews[0].published_at);
@@ -141,7 +148,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7
     }));
 
-    dynamicPages = [...tutorialPages, ...newsPages, ...mcpPages, ...usecasePages, ...modelPages];
+    const uniqAgentSlugs = Array.from(new Set(allAgents.map((a) => slugify(a.name)).filter(Boolean)));
+    const agentPages: MetadataRoute.Sitemap = uniqAgentSlugs.map((s) => ({
+      url: `${BASE_URL}/agents/${s}`,
+      lastModified: now,
+      changeFrequency: 'monthly' as const,
+      priority: 0.7
+    }));
+
+    dynamicPages = [
+      ...tutorialPages,
+      ...newsPages,
+      ...mcpPages,
+      ...usecasePages,
+      ...modelPages,
+      ...agentPages
+    ];
   } catch {
     // Supabase 不可用时静默降级，只返回静态页面
   }

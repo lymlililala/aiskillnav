@@ -63,6 +63,81 @@ export async function getAgentStats(): Promise<AgentStats> {
   return data;
 }
 
+/** 按 slugify(name) 取 agent（过滤 published；表小，全量后匹配）。 */
+export async function getAgentBySlug(slug: string): Promise<Agent | null> {
+  const { slugify } = await import('@/lib/slug');
+  if (typeof window === 'undefined') {
+    try {
+      const { getSupabaseAdmin } = await import('@/lib/supabase');
+      const { data, error } = await getSupabaseAdmin()
+        .from('agents')
+        .select('*')
+        .eq('status', 'published');
+      if (!error && data) return (data as Agent[]).find((a) => slugify(a.name) === slug) ?? null;
+    } catch {
+      // 走回退
+    }
+  }
+  const resp = await getAgents({ status: 'published', limit: 500 });
+  return resp.items.find((a) => slugify(a.name) === slug) ?? null;
+}
+
+/** 相关 agent（同 agent_type，按 slug 去重避免重名）。 */
+export async function getRelatedAgents(
+  current: { id: number; agent_type: string },
+  limit = 6
+): Promise<Agent[]> {
+  if (typeof window === 'undefined') {
+    try {
+      const { getSupabaseAdmin } = await import('@/lib/supabase');
+      const { slugify } = await import('@/lib/slug');
+      const { data, error } = await getSupabaseAdmin()
+        .from('agents')
+        .select('*')
+        .eq('status', 'published')
+        .eq('agent_type', current.agent_type)
+        .neq('id', current.id)
+        .limit(limit + 8);
+      if (!error && data) {
+        const seen = new Set<string>();
+        const out: Agent[] = [];
+        for (const a of data as Agent[]) {
+          const s = slugify(a.name);
+          if (seen.has(s)) continue;
+          seen.add(s);
+          out.push(a);
+          if (out.length >= limit) break;
+        }
+        return out;
+      }
+    } catch {
+      // ignore
+    }
+  }
+  return [];
+}
+
+/** name(小写) → slugify(name) 映射，供 usecases.tools 映射成 /agents/{slug} 内链。 */
+export async function getAgentSlugSet(): Promise<Map<string, string>> {
+  const map = new Map<string, string>();
+  if (typeof window === 'undefined') {
+    try {
+      const { getSupabaseAdmin } = await import('@/lib/supabase');
+      const { slugify } = await import('@/lib/slug');
+      const { data, error } = await getSupabaseAdmin()
+        .from('agents')
+        .select('name')
+        .eq('status', 'published');
+      if (!error && data)
+        for (const r of data as { name: string }[])
+          if (r.name) map.set(r.name.toLowerCase(), slugify(r.name));
+    } catch {
+      // ignore
+    }
+  }
+  return map;
+}
+
 export async function createAgent(payload: CreateAgentPayload): Promise<Agent> {
   const res = await fetch(`${apiBase()}/agents`, {
     method: 'POST',
