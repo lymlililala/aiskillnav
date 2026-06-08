@@ -51,6 +51,21 @@ export async function getPublishedNews(
 }
 
 export async function getNewsBySlug(slug: string): Promise<NewsItem | null> {
+  // 服务端直查 DB（与 sitemap 同源），避免 SSR 期间 HTTP 自调用超时回退 mock 导致详情页 404
+  if (typeof window === 'undefined') {
+    try {
+      const { getSupabaseAdmin } = await import('@/lib/supabase');
+      const { data, error } = await getSupabaseAdmin()
+        .from('news')
+        .select('*')
+        .eq('slug', slug)
+        .order('published_at', { ascending: false })
+        .limit(1);
+      if (!error) return (data?.[0] as NewsItem) ?? null;
+    } catch {
+      // 走下面的 API/mock 回退
+    }
+  }
   const data = await safeFetch<NewsItem>(`${apiBase()}/news/${encodeURIComponent(slug)}`);
   if (!data) return fakeNews.getNewsBySlug(slug);
   return data;
