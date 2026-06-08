@@ -72,10 +72,13 @@ function renderMarkdown(md: string): string {
     )
     .replace(/\*\*(.+?)\*\*/g, '<strong class="font-semibold">$1</strong>')
     .replace(/`(.+?)`/g, '<code class="rounded bg-muted px-1 py-0.5 text-sm font-mono">$1</code>')
-    .replace(
-      /\[(.+?)\]\((.+?)\)/g,
-      '<a href="$2" class="text-primary underline underline-offset-4 hover:no-underline" target="_blank">$1</a>'
-    )
+    .replace(/\[(.+?)\]\((.+?)\)/g, (_m, text: string, url: string) => {
+      // 站内链接用普通 <a>（不 target=_blank），让 Googlebot 当内链跟随；外链新窗口打开
+      const isInternal = /^\/(tutorials|news|mcp|agents|models|skills|usecases)(\/|\?|$)/.test(url);
+      return isInternal
+        ? `<a href="${url}" class="text-primary underline underline-offset-4 hover:no-underline">${text}</a>`
+        : `<a href="${url}" class="text-primary underline underline-offset-4 hover:no-underline" target="_blank" rel="noopener">${text}</a>`;
+    })
     .replace(/^- (.+)$/gm, '<li class="ml-4 list-disc my-0.5">$1</li>')
     .replace(/^\d+\. (.+)$/gm, '<li class="ml-4 list-decimal my-0.5">$1</li>')
     .replace(/^\|(.+)\|$/gm, (match) => {
@@ -190,12 +193,13 @@ export default async function TutorialDetailPage({ params }: Props) {
           <p className='text-sm leading-relaxed text-muted-foreground'>{tutorial.summary}</p>
           <div className='flex flex-wrap gap-1.5'>
             {tutorial.tags.map((tag) => (
-              <span
+              <Link
                 key={tag}
-                className='rounded-md bg-muted/50 border px-2 py-0.5 text-xs text-muted-foreground'
+                href={`/tutorials?tut_cat=${encodeURIComponent(tutorial.category)}`}
+                className='rounded-md bg-muted/50 border px-2 py-0.5 text-xs text-muted-foreground hover:border-primary/30 hover:text-foreground transition-colors'
               >
                 {tag}
-              </span>
+              </Link>
             ))}
           </div>
           <div className='border-b' />
