@@ -4,8 +4,8 @@ import { notFound } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import PageContainer from '@/components/layout/page-container';
-import { getNewsBySlug, getPublishedNews } from '@/features/news/api/service';
-import type { NewsItem } from '@/features/news/api/types';
+import { getNewsBySlug, getRelatedNews } from '@/features/news/api/service';
+import { getTutorialsByTags } from '@/features/tutorials/api/service';
 import { Icons } from '@/components/icons';
 import { Badge } from '@/components/ui/badge';
 
@@ -52,27 +52,14 @@ const CATEGORY_COLOR: Record<string, string> = {
 
 export default async function NewsDetailPage({ params }: Props) {
   const { slug } = await params;
-  const [item, allNewsResp] = await Promise.all([
-    getNewsBySlug(slug),
-    getPublishedNews({ limit: 50 }).catch(() => ({
-      items: [] as NewsItem[],
-      total: 0,
-      page: 1,
-      limit: 50,
-      totalPages: 0
-    }))
-  ]);
+  const item = await getNewsBySlug(slug);
   if (!item) notFound();
 
-  // 相关资讯：同类别优先，排除当前文章，取前 3 篇
-  const relatedNews = allNewsResp.items
-    .filter((n) => n.slug !== slug)
-    .sort((a, b) => {
-      const sameA = a.category === item.category ? 1 : 0;
-      const sameB = b.category === item.category ? 1 : 0;
-      return sameB - sameA;
-    })
-    .slice(0, 3);
+  // 相关资讯（tags 加权取 6 篇）+ 跨类型"延伸阅读：相关教程"（按 tags 重叠匹配 tutorials）
+  const [relatedNews, relatedTutorials] = await Promise.all([
+    getRelatedNews({ slug, category: item.category, tags: item.tags, title: item.title }, 6),
+    getTutorialsByTags(item.tags ?? [], 4)
+  ]);
 
   // Article 结构化数据（完善版，含 author/publisher）
   const jsonLd = {
@@ -223,6 +210,30 @@ export default async function NewsDetailPage({ params }: Props) {
                     })}{' '}
                     · {n.source_name}
                   </p>
+                </div>
+                <Icons.chevronRight className='h-4 w-4 shrink-0 text-muted-foreground mt-0.5' />
+              </Link>
+            ))}
+          </div>
+        )}
+
+        {/* 延伸阅读：相关教程（news → tutorials 跨类型内链） */}
+        {relatedTutorials.length > 0 && (
+          <div className='rounded-xl border bg-muted/30 p-5 space-y-3'>
+            <p className='text-xs font-semibold text-muted-foreground uppercase tracking-wide'>
+              延伸阅读 · 相关教程
+            </p>
+            {relatedTutorials.map((t) => (
+              <Link
+                key={t.slug}
+                href={`/tutorials/${t.slug}`}
+                className='flex items-start gap-3 rounded-lg border bg-card px-4 py-3 text-sm hover:border-primary/30 hover:bg-accent transition-colors group'
+              >
+                <div className='flex-1 min-w-0'>
+                  <span className='font-medium line-clamp-1 group-hover:text-primary transition-colors'>
+                    {t.title}
+                  </span>
+                  <p className='text-xs text-muted-foreground mt-0.5 line-clamp-1'>{t.subtitle}</p>
                 </div>
                 <Icons.chevronRight className='h-4 w-4 shrink-0 text-muted-foreground mt-0.5' />
               </Link>

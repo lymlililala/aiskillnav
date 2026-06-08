@@ -216,6 +216,110 @@ export async function getFeaturedTutorials(): Promise<Tutorial[]> {
   return data;
 }
 
+/**
+ * 相关教程（替换详情页此前"拉全量 2008 行再 slice 3"的做法）。
+ * DB 端用 tags 重叠 + 同 category 取候选(各≤30)，应用层加权打分取 limit 篇。
+ */
+export async function getRelatedTutorials(
+  current: { slug: string; category: string; tags: string[]; title: string },
+  limit = 6
+): Promise<Tutorial[]> {
+  if (typeof window === 'undefined') {
+    try {
+      const { getSupabaseAdmin } = await import('@/lib/supabase');
+      const sb = getSupabaseAdmin();
+      const queries: Promise<{ data: unknown[] | null }>[] = [];
+      if (current.tags?.length)
+        queries.push(
+          sb
+            .from('tutorials')
+            .select(TUTORIAL_LIST_COLUMNS)
+            .overlaps('tags', current.tags)
+            .neq('slug', current.slug)
+            .limit(30) as unknown as Promise<{ data: unknown[] | null }>
+        );
+      queries.push(
+        sb
+          .from('tutorials')
+          .select(TUTORIAL_LIST_COLUMNS)
+          .eq('category', current.category)
+          .neq('slug', current.slug)
+          .limit(30) as unknown as Promise<{ data: unknown[] | null }>
+      );
+      const results = await Promise.all(queries);
+      const map = new Map<string, Record<string, unknown>>();
+      for (const res of results)
+        for (const r of (res.data ?? []) as Record<string, unknown>[])
+          map.set(r.slug as string, r);
+      const candidates = Array.from(map.values());
+      if (candidates.length) {
+        const { relatednessScore } = await import('@/lib/topics');
+        return candidates
+          .map((c) => ({
+            c,
+            s: relatednessScore(current, {
+              tags: c.tags as string[],
+              title: c.title as string,
+              category: c.category as string
+            })
+          }))
+          .sort((x, y) => y.s - x.s)
+          .slice(0, limit)
+          .map((x) => ({ ...x.c, content: '' }) as unknown as Tutorial);
+      }
+    } catch {
+      // 走下面的回退
+    }
+  }
+  // 回退：取同类后切片
+  const all = await getTutorials({ category: current.category });
+  return all.filter((t) => t.slug !== current.slug).slice(0, limit);
+}
+
+/** 按 tags 重叠取教程（用于 news / mcp 等跨类型→教程的"延伸阅读"）。 */
+export async function getTutorialsByTags(tags: string[], limit = 6): Promise<Tutorial[]> {
+  if (!tags?.length) return [];
+  if (typeof window === 'undefined') {
+    try {
+      const { getSupabaseAdmin } = await import('@/lib/supabase');
+      const { data, error } = await getSupabaseAdmin()
+        .from('tutorials')
+        .select(TUTORIAL_LIST_COLUMNS)
+        .overlaps('tags', tags)
+        .order('is_featured', { ascending: false })
+        .order('published_at', { ascending: false })
+        .limit(limit);
+      if (!error && data) return data.map((t) => ({ ...t, content: '' }) as Tutorial);
+    } catch {
+      // ignore
+    }
+  }
+  return [];
+}
+
+/** 查 related_tools 包含某工具(name 或 slug)的教程，用于 mcp 详情页"相关教程"。 */
+export async function getTutorialsByTool(name: string, slug: string, limit = 4): Promise<Tutorial[]> {
+  if (typeof window === 'undefined') {
+    try {
+      const { getSupabaseAdmin } = await import('@/lib/supabase');
+      const sb = getSupabaseAdmin();
+      const [byName, bySlug] = await Promise.all([
+        sb.from('tutorials').select(TUTORIAL_LIST_COLUMNS).contains('related_tools', [name]).limit(limit),
+        sb.from('tutorials').select(TUTORIAL_LIST_COLUMNS).contains('related_tools', [slug]).limit(limit)
+      ]);
+      const map = new Map<string, Record<string, unknown>>();
+      for (const r of [...(byName.data ?? []), ...(bySlug.data ?? [])] as Record<string, unknown>[])
+        map.set(r.slug as string, r);
+      return Array.from(map.values())
+        .slice(0, limit)
+        .map((t) => ({ ...t, content: '' }) as unknown as Tutorial);
+    } catch {
+      // ignore
+    }
+  }
+  return [];
+}
+
 export async function createTutorial(payload: CreateTutorialPayload): Promise<Tutorial> {
   const res = await fetch(`${apiBase()}/tutorials`, {
     method: 'POST',

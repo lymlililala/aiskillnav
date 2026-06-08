@@ -170,6 +170,64 @@ export async function getNewsStats(): Promise<NewsStats> {
   return data;
 }
 
+/** 相关资讯（替换详情页"拉 50 条再排序"）。tags 重叠 + 同 category 候选 + 打分。 */
+export async function getRelatedNews(
+  current: { slug: string; category: string; tags: string[]; title: string },
+  limit = 6
+): Promise<NewsItem[]> {
+  if (typeof window === 'undefined') {
+    try {
+      const { getSupabaseAdmin } = await import('@/lib/supabase');
+      const sb = getSupabaseAdmin();
+      const queries: Promise<{ data: unknown[] | null }>[] = [];
+      if (current.tags?.length)
+        queries.push(
+          sb
+            .from('news')
+            .select('*')
+            .eq('status', 'published')
+            .overlaps('tags', current.tags)
+            .neq('slug', current.slug)
+            .limit(30) as unknown as Promise<{ data: unknown[] | null }>
+        );
+      queries.push(
+        sb
+          .from('news')
+          .select('*')
+          .eq('status', 'published')
+          .eq('category', current.category)
+          .neq('slug', current.slug)
+          .limit(30) as unknown as Promise<{ data: unknown[] | null }>
+      );
+      const results = await Promise.all(queries);
+      const map = new Map<string, Record<string, unknown>>();
+      for (const res of results)
+        for (const r of (res.data ?? []) as Record<string, unknown>[])
+          map.set(r.slug as string, r);
+      const candidates = Array.from(map.values());
+      if (candidates.length) {
+        const { relatednessScore } = await import('@/lib/topics');
+        return candidates
+          .map((c) => ({
+            c,
+            s: relatednessScore(current, {
+              tags: c.tags as string[],
+              title: c.title as string,
+              category: c.category as string
+            })
+          }))
+          .sort((x, y) => y.s - x.s)
+          .slice(0, limit)
+          .map((x) => x.c as unknown as NewsItem);
+      }
+    } catch {
+      // 走下面的回退
+    }
+  }
+  const resp = await getPublishedNews({ category: current.category, limit: 50 });
+  return resp.items.filter((n) => n.slug !== current.slug).slice(0, limit);
+}
+
 export async function createNews(payload: CreateNewsPayload): Promise<NewsItem> {
   const res = await fetch(`${apiBase()}/news`, {
     method: 'POST',

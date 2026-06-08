@@ -99,6 +99,94 @@ export async function getAllMcpServers(): Promise<McpServer[]> {
   return data.items;
 }
 
+/** 相关 MCP server（mcp 详情页此前无相关推荐）。tags 重叠 + 同 category 候选 + 打分。 */
+export async function getRelatedMcp(
+  current: { slug: string; category: string; tags: string[] },
+  limit = 6
+): Promise<McpServer[]> {
+  if (typeof window === 'undefined') {
+    try {
+      const { getSupabaseAdmin } = await import('@/lib/supabase');
+      const sb = getSupabaseAdmin();
+      const queries: Promise<{ data: unknown[] | null }>[] = [];
+      if (current.tags?.length)
+        queries.push(
+          sb
+            .from('mcp_servers')
+            .select('*')
+            .overlaps('tags', current.tags)
+            .neq('slug', current.slug)
+            .limit(30) as unknown as Promise<{ data: unknown[] | null }>
+        );
+      queries.push(
+        sb
+          .from('mcp_servers')
+          .select('*')
+          .eq('category', current.category)
+          .neq('slug', current.slug)
+          .limit(30) as unknown as Promise<{ data: unknown[] | null }>
+      );
+      const results = await Promise.all(queries);
+      const map = new Map<string, Record<string, unknown>>();
+      for (const res of results)
+        for (const r of (res.data ?? []) as Record<string, unknown>[])
+          map.set(r.slug as string, r);
+      const candidates = Array.from(map.values());
+      if (candidates.length) {
+        const { relatednessScore } = await import('@/lib/topics');
+        return candidates
+          .map((c) => ({
+            c,
+            s: relatednessScore(
+              { tags: current.tags, category: current.category },
+              { tags: c.tags as string[], category: c.category as string }
+            )
+          }))
+          .sort((x, y) => y.s - x.s)
+          .slice(0, limit)
+          .map((x) => x.c as unknown as McpServer);
+      }
+    } catch {
+      // ignore
+    }
+  }
+  return [];
+}
+
+/**
+ * 返回 工具名/slug(均小写) → 真实 slug 的映射，用于把 tutorials.related_tools
+ * 映射成 /mcp/{slug} 内链。直查 DB 分页取全量（mcp 已超 1000 条），替代 HTTP 自调用。
+ */
+export async function getMcpSlugSet(): Promise<Map<string, string>> {
+  const map = new Map<string, string>();
+  if (typeof window === 'undefined') {
+    try {
+      const { getSupabaseAdmin } = await import('@/lib/supabase');
+      const sb = getSupabaseAdmin();
+      const PAGE = 1000;
+      let offset = 0;
+      while (true) {
+        const { data, error } = await sb
+          .from('mcp_servers')
+          .select('slug, name')
+          .range(offset, offset + PAGE - 1);
+        if (error || !data || data.length === 0) break;
+        for (const r of data as { slug?: string; name?: string }[]) {
+          if (r.slug) {
+            map.set(r.slug.toLowerCase(), r.slug);
+            if (r.name) map.set(r.name.toLowerCase(), r.slug);
+          }
+        }
+        if (data.length < PAGE) break;
+        offset += PAGE;
+      }
+    } catch {
+      // ignore
+    }
+  }
+  return map;
+}
+
 export async function createMcpServer(payload: CreateMcpPayload): Promise<McpServer> {
   const res = await fetch(`${apiBase()}/mcp`, {
     method: 'POST',

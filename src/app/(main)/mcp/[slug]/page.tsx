@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { getMcpBySlug } from '@/features/mcp/api/service';
+import { getMcpBySlug, getRelatedMcp } from '@/features/mcp/api/service';
+import { getTutorialsByTool } from '@/features/tutorials/api/service';
 import { fakeMcpServers } from '@/constants/mock-api-mcp';
 import { Icons } from '@/components/icons';
 import { Badge } from '@/components/ui/badge';
@@ -110,6 +111,12 @@ export default async function McpDetailPage({ params }: Props) {
   const { slug } = await params;
   const server = await getMcpBySlug(slug);
   if (!server) notFound();
+
+  // 相关 MCP（tags+category 打分）+ 相关教程（related_tools 反向匹配本 server）
+  const [relatedMcp, relatedTutorials] = await Promise.all([
+    getRelatedMcp({ slug, category: server.category, tags: server.tags }, 6),
+    getTutorialsByTool(server.name, server.slug, 4)
+  ]);
 
   const cfg = CATEGORY_CONFIG[server.category] ?? CATEGORY_CONFIG['devtools'];
 
@@ -340,6 +347,51 @@ export default async function McpDetailPage({ params }: Props) {
             <Icons.externalLink className='h-3.5 w-3.5' />
           </Link>
         </section>
+
+        {/* 相关 MCP Server */}
+        {relatedMcp.length > 0 && (
+          <section className='space-y-3'>
+            <h2 className='text-base font-semibold'>相关 MCP Server</h2>
+            <div className='grid gap-3 sm:grid-cols-2'>
+              {relatedMcp.map((m) => (
+                <Link
+                  key={m.slug}
+                  href={`/mcp/${m.slug}`}
+                  className='flex flex-col gap-1.5 rounded-xl border bg-card px-4 py-3 hover:border-primary/30 hover:bg-accent transition-colors group'
+                >
+                  <span className='text-sm font-semibold font-mono group-hover:text-primary transition-colors'>
+                    {m.name}
+                  </span>
+                  <span className='line-clamp-2 text-xs text-muted-foreground'>{m.description}</span>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* 相关教程（来自 related_tools 反向匹配） */}
+        {relatedTutorials.length > 0 && (
+          <section className='space-y-3'>
+            <h2 className='text-base font-semibold'>相关教程</h2>
+            <div className='space-y-2'>
+              {relatedTutorials.map((t) => (
+                <Link
+                  key={t.slug}
+                  href={`/tutorials/${t.slug}`}
+                  className='flex items-start gap-3 rounded-lg border bg-card px-4 py-3 text-sm hover:border-primary/30 hover:bg-accent transition-colors group'
+                >
+                  <div className='flex-1 min-w-0'>
+                    <span className='font-medium line-clamp-1 group-hover:text-primary transition-colors'>
+                      {t.title}
+                    </span>
+                    <p className='text-xs text-muted-foreground mt-0.5 line-clamp-1'>{t.subtitle}</p>
+                  </div>
+                  <Icons.chevronRight className='h-4 w-4 shrink-0 text-muted-foreground mt-0.5' />
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Related Links */}
         <div className='rounded-xl border bg-muted/30 p-5 space-y-2'>
