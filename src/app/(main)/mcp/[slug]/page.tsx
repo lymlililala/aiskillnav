@@ -190,12 +190,13 @@ export default async function McpDetailPage({ params }: Props) {
 
           <div className='flex flex-wrap gap-1.5'>
             {server.tags.map((tag) => (
-              <span
+              <Link
                 key={tag}
-                className='rounded-md bg-muted/50 border px-2 py-0.5 text-xs text-muted-foreground'
+                href={`/mcp?mcp_search=${encodeURIComponent(tag)}`}
+                className='rounded-md bg-muted/50 border px-2 py-0.5 text-xs text-muted-foreground hover:border-primary/30 hover:text-foreground transition-colors'
               >
                 {tag}
-              </span>
+              </Link>
             ))}
           </div>
           <div className='border-b' />

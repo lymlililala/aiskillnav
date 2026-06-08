@@ -11,6 +11,8 @@ const NAV_LINKS = [
   { label: 'Agents', href: '/agents' },
   { label: 'MCP', href: '/mcp' },
   { label: '模型', href: '/models' },
+  { label: '教程', href: '/tutorials' },
+  { label: '场景', href: '/usecases' },
   { label: 'News', href: '/news' }
 ];
 

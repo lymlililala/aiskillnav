@@ -59,6 +59,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       newsOffset += PAGE;
     }
 
+    // 分页查询所有 MCP server（详情页此前不在 sitemap，是抓取盲区）
+    const allMcp: { slug: string; created_at?: string }[] = [];
+    let mcpOffset = 0;
+    while (true) {
+      const { data, error } = await supabase
+        .from('mcp_servers')
+        .select('slug, created_at')
+        .range(mcpOffset, mcpOffset + PAGE - 1);
+      if (error || !data || data.length === 0) break;
+      allMcp.push(...data);
+      if (data.length < PAGE) break;
+      mcpOffset += PAGE;
+    }
+
     // 文章已按 published_at 降序，首条即最新
     if (allTutorials[0]?.published_at) newestTutorialDate = new Date(allTutorials[0].published_at);
     if (allNews[0]?.published_at) newestNewsDate = new Date(allNews[0].published_at);
@@ -81,7 +95,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.87
     }));
 
-    dynamicPages = [...tutorialPages, ...newsPages];
+    const uniqMcp = Array.from(new Map(allMcp.map((m) => [m.slug, m])).values());
+    const mcpPages: MetadataRoute.Sitemap = uniqMcp.map((m) => ({
+      url: `${BASE_URL}/mcp/${m.slug}`,
+      lastModified: m.created_at ? new Date(m.created_at) : now,
+      changeFrequency: 'monthly' as const,
+      priority: 0.8
+    }));
+
+    dynamicPages = [...tutorialPages, ...newsPages, ...mcpPages];
   } catch {
     // Supabase 不可用时静默降级，只返回静态页面
   }
