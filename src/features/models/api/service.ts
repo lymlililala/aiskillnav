@@ -33,6 +33,28 @@ export async function getModels(
     is_open_source?: boolean;
   } = {}
 ): Promise<AiModel[]> {
+  // 服务端直查 DB：确保列表显示最新模型 + 按能力排序（reasoning→code→release_date），
+  // 不受 HTTP 自调用超时/回退 mock 影响。
+  if (typeof window === 'undefined') {
+    try {
+      const { getSupabaseAdmin } = await import('@/lib/supabase');
+      let q = getSupabaseAdmin().from('ai_models').select('*');
+      if (opts.vendor && opts.vendor !== 'all') q = q.eq('vendor', opts.vendor);
+      if (opts.is_open_source !== undefined) q = q.eq('is_open_source', opts.is_open_source);
+      if (opts.search)
+        q = q.or(
+          `name.ilike.%${opts.search}%,description.ilike.%${opts.search}%,vendor.ilike.%${opts.search}%`
+        );
+      const { data, error } = await q
+        .order('reasoning_score', { ascending: false })
+        .order('code_score', { ascending: false })
+        .order('release_date', { ascending: false, nullsFirst: false });
+      if (!error && data) return data as AiModel[];
+    } catch {
+      // 走下面的回退
+    }
+  }
+
   const params = new URLSearchParams();
   if (opts.search) params.set('search', opts.search);
   if (opts.vendor && opts.vendor !== 'all') params.set('vendor', opts.vendor);
@@ -122,6 +144,15 @@ export async function getRelatedModels(
   }
   const all = await getModels({ vendor: current.vendor });
   return all.filter((m) => m.id !== current.id).slice(0, limit);
+}
+
+/** 取某系列的全部版本（用于系列对比页）。复用 getModels（已直查 + 按能力排序），应用层按系列正则过滤。 */
+export async function getModelsBySeries(slug: string): Promise<AiModel[]> {
+  const { getModelSeriesBySlug } = await import('@/features/models/series');
+  const series = getModelSeriesBySlug(slug);
+  if (!series) return [];
+  const all = await getModels();
+  return all.filter((m) => series.match.test(m.name));
 }
 
 export async function createModel(payload: CreateModelPayload): Promise<AiModel> {

@@ -4,6 +4,7 @@ import { Icons } from '@/components/icons';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { slugify } from '@/lib/slug';
+import { MODEL_SERIES } from '@/features/models/series';
 import type { AiModel, Benchmark } from '@/features/models/api/service';
 import type { Metadata } from 'next';
 
@@ -232,15 +233,61 @@ export default async function ModelsPage() {
           ))}
         </div>
 
-        {/* Models Grid */}
-        <section>
-          <h2 className='mb-4 text-base font-semibold'>主流模型对比</h2>
-          <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-            {models.map((m) => (
-              <ModelCard key={m.id} model={m} />
+        {/* 按系列浏览 — 系列对比页入口 */}
+        <div className='space-y-2'>
+          <h2 className='text-sm font-semibold'>按系列对比</h2>
+          <div className='flex flex-wrap gap-2'>
+            {MODEL_SERIES.filter((s) => models.some((m) => s.match.test(m.name))).map((s) => (
+              <Link
+                key={s.slug}
+                href={`/models/series/${s.slug}`}
+                className='rounded-full border px-3 py-1 text-xs font-medium text-muted-foreground hover:border-primary/30 hover:text-foreground transition-colors'
+              >
+                {s.label}
+              </Link>
             ))}
           </div>
-        </section>
+        </div>
+
+        {/* Models — 按系列分组（同系列各版本聚在一起） */}
+        {MODEL_SERIES.map((series) => {
+          const group = models.filter((m) => series.match.test(m.name));
+          if (group.length === 0) return null;
+          return (
+            <section key={series.slug}>
+              <div className='mb-4 flex items-center justify-between gap-2'>
+                <h2 className='text-base font-semibold'>{series.label}</h2>
+                <Link
+                  href={`/models/series/${series.slug}`}
+                  className='flex items-center gap-1 text-xs text-muted-foreground hover:text-primary transition-colors'
+                >
+                  系列对比 <Icons.chevronRight className='h-3.5 w-3.5' />
+                </Link>
+              </div>
+              <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+                {group.map((m) => (
+                  <ModelCard key={m.id} model={m} />
+                ))}
+              </div>
+            </section>
+          );
+        })}
+
+        {/* 其他（未归入任何系列的模型） */}
+        {(() => {
+          const others = models.filter((m) => !MODEL_SERIES.some((s) => s.match.test(m.name)));
+          if (others.length === 0) return null;
+          return (
+            <section>
+              <h2 className='mb-4 text-base font-semibold'>其他模型</h2>
+              <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+                {others.map((m) => (
+                  <ModelCard key={m.id} model={m} />
+                ))}
+              </div>
+            </section>
+          );
+        })()}
 
         {/* Benchmarks */}
         <section>
