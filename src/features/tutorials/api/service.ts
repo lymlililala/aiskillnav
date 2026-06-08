@@ -26,13 +26,40 @@ async function safeFetch<T>(url: string, init?: RequestInit): Promise<T | null> 
   }
 }
 
-export async function getTutorials(
-  opts: {
-    level?: string;
-    category?: string;
-    search?: string;
-  } = {}
-): Promise<Tutorial[]> {
+type TutorialQuery = { level?: string; category?: string; search?: string };
+
+/**
+ * 服务端直查 Supabase（与 sitemap.ts 同源）。
+ * 关键：Server Component / ISR 渲染时不要再通过 HTTP 自调用 /api/tutorials —
+ * 那条「函数内再请求另一个 serverless 函数」的链路在生产会偶发 upstream 超时，
+ * 一旦失败就回退到只有 ~27 篇的 mock，导致真实教程详情页返回 404。
+ * 直查 DB 后数据源与 sitemap 完全一致，彻底消除 404。
+ * 返回 null 表示 DB 不可用（缺少 env 等），调用方再回退到 API/mock。
+ */
+async function fetchTutorialsFromDb(opts: TutorialQuery): Promise<Tutorial[] | null> {
+  try {
+    const { getSupabaseAdmin } = await import('@/lib/supabase');
+    let query = getSupabaseAdmin().from('tutorials').select('*');
+    if (opts.level && opts.level !== 'all') query = query.eq('level', opts.level);
+    if (opts.category && opts.category !== 'all') query = query.eq('category', opts.category);
+    if (opts.search) query = query.or(`title.ilike.%${opts.search}%,summary.ilike.%${opts.search}%`);
+    const { data, error } = await query
+      .order('is_featured', { ascending: false })
+      .order('published_at', { ascending: false });
+    if (error || !data) return null;
+    return data as Tutorial[];
+  } catch {
+    return null;
+  }
+}
+
+export async function getTutorials(opts: TutorialQuery = {}): Promise<Tutorial[]> {
+  // 服务端优先直查 DB，避免 SSR 期间 HTTP 自调用超时
+  if (typeof window === 'undefined') {
+    const direct = await fetchTutorialsFromDb(opts);
+    if (direct) return direct;
+  }
+
   const params = new URLSearchParams();
   if (opts.search) params.set('search', opts.search);
   if (opts.level && opts.level !== 'all') params.set('level', opts.level);
@@ -44,6 +71,24 @@ export async function getTutorials(
 }
 
 export async function getTutorialBySlug(slug: string): Promise<Tutorial | null> {
+  // 服务端直查 DB；用 limit(1) 取首条，避免 .single() 对缺失/重复 slug 抛错
+  if (typeof window === 'undefined') {
+    try {
+      const { getSupabaseAdmin } = await import('@/lib/supabase');
+      const { data, error } = await getSupabaseAdmin()
+        .from('tutorials')
+        .select('*')
+        .eq('slug', slug)
+        .order('published_at', { ascending: false })
+        .limit(1);
+      // 查询成功：有则返回该教程，无则 null（slug 确实不存在 → 正常 404）
+      if (!error) return (data?.[0] as Tutorial) ?? null;
+      // 仅当 DB 出错（缺 env 等）才落到下面的 API/mock 回退
+    } catch {
+      // ignore，走回退
+    }
+  }
+
   const data = await safeFetch<Tutorial>(`${apiBase()}/tutorials?slug=${encodeURIComponent(slug)}`);
   if (!data) return fakeTutorials.getTutorialBySlug(slug);
   return data;
