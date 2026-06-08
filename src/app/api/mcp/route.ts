@@ -101,13 +101,16 @@ export async function GET(request: NextRequest) {
   // slug lookup
   const slug = searchParams.get('slug');
   if (slug) {
+    // 用 limit(1) 取首条，避免 .single() 在 slug 缺失或重复时抛错
     const { data, error } = await supabaseAdmin
       .from('mcp_servers')
       .select('*')
       .eq('slug', slug)
-      .single();
-    if (error) return NextResponse.json(null, { status: 404 });
-    return NextResponse.json(data);
+      .limit(1);
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    const row = data?.[0];
+    if (!row) return NextResponse.json(null, { status: 404 });
+    return NextResponse.json(row);
   }
 
   const page = Number(searchParams.get('page') ?? 1);

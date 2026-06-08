@@ -5,13 +5,26 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   const { id } = await params;
   // Support slug lookup: /api/news/some-slug
   const isNumeric = /^\d+$/.test(id);
-  const query = isNumeric
-    ? supabaseAdmin.from('news').select('*').eq('id', Number(id)).single()
-    : supabaseAdmin.from('news').select('*').eq('slug', id).single();
-
-  const { data, error } = await query;
-  if (error) return NextResponse.json({ error: error.message }, { status: 404 });
-  return NextResponse.json(data);
+  if (isNumeric) {
+    const { data, error } = await supabaseAdmin
+      .from('news')
+      .select('*')
+      .eq('id', Number(id))
+      .single();
+    if (error) return NextResponse.json({ error: error.message }, { status: 404 });
+    return NextResponse.json(data);
+  }
+  // slug 用 limit(1) 取首条，避免 .single() 在 slug 缺失或重复时抛错
+  const { data, error } = await supabaseAdmin
+    .from('news')
+    .select('*')
+    .eq('slug', id)
+    .order('published_at', { ascending: false })
+    .limit(1);
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  const row = data?.[0];
+  if (!row) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  return NextResponse.json(row);
 }
 
 export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {

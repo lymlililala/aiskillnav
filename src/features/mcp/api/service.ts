@@ -69,6 +69,20 @@ export async function getMcpById(id: number): Promise<McpServer | null> {
 }
 
 export async function getMcpBySlug(slug: string): Promise<McpServer | null> {
+  // 服务端直查 DB（与 sitemap 同源），避免 SSR 期间 HTTP 自调用超时回退 mock 导致详情页 404
+  if (typeof window === 'undefined') {
+    try {
+      const { getSupabaseAdmin } = await import('@/lib/supabase');
+      const { data, error } = await getSupabaseAdmin()
+        .from('mcp_servers')
+        .select('*')
+        .eq('slug', slug)
+        .limit(1);
+      if (!error) return (data?.[0] as McpServer) ?? null;
+    } catch {
+      // 走下面的 API/mock 回退
+    }
+  }
   const data = await safeFetch<McpServer>(`${apiBase()}/mcp?slug=${encodeURIComponent(slug)}`);
   if (!data) return fakeMcpServers.getBySlug(slug);
   return data;
