@@ -67,6 +67,26 @@ export async function getSiteStats(): Promise<SiteStats> {
   return data;
 }
 
+/** 取某平台下的全部已发布站点，用于分类聚合页 /skills/category/{platform}。 */
+export async function getSitesByPlatform(platform: string, limit = 100): Promise<Site[]> {
+  if (typeof window === 'undefined') {
+    try {
+      const { getSupabaseAdmin } = await import('@/lib/supabase');
+      const { data, error } = await getSupabaseAdmin()
+        .from('skills')
+        .select('*')
+        .eq('platform', platform)
+        .eq('status', 'published')
+        .limit(limit);
+      if (!error && data) return data as Site[];
+    } catch {
+      // 走回退
+    }
+  }
+  const resp = await getSites({ platform, status: 'published', limit });
+  return resp.items;
+}
+
 export async function createSite(payload: CreateSitePayload): Promise<Site> {
   const res = await fetch(`${apiBase()}/skills`, {
     method: 'POST',
