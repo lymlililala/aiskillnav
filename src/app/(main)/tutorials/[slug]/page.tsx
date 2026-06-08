@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { getTutorialBySlug, getTutorials } from '@/features/tutorials/api/service';
-import type { Tutorial } from '@/features/tutorials/api/service';
+import { getTutorialBySlug, getRelatedTutorials } from '@/features/tutorials/api/service';
+import { getMcpSlugSet } from '@/features/mcp/api/service';
 import { Icons } from '@/components/icons';
 import { Badge } from '@/components/ui/badge';
 import PageContainer from '@/components/layout/page-container';
@@ -97,21 +97,17 @@ function renderMarkdown(md: string): string {
 
 export default async function TutorialDetailPage({ params }: Props) {
   const { slug } = await params;
-  const [tutorial, allTutorials] = await Promise.all([
-    getTutorialBySlug(slug),
-    getTutorials().catch(() => [] as Tutorial[])
-  ]);
+  const tutorial = await getTutorialBySlug(slug);
   if (!tutorial) notFound();
 
-  // 相关教程：同类别优先，排除当前文章，取前 3 篇
-  const related = allTutorials
-    .filter((t) => t.slug !== slug)
-    .sort((a, b) => {
-      const sameA = a.category === tutorial.category ? 1 : 0;
-      const sameB = b.category === tutorial.category ? 1 : 0;
-      return sameB - sameA;
-    })
-    .slice(0, 3);
+  // 相关教程：tags 加权打分取 6 篇（DB 端过滤，不再拉全量）；并取 mcp 映射表把 related_tools 做成内链
+  const [related, mcpSlugSet] = await Promise.all([
+    getRelatedTutorials(
+      { slug, category: tutorial.category, tags: tutorial.tags, title: tutorial.title },
+      6
+    ),
+    getMcpSlugSet()
+  ]);
 
   const level = LEVEL_CONFIG[tutorial.level];
   const html = renderMarkdown(tutorial.content);
@@ -213,14 +209,25 @@ export default async function TutorialDetailPage({ params }: Props) {
               相关工具
             </p>
             <div className='flex flex-wrap gap-2'>
-              {tutorial.related_tools.map((tool) => (
-                <span
-                  key={tool}
-                  className='rounded-lg border bg-card px-3 py-1.5 text-xs font-medium'
-                >
-                  {tool}
-                </span>
-              ))}
+              {tutorial.related_tools.map((tool) => {
+                const mcp = mcpSlugSet.get(tool.toLowerCase());
+                return mcp ? (
+                  <Link
+                    key={tool}
+                    href={`/mcp/${mcp}`}
+                    className='rounded-lg border bg-card px-3 py-1.5 text-xs font-medium hover:border-primary/30 hover:text-primary transition-colors'
+                  >
+                    {tool}
+                  </Link>
+                ) : (
+                  <span
+                    key={tool}
+                    className='rounded-lg border bg-card px-3 py-1.5 text-xs font-medium'
+                  >
+                    {tool}
+                  </span>
+                );
+              })}
             </div>
           </div>
         )}
