@@ -1,5 +1,5 @@
 import PageContainer from '@/components/layout/page-container';
-import { getTutorials, getFeaturedTutorials } from '@/features/tutorials/api/service';
+import { getTutorialsPage, getFeaturedTutorials, getTutorialStats } from '@/features/tutorials/api/service';
 import { Icons } from '@/components/icons';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
@@ -88,55 +88,67 @@ export default async function TutorialsPage({ searchParams }: PageProps) {
   const params = await searchParams;
   const level = typeof params.level === 'string' ? params.level : 'all';
   const category = typeof params.tut_cat === 'string' ? params.tut_cat : 'all';
+  const page = typeof params.page === 'string' ? Number(params.page) || 1 : 1;
+  const limit = 48;
 
-  const [all, featured] = await Promise.all([
-    getTutorials({
+  const [{ items, total_items }, featured, stats] = await Promise.all([
+    getTutorialsPage({
+      page,
+      limit,
       level: level !== 'all' ? level : undefined,
       category: category !== 'all' ? category : undefined
     }),
-    getFeaturedTutorials()
+    getFeaturedTutorials(),
+    getTutorialStats()
   ]);
 
-  // ItemList 结构化数据 — 提升 Google 列表富结果
-  const itemListJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'ItemList',
-    name: '教程中心 — AI Agent 实战教程',
-    url: 'https://aiskillnav.com/tutorials',
-    description: 'AI Agent 从入门到实战：概念理解、MCP 使用、平台实操、工作流自动化',
-    numberOfItems: all.length,
-    itemListElement: all.slice(0, 20).map((t, i) => ({
-      '@type': 'ListItem',
-      position: i + 1,
-      url: `https://aiskillnav.com/tutorials/${t.slug}`,
-      name: t.title
-    }))
+  const totalPages = Math.ceil(total_items / limit);
+  const pageUrl = (p: number) => {
+    const sp = new URLSearchParams();
+    if (p > 1) sp.set('page', String(p));
+    if (level !== 'all') sp.set('level', level);
+    if (category !== 'all') sp.set('tut_cat', category);
+    const qs = sp.toString();
+    return `/tutorials${qs ? `?${qs}` : ''}`;
   };
+
+  // ItemList 结构化数据 — 仅首页（page=1）时输出，避免分页重复
+  const itemListJsonLd =
+    page === 1
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'ItemList',
+          name: '教程中心 — AI Agent 实战教程',
+          url: 'https://aiskillnav.com/tutorials',
+          description: 'AI Agent 从入门到实战：概念理解、MCP 使用、平台实操、工作流自动化',
+          numberOfItems: total_items,
+          itemListElement: items.slice(0, 20).map((t, i) => ({
+            '@type': 'ListItem',
+            position: i + 1,
+            url: `https://aiskillnav.com/tutorials/${t.slug}`,
+            name: t.title
+          }))
+        }
+      : null;
 
   return (
     <PageContainer
       pageTitle='教程中心'
       pageDescription='AI Agent 从入门到实战：概念理解、MCP 使用、平台实操、工作流自动化'
     >
-      <script
-        type='application/ld+json'
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
-      />
+      {itemListJsonLd && (
+        <script
+          type='application/ld+json'
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
+        />
+      )}
       <div className='space-y-8'>
         {/* Quick stats */}
         <div className='grid grid-cols-3 gap-3'>
           {[
-            { label: '教程总数', value: all.length, icon: Icons.post },
-            {
-              label: '入门教程',
-              value: all.filter((t) => t.level === 'beginner').length,
-              icon: Icons.info
-            },
-            {
-              label: '实操教程',
-              value: all.filter((t) => t.category === 'hands-on').length,
-              icon: Icons.settings
-            }
+            { label: '教程总数', value: stats.total, icon: Icons.post },
+            { label: '入门教程', value: stats.byLevel.beginner ?? 0, icon: Icons.info },
+            { label: '实操教程', value: stats.byCategory['hands-on'] ?? 0, icon: Icons.settings }
           ].map((s) => (
             <div
               key={s.label}
@@ -152,7 +164,7 @@ export default async function TutorialsPage({ searchParams }: PageProps) {
         </div>
 
         {/* Featured */}
-        {featured.length > 0 && level === 'all' && category === 'all' && (
+        {featured.length > 0 && level === 'all' && category === 'all' && page === 1 && (
           <section>
             <div className='mb-3 flex items-center gap-2'>
               <Icons.sparkles className='h-4 w-4 text-amber-500' />
@@ -207,16 +219,43 @@ export default async function TutorialsPage({ searchParams }: PageProps) {
         </div>
 
         {/* Full list */}
-        {all.length === 0 ? (
+        {items.length === 0 ? (
           <div className='flex flex-col items-center justify-center py-16 text-center'>
             <Icons.post className='mb-3 h-10 w-10 text-muted-foreground/40' />
             <p className='text-sm text-muted-foreground'>暂无相关教程</p>
           </div>
         ) : (
           <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-3'>
-            {all.map((t) => (
+            {items.map((t) => (
               <TutorialCard key={t.id} tutorial={t} />
             ))}
+          </div>
+        )}
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className='flex items-center justify-center gap-2'>
+            {page > 1 && (
+              <Link
+                href={pageUrl(page - 1)}
+                className='flex items-center gap-1 rounded-lg border px-3 py-1.5 text-xs hover:bg-accent transition-colors'
+              >
+                <Icons.chevronLeft className='h-3.5 w-3.5' />
+                上一页
+              </Link>
+            )}
+            <span className='text-xs text-muted-foreground'>
+              第 {page} / {totalPages} 页
+            </span>
+            {page < totalPages && (
+              <Link
+                href={pageUrl(page + 1)}
+                className='flex items-center gap-1 rounded-lg border px-3 py-1.5 text-xs hover:bg-accent transition-colors'
+              >
+                下一页
+                <Icons.chevronRight className='h-3.5 w-3.5' />
+              </Link>
+            )}
           </div>
         )}
       </div>
