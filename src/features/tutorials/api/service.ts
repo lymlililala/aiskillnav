@@ -28,6 +28,12 @@ async function safeFetch<T>(url: string, init?: RequestInit): Promise<T | null> 
 
 type TutorialQuery = { level?: string; category?: string; search?: string };
 
+export type TutorialsPage = { items: Tutorial[]; total_items: number };
+
+// 列表场景不需要 content（Markdown 正文，是最大字段）：排除后每行 payload 大幅减小
+const TUTORIAL_LIST_COLUMNS =
+  'id,slug,title,subtitle,summary,level,category,tags,estimated_minutes,related_tools,is_featured,published_at';
+
 /**
  * 服务端直查 Supabase（与 sitemap.ts 同源）。
  * 关键：Server Component / ISR 渲染时不要再通过 HTTP 自调用 /api/tutorials —
@@ -39,10 +45,7 @@ type TutorialQuery = { level?: string; category?: string; search?: string };
 async function fetchTutorialsFromDb(opts: TutorialQuery): Promise<Tutorial[] | null> {
   try {
     const { getSupabaseAdmin } = await import('@/lib/supabase');
-    // 列表场景不需要 content（Markdown 正文，是最大字段）：排除后 2008 行 payload 从数 MB 降到几百 KB
-    const LIST_COLUMNS =
-      'id,slug,title,subtitle,summary,level,category,tags,estimated_minutes,related_tools,is_featured,published_at';
-    let query = getSupabaseAdmin().from('tutorials').select(LIST_COLUMNS);
+    let query = getSupabaseAdmin().from('tutorials').select(TUTORIAL_LIST_COLUMNS);
     if (opts.level && opts.level !== 'all') query = query.eq('level', opts.level);
     if (opts.category && opts.category !== 'all') query = query.eq('category', opts.category);
     if (opts.search) query = query.or(`title.ilike.%${opts.search}%,summary.ilike.%${opts.search}%`);
@@ -74,6 +77,47 @@ export async function getTutorials(opts: TutorialQuery = {}): Promise<Tutorial[]
   return data;
 }
 
+/**
+ * 分页版列表查询：/tutorials 列表页只渲染当前页，避免一次性 SSR 全部 2008 篇
+ * （此前 5.5MB HTML / ~5s）。服务端直查 + count；DB 不可用时回退到全量再切片。
+ */
+export async function getTutorialsPage(
+  opts: TutorialQuery & { page?: number; limit?: number } = {}
+): Promise<TutorialsPage> {
+  const page = opts.page && opts.page > 0 ? opts.page : 1;
+  const limit = opts.limit ?? 48;
+  if (typeof window === 'undefined') {
+    try {
+      const { getSupabaseAdmin } = await import('@/lib/supabase');
+      let query = getSupabaseAdmin()
+        .from('tutorials')
+        .select(TUTORIAL_LIST_COLUMNS, { count: 'exact' });
+      if (opts.level && opts.level !== 'all') query = query.eq('level', opts.level);
+      if (opts.category && opts.category !== 'all') query = query.eq('category', opts.category);
+      if (opts.search)
+        query = query.or(`title.ilike.%${opts.search}%,summary.ilike.%${opts.search}%`);
+      const { data, count, error } = await query
+        .order('is_featured', { ascending: false })
+        .order('published_at', { ascending: false })
+        .range((page - 1) * limit, page * limit - 1);
+      if (!error && data)
+        return {
+          items: data.map((t) => ({ ...t, content: '' })) as Tutorial[],
+          total_items: count ?? 0
+        };
+    } catch {
+      // 走下面的回退
+    }
+  }
+  // 回退：取全量再客户端切片（本地开发 / DB 不可用）
+  const all = await getTutorials({
+    level: opts.level,
+    category: opts.category,
+    search: opts.search
+  });
+  return { items: all.slice((page - 1) * limit, page * limit), total_items: all.length };
+}
+
 export async function getTutorialBySlug(slug: string): Promise<Tutorial | null> {
   // 服务端直查 DB；用 limit(1) 取首条，避免 .single() 对缺失/重复 slug 抛错
   if (typeof window === 'undefined') {
@@ -99,6 +143,35 @@ export async function getTutorialBySlug(slug: string): Promise<Tutorial | null> 
 }
 
 export async function getTutorialStats() {
+  // 服务端直查：用 head count 并发统计，避免 select('*') 拉全量 2008 行
+  if (typeof window === 'undefined') {
+    try {
+      const { getSupabaseAdmin } = await import('@/lib/supabase');
+      const sb = getSupabaseAdmin();
+      const LEVELS = ['beginner', 'intermediate', 'advanced'];
+      const CATS = ['concept', 'hands-on', 'mcp', 'agent', 'workflow', 'creative', 'productivity'];
+      const [totalRes, featuredRes, ...rest] = await Promise.all([
+        sb.from('tutorials').select('*', { count: 'exact', head: true }),
+        sb.from('tutorials').select('*', { count: 'exact', head: true }).eq('is_featured', true),
+        ...LEVELS.map((l) =>
+          sb.from('tutorials').select('*', { count: 'exact', head: true }).eq('level', l)
+        ),
+        ...CATS.map((c) =>
+          sb.from('tutorials').select('*', { count: 'exact', head: true }).eq('category', c)
+        )
+      ]);
+      if (!totalRes.error) {
+        const byLevel = Object.fromEntries(LEVELS.map((l, i) => [l, rest[i].count ?? 0]));
+        const byCategory = Object.fromEntries(
+          CATS.map((c, i) => [c, rest[LEVELS.length + i].count ?? 0])
+        );
+        return { total: totalRes.count ?? 0, featured: featuredRes.count ?? 0, byLevel, byCategory };
+      }
+    } catch {
+      // 走下面的 API/mock 回退
+    }
+  }
+
   const data = await safeFetch<{
     total: number;
     featured: number;
