@@ -3,6 +3,7 @@ import { getModels, getBenchmarks, getModelStats } from '@/features/models/api/s
 import { Icons } from '@/components/icons';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
+import { slugify } from '@/lib/slug';
 import type { AiModel, Benchmark } from '@/features/models/api/service';
 import type { Metadata } from 'next';
 
@@ -42,7 +43,10 @@ function ScoreBar({ score }: { score: number }) {
 
 function ModelCard({ model }: { model: AiModel }) {
   return (
-    <div className='flex flex-col rounded-xl border bg-card p-5 shadow-sm'>
+    <Link
+      href={`/models/${slugify(model.name)}`}
+      className='group flex flex-col rounded-xl border bg-card p-5 shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 hover:border-primary/30'
+    >
       <div className='mb-4 flex items-start justify-between gap-2'>
         <div>
           <div className='flex items-center gap-2'>
@@ -101,15 +105,10 @@ function ModelCard({ model }: { model: AiModel }) {
         </div>
       </div>
 
-      <Link
-        href={model.url}
-        target='_blank'
-        rel='noopener noreferrer'
-        className='mt-auto flex items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-medium transition-colors hover:bg-accent'
-      >
-        官网 <Icons.externalLink className='h-3 w-3' />
-      </Link>
-    </div>
+      <span className='mt-auto flex items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-medium transition-colors group-hover:bg-accent'>
+        查看详情 <Icons.chevronRight className='h-3 w-3' />
+      </span>
+    </Link>
   );
 }
 
@@ -165,7 +164,7 @@ export default async function ModelsPage() {
     itemListElement: models.map((m, i) => ({
       '@type': 'ListItem',
       position: i + 1,
-      url: m.url,
+      url: `https://aiskillnav.com/models/${slugify(m.name)}`,
       name: m.name
     }))
   };

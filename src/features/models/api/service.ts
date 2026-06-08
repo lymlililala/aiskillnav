@@ -69,6 +69,61 @@ export async function getModelById(id: number): Promise<AiModel | null> {
   return safeFetch<AiModel>(`${apiBase()}/models/${id}`);
 }
 
+/** 按 slugify(name) 取模型（表小，全量拉取后匹配）。 */
+export async function getModelBySlug(slug: string): Promise<AiModel | null> {
+  const { slugify } = await import('@/lib/slug');
+  if (typeof window === 'undefined') {
+    try {
+      const { getSupabaseAdmin } = await import('@/lib/supabase');
+      const { data, error } = await getSupabaseAdmin().from('ai_models').select('*');
+      if (!error && data) return (data as AiModel[]).find((m) => slugify(m.name) === slug) ?? null;
+    } catch {
+      // 走回退
+    }
+  }
+  const all = await getModels();
+  return all.find((m) => slugify(m.name) === slug) ?? null;
+}
+
+/** 相关模型：同 vendor 或 model_type 重叠。 */
+export async function getRelatedModels(
+  current: { id: number; vendor: string; model_type: string[] },
+  limit = 6
+): Promise<AiModel[]> {
+  if (typeof window === 'undefined') {
+    try {
+      const { getSupabaseAdmin } = await import('@/lib/supabase');
+      const sb = getSupabaseAdmin();
+      const queries: Promise<{ data: unknown[] | null }>[] = [
+        sb
+          .from('ai_models')
+          .select('*')
+          .eq('vendor', current.vendor)
+          .neq('id', current.id)
+          .limit(30) as unknown as Promise<{ data: unknown[] | null }>
+      ];
+      if (current.model_type?.length)
+        queries.push(
+          sb
+            .from('ai_models')
+            .select('*')
+            .overlaps('model_type', current.model_type)
+            .neq('id', current.id)
+            .limit(30) as unknown as Promise<{ data: unknown[] | null }>
+        );
+      const results = await Promise.all(queries);
+      const map = new Map<number, AiModel>();
+      for (const res of results)
+        for (const r of (res.data ?? []) as AiModel[]) map.set(r.id, r);
+      return Array.from(map.values()).slice(0, limit);
+    } catch {
+      // 走回退
+    }
+  }
+  const all = await getModels({ vendor: current.vendor });
+  return all.filter((m) => m.id !== current.id).slice(0, limit);
+}
+
 export async function createModel(payload: CreateModelPayload): Promise<AiModel> {
   const res = await fetch(`${apiBase()}/models`, {
     method: 'POST',

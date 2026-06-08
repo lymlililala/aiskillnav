@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { getSupabaseAdmin } from '@/lib/supabase';
 import { PILLAR_TOPICS } from '@/features/tutorials/topics';
+import { slugify } from '@/lib/slug';
 
 // 声明为动态路由，避免 build 时尝试静态生成（会触发 Supabase 查询超时）
 // sitemap 每次请求时动态生成，Googlebot 抓取时拿到最新数据
@@ -88,6 +89,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       ucOffset += PAGE;
     }
 
+    // 查询所有模型（详情页 /models/{slugify(name)}）
+    const allModels: { name: string }[] = [];
+    {
+      const { data } = await supabase.from('ai_models').select('name');
+      if (data) allModels.push(...data);
+    }
+
     // 文章已按 published_at 降序，首条即最新
     if (allTutorials[0]?.published_at) newestTutorialDate = new Date(allTutorials[0].published_at);
     if (allNews[0]?.published_at) newestNewsDate = new Date(allNews[0].published_at);
@@ -125,7 +133,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7
     }));
 
-    dynamicPages = [...tutorialPages, ...newsPages, ...mcpPages, ...usecasePages];
+    const uniqModelSlugs = Array.from(new Set(allModels.map((m) => slugify(m.name)).filter(Boolean)));
+    const modelPages: MetadataRoute.Sitemap = uniqModelSlugs.map((s) => ({
+      url: `${BASE_URL}/models/${s}`,
+      lastModified: now,
+      changeFrequency: 'monthly' as const,
+      priority: 0.7
+    }));
+
+    dynamicPages = [...tutorialPages, ...newsPages, ...mcpPages, ...usecasePages, ...modelPages];
   } catch {
     // Supabase 不可用时静默降级，只返回静态页面
   }
