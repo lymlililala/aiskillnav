@@ -29,7 +29,8 @@ export default function robots(): MetadataRoute.Robots {
         disallow: [
           // 仍屏蔽 dashboard 下纯后台演示页（billing/users/kanban 等，不在上面的放行列表内）
           '/dashboard/',
-          '/admin/',
+          // 无斜杠前缀，连后台首页 /admin（会 307 跳到 /admin/login）一并屏蔽，避免浪费抓取预算
+          '/admin',
           '/api/',
           '/auth/',
           '/monitoring',
