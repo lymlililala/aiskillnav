@@ -30,7 +30,50 @@ async function safeFetch<T>(url: string, init?: RequestInit): Promise<T | null> 
   }
 }
 
+/**
+ * 服务端直查 Supabase（与 sitemap / api 同源），复刻 /api/news 的分页与过滤逻辑。
+ * 避免 SSR（列表页 + 详情页的「相关资讯」）走 HTTP 自调用 /api/news 而偶发 upstream 超时，
+ * 拖慢响应 → Google 降低抓取速率 → 大量页面停留在「已发现 - 尚未编入索引」。
+ * 返回 null 表示 DB 不可用，调用方再回退到 API/mock。
+ */
+async function fetchNewsFromDb(filters: NewsFilters): Promise<NewsResponse | null> {
+  try {
+    const { getSupabaseAdmin } = await import('@/lib/supabase');
+    const page = filters.page ?? 1;
+    const limit = filters.limit ?? 10;
+    let query = getSupabaseAdmin().from('news').select('*', { count: 'exact' });
+    if (filters.status && filters.status !== 'all') query = query.eq('status', filters.status);
+    if (filters.category && filters.category !== 'all') query = query.eq('category', filters.category);
+    if (filters.search)
+      query = query.or(
+        `title.ilike.%${filters.search}%,summary.ilike.%${filters.search}%,source_name.ilike.%${filters.search}%`
+      );
+    if (filters.sort) {
+      try {
+        const s = JSON.parse(filters.sort) as { id: string; desc: boolean }[];
+        if (s.length > 0) query = query.order(s[0].id, { ascending: !s[0].desc });
+        else query = query.order('published_at', { ascending: false });
+      } catch {
+        query = query.order('published_at', { ascending: false });
+      }
+    } else {
+      query = query.order('published_at', { ascending: false });
+    }
+    const { data, count, error } = await query.range((page - 1) * limit, page * limit - 1);
+    if (error) return null;
+    return { items: (data ?? []) as NewsItem[], total_items: count ?? 0 };
+  } catch {
+    return null;
+  }
+}
+
 export async function getNews(filters: NewsFilters): Promise<NewsResponse> {
+  // 服务端优先直查 DB，避免 SSR 期间 HTTP 自调用超时
+  if (typeof window === 'undefined') {
+    const direct = await fetchNewsFromDb(filters);
+    if (direct) return direct;
+  }
+
   const params = new URLSearchParams();
   if (filters.page) params.set('page', String(filters.page));
   if (filters.limit) params.set('limit', String(filters.limit));
@@ -78,6 +121,22 @@ export async function getNewsById(id: number): Promise<NewsItem | null> {
 }
 
 export async function getFeaturedNews(): Promise<NewsItem[]> {
+  // 服务端直查 DB，避免 SSR 自调用超时
+  if (typeof window === 'undefined') {
+    try {
+      const { getSupabaseAdmin } = await import('@/lib/supabase');
+      const { data, error } = await getSupabaseAdmin()
+        .from('news')
+        .select('*')
+        .eq('is_featured', true)
+        .eq('status', 'published')
+        .order('published_at', { ascending: false })
+        .limit(6);
+      if (!error) return (data ?? []) as NewsItem[];
+    } catch {
+      // 走下面的 API/mock 回退
+    }
+  }
   const data = await safeFetch<NewsItem[]>(`${apiBase()}/news?action=featured`);
   if (!data) return fakeNews.getFeaturedNews();
   return data;
