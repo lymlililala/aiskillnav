@@ -119,6 +119,21 @@ export async function getTutorialStats() {
 }
 
 export async function getFeaturedTutorials(): Promise<Tutorial[]> {
+  // 服务端直查 DB，避免 SSR 自调用超时拖慢 /tutorials 列表页
+  if (typeof window === 'undefined') {
+    try {
+      const { getSupabaseAdmin } = await import('@/lib/supabase');
+      const { data, error } = await getSupabaseAdmin()
+        .from('tutorials')
+        .select('*')
+        .eq('is_featured', true)
+        .order('published_at', { ascending: false })
+        .limit(6);
+      if (!error) return (data ?? []) as Tutorial[];
+    } catch {
+      // 走下面的 API/mock 回退
+    }
+  }
   const data = await safeFetch<Tutorial[]>(`${apiBase()}/tutorials?action=featured`);
   if (!data) return fakeTutorials.getFeatured();
   return data;

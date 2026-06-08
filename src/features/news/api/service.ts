@@ -143,6 +143,22 @@ export async function getFeaturedNews(): Promise<NewsItem[]> {
 }
 
 export async function getAllNewsCategories(): Promise<string[]> {
+  // 服务端直查 DB，避免 SSR 自调用超时拖慢 /news 列表页
+  if (typeof window === 'undefined') {
+    try {
+      const { getSupabaseAdmin } = await import('@/lib/supabase');
+      const { data, error } = await getSupabaseAdmin()
+        .from('news')
+        .select('category')
+        .eq('status', 'published');
+      if (!error)
+        return Array.from(
+          new Set((data ?? []).map((r: { category: string }) => r.category))
+        ).sort();
+    } catch {
+      // 走下面的 API/mock 回退
+    }
+  }
   const data = await safeFetch<string[]>(`${apiBase()}/news?action=categories`);
   if (!data) return fakeNews.getAllCategories();
   return data;
