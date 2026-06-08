@@ -320,6 +320,49 @@ export async function getTutorialsByTool(name: string, slug: string, limit = 4):
   return [];
 }
 
+/**
+ * 主题集群聚合：取命中某主题（tags 重叠 或 title 含关键词）的教程，用于 pillar 中心页。
+ * tags 重叠用 .overlaps；标题用 .or(title.ilike.*token*)。合并去重后取 limit 篇。
+ */
+export async function getTutorialsByTopic(matchTokens: string[], limit = 100): Promise<Tutorial[]> {
+  if (!matchTokens?.length) return [];
+  if (typeof window === 'undefined') {
+    try {
+      const { getSupabaseAdmin } = await import('@/lib/supabase');
+      const sb = getSupabaseAdmin();
+      const titleOr = matchTokens.map((t) => `title.ilike.*${t}*`).join(',');
+      const [byTags, byTitle] = await Promise.all([
+        sb
+          .from('tutorials')
+          .select(TUTORIAL_LIST_COLUMNS)
+          .overlaps('tags', matchTokens)
+          .order('is_featured', { ascending: false })
+          .order('published_at', { ascending: false })
+          .limit(limit),
+        sb
+          .from('tutorials')
+          .select(TUTORIAL_LIST_COLUMNS)
+          .or(titleOr)
+          .order('is_featured', { ascending: false })
+          .order('published_at', { ascending: false })
+          .limit(limit)
+      ]);
+      const map = new Map<string, Record<string, unknown>>();
+      for (const r of [...(byTags.data ?? []), ...(byTitle.data ?? [])] as Record<
+        string,
+        unknown
+      >[])
+        map.set(r.slug as string, r);
+      return Array.from(map.values())
+        .slice(0, limit)
+        .map((t) => ({ ...t, content: '' }) as unknown as Tutorial);
+    } catch {
+      // ignore
+    }
+  }
+  return [];
+}
+
 export async function createTutorial(payload: CreateTutorialPayload): Promise<Tutorial> {
   const res = await fetch(`${apiBase()}/tutorials`, {
     method: 'POST',

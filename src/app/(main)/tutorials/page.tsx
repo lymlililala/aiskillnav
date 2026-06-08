@@ -1,5 +1,6 @@
 import PageContainer from '@/components/layout/page-container';
 import { getTutorialsPage, getFeaturedTutorials, getTutorialStats } from '@/features/tutorials/api/service';
+import { PILLAR_TOPICS } from '@/features/tutorials/topics';
 import { Icons } from '@/components/icons';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
@@ -161,6 +162,22 @@ export default async function TutorialsPage({ searchParams }: PageProps) {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* 按主题浏览 — pillar 主题枢纽入口 */}
+        <div className='space-y-2'>
+          <h2 className='text-sm font-semibold'>按主题浏览</h2>
+          <div className='flex flex-wrap gap-2'>
+            {PILLAR_TOPICS.map((tp) => (
+              <Link
+                key={tp.slug}
+                href={`/tutorials/topic/${tp.slug}`}
+                className='rounded-full border px-3 py-1 text-xs font-medium text-muted-foreground hover:border-primary/30 hover:text-foreground transition-colors'
+              >
+                {tp.title}
+              </Link>
+            ))}
+          </div>
         </div>
 
         {/* Featured */}

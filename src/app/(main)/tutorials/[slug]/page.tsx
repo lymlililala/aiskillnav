@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getTutorialBySlug, getRelatedTutorials } from '@/features/tutorials/api/service';
 import { getMcpSlugSet } from '@/features/mcp/api/service';
+import { matchPillarTopics } from '@/features/tutorials/topics';
 import { Icons } from '@/components/icons';
 import { Badge } from '@/components/ui/badge';
 import PageContainer from '@/components/layout/page-container';
@@ -110,6 +111,8 @@ export default async function TutorialDetailPage({ params }: Props) {
   ]);
 
   const level = LEVEL_CONFIG[tutorial.level];
+  // 该教程命中的主题集群（pillar），用于"所属主题"回流链
+  const topics = matchPillarTopics(tutorial.tags, tutorial.title);
   const html = renderMarkdown(tutorial.content);
 
   // Article 结构化数据
@@ -229,6 +232,22 @@ export default async function TutorialDetailPage({ params }: Props) {
                 );
               })}
             </div>
+          </div>
+        )}
+
+        {/* 所属主题（pillar 回流链） */}
+        {topics.length > 0 && (
+          <div className='flex flex-wrap items-center gap-2'>
+            <span className='text-xs font-medium text-muted-foreground'>所属主题：</span>
+            {topics.map((tp) => (
+              <Link
+                key={tp.slug}
+                href={`/tutorials/topic/${tp.slug}`}
+                className='rounded-full border px-3 py-1 text-xs font-medium hover:border-primary/30 hover:text-primary transition-colors'
+              >
+                {tp.title}
+              </Link>
+            ))}
           </div>
         )}
 
