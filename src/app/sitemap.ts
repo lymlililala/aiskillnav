@@ -3,6 +3,7 @@ import { getSupabaseAdmin } from '@/lib/supabase';
 import { PILLAR_TOPICS } from '@/features/tutorials/topics';
 import { slugify } from '@/lib/slug';
 import { SKILL_CATEGORIES } from '@/features/skills/categories';
+import { MODEL_SERIES } from '@/features/models/series';
 
 // 声明为动态路由，避免 build 时尝试静态生成（会触发 Supabase 查询超时）
 // sitemap 每次请求时动态生成，Googlebot 抓取时拿到最新数据
@@ -190,6 +191,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // skills 分类聚合页
     ...SKILL_CATEGORIES.map((c) => ({
       url: `${BASE_URL}/skills/category/${c.slug}`,
+      lastModified: now,
+      changeFrequency: 'weekly' as const,
+      priority: 0.7
+    })),
+    // 模型系列对比页
+    ...MODEL_SERIES.map((s) => ({
+      url: `${BASE_URL}/models/series/${s.slug}`,
       lastModified: now,
       changeFrequency: 'weekly' as const,
       priority: 0.7
