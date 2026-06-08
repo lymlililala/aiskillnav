@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { getSupabaseAdmin } from '@/lib/supabase';
+import { PILLAR_TOPICS } from '@/features/tutorials/topics';
 
 // 声明为动态路由，避免 build 时尝试静态生成（会触发 Supabase 查询超时）
 // sitemap 每次请求时动态生成，Googlebot 抓取时拿到最新数据
@@ -118,7 +119,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/tutorials`, lastModified: newestTutorialDate, changeFrequency: 'weekly', priority: 0.85 },
     { url: `${BASE_URL}/usecases`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
     { url: `${BASE_URL}/news`, lastModified: newestNewsDate, changeFrequency: 'daily', priority: 0.9 },
-    { url: `${BASE_URL}/about`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 }
+    { url: `${BASE_URL}/about`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
+    // 主题集群 pillar 枢纽页（高优先级，集中权重）
+    ...PILLAR_TOPICS.map((t) => ({
+      url: `${BASE_URL}/tutorials/topic/${t.slug}`,
+      lastModified: now,
+      changeFrequency: 'weekly' as const,
+      priority: 0.9
+    }))
   ];
 
   // 合并：静态入口页 + 动态文章页（去重）
