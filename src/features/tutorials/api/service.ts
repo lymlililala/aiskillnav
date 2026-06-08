@@ -39,7 +39,10 @@ type TutorialQuery = { level?: string; category?: string; search?: string };
 async function fetchTutorialsFromDb(opts: TutorialQuery): Promise<Tutorial[] | null> {
   try {
     const { getSupabaseAdmin } = await import('@/lib/supabase');
-    let query = getSupabaseAdmin().from('tutorials').select('*');
+    // 列表场景不需要 content（Markdown 正文，是最大字段）：排除后 2008 行 payload 从数 MB 降到几百 KB
+    const LIST_COLUMNS =
+      'id,slug,title,subtitle,summary,level,category,tags,estimated_minutes,related_tools,is_featured,published_at';
+    let query = getSupabaseAdmin().from('tutorials').select(LIST_COLUMNS);
     if (opts.level && opts.level !== 'all') query = query.eq('level', opts.level);
     if (opts.category && opts.category !== 'all') query = query.eq('category', opts.category);
     if (opts.search) query = query.or(`title.ilike.%${opts.search}%,summary.ilike.%${opts.search}%`);
@@ -47,7 +50,8 @@ async function fetchTutorialsFromDb(opts: TutorialQuery): Promise<Tutorial[] | n
       .order('is_featured', { ascending: false })
       .order('published_at', { ascending: false });
     if (error || !data) return null;
-    return data as Tutorial[];
+    // content 不在 SELECT 中，补空串以满足 Tutorial 类型（列表/相关教程都不渲染正文）
+    return data.map((t) => ({ ...t, content: '' })) as Tutorial[];
   } catch {
     return null;
   }
