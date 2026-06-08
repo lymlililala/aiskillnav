@@ -74,6 +74,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       mcpOffset += PAGE;
     }
 
+    // 分页查询所有 usecases（详情页 /usecases/{id}）
+    const allUseCases: { id: number }[] = [];
+    let ucOffset = 0;
+    while (true) {
+      const { data, error } = await supabase
+        .from('use_cases')
+        .select('id')
+        .range(ucOffset, ucOffset + PAGE - 1);
+      if (error || !data || data.length === 0) break;
+      allUseCases.push(...data);
+      if (data.length < PAGE) break;
+      ucOffset += PAGE;
+    }
+
     // 文章已按 published_at 降序，首条即最新
     if (allTutorials[0]?.published_at) newestTutorialDate = new Date(allTutorials[0].published_at);
     if (allNews[0]?.published_at) newestNewsDate = new Date(allNews[0].published_at);
@@ -104,7 +118,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8
     }));
 
-    dynamicPages = [...tutorialPages, ...newsPages, ...mcpPages];
+    const usecasePages: MetadataRoute.Sitemap = allUseCases.map((u) => ({
+      url: `${BASE_URL}/usecases/${u.id}`,
+      lastModified: now,
+      changeFrequency: 'monthly' as const,
+      priority: 0.7
+    }));
+
+    dynamicPages = [...tutorialPages, ...newsPages, ...mcpPages, ...usecasePages];
   } catch {
     // Supabase 不可用时静默降级，只返回静态页面
   }

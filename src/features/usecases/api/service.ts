@@ -59,6 +59,68 @@ export async function getUseCaseStats() {
   return data;
 }
 
+/** 按 id 取单条用例（详情页用）。route 已支持，这里服务端直查 + 回退。 */
+export async function getUseCaseById(id: number): Promise<UseCase | null> {
+  if (typeof window === 'undefined') {
+    try {
+      const { getSupabaseAdmin } = await import('@/lib/supabase');
+      const { data, error } = await getSupabaseAdmin()
+        .from('use_cases')
+        .select('*')
+        .eq('id', id)
+        .limit(1);
+      if (!error) return (data?.[0] as UseCase) ?? null;
+    } catch {
+      // 走回退
+    }
+  }
+  const data = await safeFetch<UseCase>(`${apiBase()}/usecases/${id}`);
+  if (data) return data;
+  const all = await getUseCases();
+  return all.find((u) => u.id === id) ?? null;
+}
+
+/** 相关用例（同 industry）。 */
+export async function getRelatedUseCases(
+  current: { id: number; industry: string },
+  limit = 6
+): Promise<UseCase[]> {
+  if (typeof window === 'undefined') {
+    try {
+      const { getSupabaseAdmin } = await import('@/lib/supabase');
+      const { data, error } = await getSupabaseAdmin()
+        .from('use_cases')
+        .select('*')
+        .eq('industry', current.industry)
+        .neq('id', current.id)
+        .limit(limit);
+      if (!error && data) return data as UseCase[];
+    } catch {
+      // 走回退
+    }
+  }
+  const all = await getUseCases({ industry: current.industry });
+  return all.filter((u) => u.id !== current.id).slice(0, limit);
+}
+
+/** 推荐了某工具的用例（tools 数组包含 tool），供 agents/models 详情页"关联用例"反查。 */
+export async function getUseCasesByTool(tool: string, limit = 6): Promise<UseCase[]> {
+  if (typeof window === 'undefined') {
+    try {
+      const { getSupabaseAdmin } = await import('@/lib/supabase');
+      const { data, error } = await getSupabaseAdmin()
+        .from('use_cases')
+        .select('*')
+        .contains('tools', [tool])
+        .limit(limit);
+      if (!error && data) return data as UseCase[];
+    } catch {
+      // ignore
+    }
+  }
+  return [];
+}
+
 export async function createUseCase(payload: CreateUseCasePayload): Promise<UseCase> {
   const res = await fetch(`${apiBase()}/usecases`, {
     method: 'POST',

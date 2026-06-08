@@ -1,4 +1,5 @@
 import PageContainer from '@/components/layout/page-container';
+import Link from 'next/link';
 import { getUseCases, getFeaturedUseCases, getUseCaseStats } from '@/features/usecases/api/service';
 import { Icons } from '@/components/icons';
 import { Badge } from '@/components/ui/badge';
@@ -77,7 +78,10 @@ function UseCaseCard({ uc }: { uc: UseCase }) {
   const diff = DIFFICULTY_CONFIG[uc.difficulty] ?? DIFFICULTY_CONFIG[1];
   const IndIcon = ind.icon;
   return (
-    <div className='flex flex-col rounded-xl border bg-card p-5 shadow-sm'>
+    <Link
+      href={`/usecases/${uc.id}`}
+      className='group flex flex-col rounded-xl border bg-card p-5 shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 hover:border-primary/30'
+    >
       <div className='mb-3 flex items-start justify-between gap-2'>
         <div className='flex items-center gap-2'>
           <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${ind.bg}`}>
@@ -137,7 +141,7 @@ function UseCaseCard({ uc }: { uc: UseCase }) {
           </span>
         ))}
       </div>
-    </div>
+    </Link>
   );
 }
 
