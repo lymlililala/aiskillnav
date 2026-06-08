@@ -46,3 +46,8 @@ next-env.d.ts
 
 # Sentry Config File
 .env.sentry-build-plugin
+
+# 含明文 Supabase service_role key 的一次性数据脚本 — 不纳入版本控制
+# （link-health-check.mjs 因 GitHub Actions 依赖未列入，需单独改用 env+secret）
+scripts/insert-*.mjs
+scripts/supabase-setup.mjs
