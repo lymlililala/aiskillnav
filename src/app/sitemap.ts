@@ -11,26 +11,19 @@ const BASE_URL = 'https://aiskillnav.com';
 /**
  * 动态生成 sitemap.xml — 静态入口页 + 从 Supabase 分页读取全量文章
  * 访问地址: /sitemap.xml
+ *
+ * 注意：仅收录规范的公开 URL（(main) 路由组下的 /news、/tutorials 等）。
+ * 旧的 /dashboard/* 路径已 308 永久重定向到这些规范页面，因此不应出现在 sitemap 中。
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 
-  // 静态入口页面（仅保留核心列表页，详情页完全由 Supabase 动态生成）
-  const staticPages: MetadataRoute.Sitemap = [
-    { url: BASE_URL, lastModified: now, changeFrequency: 'weekly', priority: 1.0 },
-    { url: `${BASE_URL}/skills`, lastModified: now, changeFrequency: 'daily', priority: 0.9 },
-    { url: `${BASE_URL}/agents`, lastModified: now, changeFrequency: 'daily', priority: 0.9 },
-    { url: `${BASE_URL}/mcp`, lastModified: now, changeFrequency: 'weekly', priority: 0.85 },
-    { url: `${BASE_URL}/models`, lastModified: now, changeFrequency: 'weekly', priority: 0.85 },
-    { url: `${BASE_URL}/tutorials`, lastModified: now, changeFrequency: 'weekly', priority: 0.85 },
-    { url: `${BASE_URL}/usecases`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${BASE_URL}/news`, lastModified: now, changeFrequency: 'daily', priority: 0.9 },
-    { url: `${BASE_URL}/about`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 }
-  ];
-
   // 动态页面 — 从 Supabase 分页读取全量 tutorials 和 news
   // Supabase JS 客户端默认上限 1000 条，需分页循环取全量
   let dynamicPages: MetadataRoute.Sitemap = [];
+  // 列表页的 lastModified 取最新文章发布时间，提示 Google 这些聚合页有更新、需要重抓
+  let newestTutorialDate = now;
+  let newestNewsDate = now;
   try {
     const supabase = getSupabaseAdmin();
     const PAGE = 1000;
@@ -66,6 +59,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       newsOffset += PAGE;
     }
 
+    // 文章已按 published_at 降序，首条即最新
+    if (allTutorials[0]?.published_at) newestTutorialDate = new Date(allTutorials[0].published_at);
+    if (allNews[0]?.published_at) newestNewsDate = new Date(allNews[0].published_at);
+
     const tutorialPages: MetadataRoute.Sitemap = allTutorials.map((t) => ({
       url: `${BASE_URL}/tutorials/${t.slug}`,
       lastModified: new Date(t.published_at),
@@ -84,6 +81,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   } catch {
     // Supabase 不可用时静默降级，只返回静态页面
   }
+
+  // 静态入口页面（仅保留核心列表页，详情页完全由 Supabase 动态生成）
+  const staticPages: MetadataRoute.Sitemap = [
+    { url: BASE_URL, lastModified: now, changeFrequency: 'weekly', priority: 1.0 },
+    { url: `${BASE_URL}/skills`, lastModified: now, changeFrequency: 'daily', priority: 0.9 },
+    { url: `${BASE_URL}/agents`, lastModified: now, changeFrequency: 'daily', priority: 0.9 },
+    { url: `${BASE_URL}/mcp`, lastModified: now, changeFrequency: 'weekly', priority: 0.85 },
+    { url: `${BASE_URL}/models`, lastModified: now, changeFrequency: 'weekly', priority: 0.85 },
+    { url: `${BASE_URL}/tutorials`, lastModified: newestTutorialDate, changeFrequency: 'weekly', priority: 0.85 },
+    { url: `${BASE_URL}/usecases`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${BASE_URL}/news`, lastModified: newestNewsDate, changeFrequency: 'daily', priority: 0.9 },
+    { url: `${BASE_URL}/about`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 }
+  ];
 
   // 合并：静态入口页 + 动态文章页（去重）
   const staticUrls = new Set(staticPages.map((p) => p.url));
