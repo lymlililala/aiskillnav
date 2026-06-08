@@ -7,6 +7,10 @@ import { slugify } from '@/lib/slug';
 import type { AiModel, Benchmark } from '@/features/models/api/service';
 import type { Metadata } from 'next';
 
+// 动态渲染：模型库会更新，确保列表始终反映最新数据
+export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
+
 export async function generateMetadata(): Promise<Metadata> {
   const { resolvePageMeta } = await import('@/features/seo/api/service');
   const meta = await resolvePageMeta('/dashboard/models');
