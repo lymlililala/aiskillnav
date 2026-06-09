@@ -25,22 +25,6 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-function ScoreBar({ score }: { score: number }) {
-  return (
-    <div className='flex items-center gap-2'>
-      <div className='flex gap-0.5'>
-        {Array.from({ length: 5 }, (_, i) => (
-          <div
-            key={i}
-            className={`h-1.5 w-4 rounded-full ${i < score ? 'bg-primary' : 'bg-muted'}`}
-          />
-        ))}
-      </div>
-      <span className='text-[11px] font-medium tabular-nums text-muted-foreground'>{score}</span>
-    </div>
-  );
-}
-
 function ModelCard({ model }: { model: AiModel }) {
   return (
     <Link
@@ -87,21 +71,6 @@ function ModelCard({ model }: { model: AiModel }) {
         <div className='rounded-lg bg-muted/30 px-2.5 py-2'>
           <p className='text-[10px] text-muted-foreground'>输入价格</p>
           <p className='text-xs font-semibold'>{model.price_input ?? '—'}</p>
-        </div>
-      </div>
-
-      <div className='space-y-2 mb-4'>
-        <div className='flex items-center justify-between'>
-          <span className='text-[10px] text-muted-foreground'>推理能力</span>
-          <ScoreBar score={model.reasoning_score} />
-        </div>
-        <div className='flex items-center justify-between'>
-          <span className='text-[10px] text-muted-foreground'>代码能力</span>
-          <ScoreBar score={model.code_score} />
-        </div>
-        <div className='flex items-center justify-between'>
-          <span className='text-[10px] text-muted-foreground'>响应速度</span>
-          <ScoreBar score={model.speed_score} />
         </div>
       </div>
 
