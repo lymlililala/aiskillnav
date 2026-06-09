@@ -26,22 +26,17 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 function ScoreBar({ score }: { score: number }) {
-  const colors = [
-    '',
-    'bg-rose-500',
-    'bg-orange-500',
-    'bg-amber-500',
-    'bg-blue-500',
-    'bg-emerald-500'
-  ];
   return (
-    <div className='flex items-center gap-1'>
-      {Array.from({ length: 5 }, (_, i) => (
-        <div
-          key={i}
-          className={`h-1.5 w-4 rounded-full ${i < score ? colors[score] : 'bg-muted'}`}
-        />
-      ))}
+    <div className='flex items-center gap-2'>
+      <div className='flex gap-0.5'>
+        {Array.from({ length: 5 }, (_, i) => (
+          <div
+            key={i}
+            className={`h-1.5 w-4 rounded-full ${i < score ? 'bg-primary' : 'bg-muted'}`}
+          />
+        ))}
+      </div>
+      <span className='text-[11px] font-medium tabular-nums text-muted-foreground'>{score}</span>
     </div>
   );
 }
