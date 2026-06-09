@@ -36,7 +36,8 @@ export async function GET(request: NextRequest) {
     );
 
   query = query
-    .order('is_featured', { ascending: false })
+    .order('reasoning_score', { ascending: false })
+    .order('code_score', { ascending: false })
     .order('release_date', { ascending: false });
 
   const { data, error } = await query;
