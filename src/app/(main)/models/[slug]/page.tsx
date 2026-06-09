@@ -13,15 +13,17 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 3600;
 
 function ScoreBar({ score }: { score: number }) {
-  const colors = ['', 'bg-rose-500', 'bg-orange-500', 'bg-amber-500', 'bg-blue-500', 'bg-emerald-500'];
   return (
-    <div className='flex items-center gap-1'>
-      {Array.from({ length: 5 }, (_, i) => (
-        <div
-          key={i}
-          className={`h-1.5 w-5 rounded-full ${i < score ? colors[score] : 'bg-muted'}`}
-        />
-      ))}
+    <div className='flex items-center gap-2'>
+      <div className='flex gap-1'>
+        {Array.from({ length: 5 }, (_, i) => (
+          <div
+            key={i}
+            className={`h-1.5 w-5 rounded-full ${i < score ? 'bg-primary' : 'bg-muted'}`}
+          />
+        ))}
+      </div>
+      <span className='text-xs font-medium tabular-nums text-muted-foreground'>{score} / 5</span>
     </div>
   );
 }
