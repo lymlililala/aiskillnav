@@ -63,14 +63,18 @@ function ModelCard({ model }: { model: AiModel }) {
         {model.description}
       </p>
 
-      <div className='mb-4 grid grid-cols-2 gap-2'>
+      <div className='mb-4 grid grid-cols-3 gap-2'>
         <div className='rounded-lg bg-muted/30 px-2.5 py-2'>
           <p className='text-[10px] text-muted-foreground'>上下文窗口</p>
-          <p className='text-xs font-semibold'>{model.context_window}</p>
+          <p className='text-xs font-semibold'>{model.context_window ?? '—'}</p>
         </div>
         <div className='rounded-lg bg-muted/30 px-2.5 py-2'>
           <p className='text-[10px] text-muted-foreground'>输入价格</p>
           <p className='text-xs font-semibold'>{model.price_input ?? '—'}</p>
+        </div>
+        <div className='rounded-lg bg-muted/30 px-2.5 py-2'>
+          <p className='text-[10px] text-muted-foreground'>输出价格</p>
+          <p className='text-xs font-semibold'>{model.price_output ?? '—'}</p>
         </div>
       </div>
 
