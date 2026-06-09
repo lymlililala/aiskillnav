@@ -4,6 +4,7 @@ import { PILLAR_TOPICS } from '@/features/tutorials/topics';
 import { slugify } from '@/lib/slug';
 import { SKILL_CATEGORIES } from '@/features/skills/categories';
 import { MODEL_SERIES } from '@/features/models/series';
+import { NOINDEX_TUTORIAL_SLUGS } from '@/features/tutorials/noindex-slugs';
 
 // 声明为动态路由，避免 build 时尝试静态生成（会触发 Supabase 查询超时）
 // sitemap 每次请求时动态生成，Googlebot 抓取时拿到最新数据
@@ -113,12 +114,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const uniqTutorials = Array.from(new Map(allTutorials.map((t) => [t.slug, t])).values());
     const uniqNews = Array.from(new Map(allNews.map((n) => [n.slug, n])).values());
 
-    const tutorialPages: MetadataRoute.Sitemap = uniqTutorials.map((t) => ({
-      url: `${BASE_URL}/tutorials/${t.slug}`,
-      lastModified: new Date(t.published_at),
-      changeFrequency: 'monthly' as const,
-      priority: 0.88
-    }));
+    // 排除已 noindex 的损坏模板页：sitemap 与 robots meta 保持一致，不向 Google 提交它们
+    const tutorialPages: MetadataRoute.Sitemap = uniqTutorials
+      .filter((t) => !NOINDEX_TUTORIAL_SLUGS.has(t.slug))
+      .map((t) => ({
+        url: `${BASE_URL}/tutorials/${t.slug}`,
+        lastModified: new Date(t.published_at),
+        changeFrequency: 'monthly' as const,
+        priority: 0.88
+      }));
 
     const newsPages: MetadataRoute.Sitemap = uniqNews.map((n) => ({
       url: `${BASE_URL}/news/${n.slug}`,
