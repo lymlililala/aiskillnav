@@ -6,7 +6,12 @@ import { getAgentStats } from '@/features/agents/api/service';
 import { getMcpStats } from '@/features/mcp/api/service';
 import { getModelStats } from '@/features/models/api/service';
 import { getUseCaseStats } from '@/features/usecases/api/service';
-import { getTutorialStats, getFeaturedTutorials } from '@/features/tutorials/api/service';
+import {
+  getTutorialStats,
+  getFeaturedTutorials,
+  getTutorialsBySlugs
+} from '@/features/tutorials/api/service';
+import { HOT_TUTORIAL_SLUGS } from '@/features/tutorials/hot';
 
 // ISR: 按需渲染，1 小时内复用缓存
 export const dynamic = 'force-dynamic';
@@ -171,8 +176,9 @@ async function getLiveStats() {
 }
 
 async function getHomePageContent() {
-  const [featuredTutorials, latestNewsResp] = await Promise.all([
+  const [featuredTutorials, hotTutorials, latestNewsResp] = await Promise.all([
     getFeaturedTutorials().catch(() => []),
+    getTutorialsBySlugs(HOT_TUTORIAL_SLUGS).catch(() => []),
     getPublishedNews({ page: 1, limit: 6, sort: 'newest' }).catch(() => ({
       items: [] as import('@/constants/mock-api-news').NewsItem[],
       total_items: 0
@@ -184,6 +190,7 @@ async function getHomePageContent() {
 
   return {
     displayTutorials,
+    hotTutorials,
     latestNews: latestNewsResp.items.slice(0, 6)
   };
 }
@@ -407,6 +414,50 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ── Hot Guides（GSC 高曝光、排名 4-10 的页，首页直链助推前 3） ── */}
+      {content.hotTutorials.length > 0 && (
+        <section className='border-t bg-muted/20 py-14 md:py-16'>
+          <div className='mx-auto max-w-6xl px-4 md:px-6'>
+            <div className='mb-8 flex items-center justify-between'>
+              <div>
+                <h2 className='flex items-center gap-2 text-xl font-bold tracking-tight md:text-2xl'>
+                  <Icons.trendingUp className='h-5 w-5 text-primary' />
+                  热门指南
+                </h2>
+                <p className='mt-1 text-sm text-muted-foreground'>
+                  大家都在搜的实战对比与上手指南，精选高热度内容
+                </p>
+              </div>
+              <Link
+                href='/tutorials'
+                className='flex items-center gap-1 text-xs text-primary hover:underline'
+              >
+                查看全部 <Icons.chevronRight className='h-3.5 w-3.5' />
+              </Link>
+            </div>
+            <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-4'>
+              {content.hotTutorials.map((t) => (
+                <Link
+                  key={t.id}
+                  href={`/tutorials/${t.slug}`}
+                  className='group flex flex-col gap-2 rounded-xl border bg-card p-4 shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 hover:border-primary/30'
+                >
+                  <h3 className='text-sm font-semibold leading-snug group-hover:text-primary transition-colors line-clamp-2'>
+                    {t.title}
+                  </h3>
+                  <p className='flex-1 line-clamp-2 text-xs leading-relaxed text-muted-foreground'>
+                    {t.summary}
+                  </p>
+                  <div className='flex items-center gap-1 text-[11px] text-muted-foreground'>
+                    <Icons.clock className='h-3 w-3' />约 {t.estimated_minutes} 分钟
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ── Featured Tutorials ── */}
       {content.displayTutorials.length > 0 && (

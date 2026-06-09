@@ -217,6 +217,31 @@ export async function getFeaturedTutorials(): Promise<Tutorial[]> {
 }
 
 /**
+ * 按 slug 批量取教程，并保持传入 slug 的顺序返回（缺失的 slug 跳过）。
+ * 用途：首页「热门指南」区块——人工策划一批 GSC 高曝光、排名 4-10 的页，
+ * 从全站权重最高的首页直链它们，把排名往前 3 推。顺序即策划顺序。
+ */
+export async function getTutorialsBySlugs(slugs: string[]): Promise<Tutorial[]> {
+  if (slugs.length === 0) return [];
+  if (typeof window === 'undefined') {
+    try {
+      const { getSupabaseAdmin } = await import('@/lib/supabase');
+      const { data, error } = await getSupabaseAdmin()
+        .from('tutorials')
+        .select(TUTORIAL_LIST_COLUMNS)
+        .in('slug', slugs);
+      if (!error && data) {
+        const bySlug = new Map((data as Tutorial[]).map((t) => [t.slug, t]));
+        return slugs.map((s) => bySlug.get(s)).filter((t): t is Tutorial => Boolean(t));
+      }
+    } catch {
+      // 失败则返回空，首页该区块自动不渲染
+    }
+  }
+  return [];
+}
+
+/**
  * 相关教程（替换详情页此前"拉全量 2008 行再 slice 3"的做法）。
  * DB 端用 tags 重叠 + 同 category 取候选(各≤30)，应用层加权打分取 limit 篇。
  */
