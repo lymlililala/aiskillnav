@@ -59,6 +59,7 @@ const LEVEL_CONFIG: Record<string, { label: string; color: string }> = {
 };
 
 function renderMarkdown(md: string): string {
+  if (!md) return '';
   return md
     .replace(/^### (.+)$/gm, '<h3 class="text-base font-semibold mt-6 mb-2">$1</h3>')
     .replace(/^## (.+)$/gm, '<h2 class="text-lg font-bold mt-8 mb-3">$1</h2>')
