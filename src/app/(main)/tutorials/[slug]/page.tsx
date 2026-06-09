@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getTutorialBySlug, getRelatedTutorials } from '@/features/tutorials/api/service';
+import { NOINDEX_TUTORIAL_SLUGS } from '@/features/tutorials/noindex-slugs';
 import { getMcpSlugSet } from '@/features/mcp/api/service';
 import { matchPillarTopics } from '@/features/tutorials/topics';
 import { Icons } from '@/components/icons';
@@ -15,11 +16,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const t = await getTutorialBySlug(slug);
   if (!t) return { title: '教程不存在' };
   const url = `https://aiskillnav.com/tutorials/${slug}`;
+  // 损坏的批量模板页：加 noindex（仍 follow，让内链权重流动），并随名单移除而恢复
+  const noindex = NOINDEX_TUTORIAL_SLUGS.has(slug);
   return {
     title: `${t.title} | 教程中心`,
     description: t.summary,
     keywords: t.tags,
     alternates: { canonical: url },
+    ...(noindex ? { robots: { index: false, follow: true } } : {}),
     openGraph: {
       type: 'article',
       url,
