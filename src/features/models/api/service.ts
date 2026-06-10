@@ -92,8 +92,16 @@ export async function getModelById(id: number): Promise<AiModel | null> {
 }
 
 /** 按 slugify(name) 取模型（表小，全量拉取后匹配）。 */
-export async function getModelBySlug(slug: string): Promise<AiModel | null> {
+export async function getModelBySlug(rawSlug: string): Promise<AiModel | null> {
   const { slugify } = await import('@/lib/slug');
+  // params.slug 对非 ASCII（中文）在生产可能是 percent-encoded，先解码再 slugify 对齐
+  let decoded = rawSlug;
+  try {
+    decoded = decodeURIComponent(rawSlug);
+  } catch {
+    // 含非法转义序列则保持原值
+  }
+  const slug = slugify(decoded);
   if (typeof window === 'undefined') {
     try {
       const { getSupabaseAdmin } = await import('@/lib/supabase');
