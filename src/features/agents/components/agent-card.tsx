@@ -43,14 +43,17 @@ export function AgentCard({ agent }: { agent: Agent }) {
   const visibleTags = agent.tags.slice(0, 2);
   const extraTagCount = agent.tags.length > 2 ? agent.tags.length - 2 : 0;
 
+  // slug 为空（名称无字母/数字/中文）时站内详情页打不开，整卡不可点、不显示「查看详情」
+  const slug = slugify(agent.name);
+  const hasDetail = slug.length > 0;
+
   const cardClass = cn(
     'group relative flex h-[180px] flex-col rounded-xl border border-border/60 bg-card p-4 transition-all duration-200',
-    'hover:-translate-y-0.5 hover:border-border hover:shadow-md'
+    hasDetail && 'hover:-translate-y-0.5 hover:border-border hover:shadow-md'
   );
 
-  // 整卡链到站内详情页（不再直接外链官网；官网在详情页内提供）
-  return (
-    <Link href={`/agents/${slugify(agent.name)}`} className={cardClass}>
+  const inner = (
+    <>
       {/* Header */}
       <div className='relative mb-3 flex items-start gap-3'>
         <div className='flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-muted/50'>
@@ -102,11 +105,23 @@ export function AgentCard({ agent }: { agent: Agent }) {
             </span>
           )}
         </div>
-        <span className='flex items-center gap-1 text-xs font-medium text-muted-foreground/50 group-hover:text-primary transition-colors'>
-          查看详情
-          <Icons.chevronRight className='h-3 w-3' />
-        </span>
+        {hasDetail && (
+          <span className='flex items-center gap-1 text-xs font-medium text-muted-foreground/50 group-hover:text-primary transition-colors'>
+            查看详情
+            <Icons.chevronRight className='h-3 w-3' />
+          </span>
+        )}
       </div>
+    </>
+  );
+
+  // 整卡链到站内详情页（不再直接外链官网；官网在详情页内提供）
+  if (!hasDetail) {
+    return <div className={cardClass}>{inner}</div>;
+  }
+  return (
+    <Link href={`/agents/${slug}`} className={cardClass}>
+      {inner}
     </Link>
   );
 }
