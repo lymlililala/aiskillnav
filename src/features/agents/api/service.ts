@@ -178,8 +178,17 @@ export async function getAgentStats(): Promise<AgentStats> {
 }
 
 /** 按 slugify(name) 取 agent（过滤 published；表小，全量后匹配）。 */
-export async function getAgentBySlug(slug: string): Promise<Agent | null> {
+export async function getAgentBySlug(rawSlug: string): Promise<Agent | null> {
   const { slugify } = await import('@/lib/slug');
+  // 生产环境 params.slug 对非 ASCII（中文）可能是 percent-encoded，
+  // 与已解码的 slugify(name) 直接比会全部 404；先解码再过一遍 slugify 对齐。
+  let decoded = rawSlug;
+  try {
+    decoded = decodeURIComponent(rawSlug);
+  } catch {
+    // rawSlug 含非法转义序列则保持原值
+  }
+  const slug = slugify(decoded);
   if (typeof window === 'undefined') {
     try {
       const { getSupabaseAdmin } = await import('@/lib/supabase');
