@@ -29,7 +29,79 @@ async function safeFetch<T>(url: string, init?: RequestInit): Promise<T | null> 
   }
 }
 
+/** 服务端直查 Supabase 取列表（与 /api/agents 的 GET 逻辑一致），
+ *  避免 SSR 自调 /api 超时回退 mock，导致与详情页（直查 DB）数据不一致。 */
+async function getAgentsDirect(filters: AgentFilters): Promise<AgentsResponse | null> {
+  const { getSupabaseAdmin } = await import('@/lib/supabase');
+  const sb = getSupabaseAdmin();
+  const page = filters.page ?? 1;
+  const limit = filters.limit ?? 20;
+  const status = filters.status ?? 'published';
+
+  let query = sb.from('agents').select('*', { count: 'exact' });
+  if (status && status !== 'all') query = query.eq('status', status);
+  if (filters.agent_type && filters.agent_type !== 'all')
+    query = query.eq('agent_type', filters.agent_type);
+  if (filters.open_source && filters.open_source !== 'all')
+    query = query.eq('open_source', filters.open_source);
+  if (filters.url_group) query = query.eq('url_group', Number(filters.url_group));
+  if (filters.search)
+    query = query.or(`name.ilike.%${filters.search}%,description.ilike.%${filters.search}%`);
+
+  if (filters.sort) {
+    try {
+      const s = JSON.parse(filters.sort) as { id: string; desc: boolean }[];
+      if (s.length > 0) query = query.order(s[0].id, { ascending: !s[0].desc });
+    } catch {
+      /* ignore */
+    }
+  } else {
+    query = query
+      .order('url_group', { ascending: true })
+      .order('is_featured', { ascending: false })
+      .order('created_at', { ascending: false });
+  }
+
+  const { data, count, error } = await query.range((page - 1) * limit, page * limit - 1);
+  if (error) return null;
+  const items = (data ?? []) as Agent[];
+
+  let group_counts = {
+    app: items.filter((a) => !a.url.includes('github.com') && a.url !== '#').length,
+    github: items.filter((a) => a.url.includes('github.com')).length,
+    inner: items.filter((a) => a.url === '#').length
+  };
+  if ((count ?? 0) > limit) {
+    let cq = sb.from('agents').select('url', { count: 'exact', head: false });
+    if (status && status !== 'all') cq = cq.eq('status', status);
+    if (filters.agent_type && filters.agent_type !== 'all')
+      cq = cq.eq('agent_type', filters.agent_type);
+    if (filters.open_source && filters.open_source !== 'all')
+      cq = cq.eq('open_source', filters.open_source);
+    if (filters.search)
+      cq = cq.or(`name.ilike.%${filters.search}%,description.ilike.%${filters.search}%`);
+    const { data: allData } = await cq;
+    if (allData) {
+      const rows = allData as { url: string }[];
+      group_counts = {
+        app: rows.filter((a) => !a.url.includes('github.com') && a.url !== '#').length,
+        github: rows.filter((a) => a.url.includes('github.com')).length,
+        inner: rows.filter((a) => a.url === '#').length
+      };
+    }
+  }
+  return { items, total_items: count ?? 0, group_counts };
+}
+
 export async function getAgents(filters: AgentFilters): Promise<AgentsResponse> {
+  if (typeof window === 'undefined') {
+    try {
+      const direct = await getAgentsDirect(filters);
+      if (direct) return direct;
+    } catch {
+      // 走回退
+    }
+  }
   const params = new URLSearchParams();
   if (filters.page) params.set('page', String(filters.page));
   if (filters.limit) params.set('limit', String(filters.limit));
@@ -48,6 +120,21 @@ export async function getAgents(filters: AgentFilters): Promise<AgentsResponse> 
 }
 
 export async function getFeaturedAgents(): Promise<Agent[]> {
+  if (typeof window === 'undefined') {
+    try {
+      const { getSupabaseAdmin } = await import('@/lib/supabase');
+      const { data, error } = await getSupabaseAdmin()
+        .from('agents')
+        .select('*')
+        .eq('is_featured', true)
+        .eq('status', 'published')
+        .order('created_at', { ascending: false })
+        .limit(8);
+      if (!error && data) return data as Agent[];
+    } catch {
+      // 走回退
+    }
+  }
   const data = await safeFetch<Agent[]>(`${apiBase()}/agents?action=featured`);
   if (!data) return fakeAgents.getFeaturedAgents();
   return data;
@@ -58,6 +145,33 @@ export async function getAgentById(id: number): Promise<Agent | null> {
 }
 
 export async function getAgentStats(): Promise<AgentStats> {
+  if (typeof window === 'undefined') {
+    try {
+      const { getSupabaseAdmin } = await import('@/lib/supabase');
+      const { data, error } = await getSupabaseAdmin().from('agents').select('*');
+      if (!error && data) {
+        const all = data as Agent[];
+        const published = all.filter((a) => a.status === 'published');
+        const byType = published.reduce(
+          (acc, a) => {
+            acc[a.agent_type] = (acc[a.agent_type] ?? 0) + 1;
+            return acc;
+          },
+          {} as Record<string, number>
+        );
+        return {
+          total: published.length,
+          featured: published.filter((a) => a.is_featured).length,
+          pending: all.filter((a) => a.status === 'pending').length,
+          rejected: all.filter((a) => a.status === 'rejected').length,
+          openCount: published.filter((a) => a.open_source === 'open').length,
+          byType
+        };
+      }
+    } catch {
+      // 走回退
+    }
+  }
   const data = await safeFetch<AgentStats>(`${apiBase()}/agents?action=stats`);
   if (!data) return fakeAgents.getStats();
   return data;
