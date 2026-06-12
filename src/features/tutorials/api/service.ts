@@ -35,6 +35,17 @@ const TUTORIAL_LIST_COLUMNS =
   'id,slug,title,subtitle,summary,level,category,tags,estimated_minutes,related_tools,is_featured,published_at';
 
 /**
+ * 列表/推荐类查询统一排除 published_at IS NULL 的行。
+ * 约定：noindex 名单（模板垃圾，见 noindex-slugs.ts）的行会把 published_at 置空，
+ * 使其从列表页、搜索、相关推荐、统计中消失，但详情页仍可渲染
+ * （getTutorialBySlug 不加此过滤——Google 需要抓到页面上的 noindex meta）。
+ */
+function visibleOnly<T>(query: T): T {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return (query as any).not('published_at', 'is', null) as T;
+}
+
+/**
  * 服务端直查 Supabase（与 sitemap.ts 同源）。
  * 关键：Server Component / ISR 渲染时不要再通过 HTTP 自调用 /api/tutorials —
  * 那条「函数内再请求另一个 serverless 函数」的链路在生产会偶发 upstream 超时，
@@ -45,7 +56,7 @@ const TUTORIAL_LIST_COLUMNS =
 async function fetchTutorialsFromDb(opts: TutorialQuery): Promise<Tutorial[] | null> {
   try {
     const { getSupabaseAdmin } = await import('@/lib/supabase');
-    let query = getSupabaseAdmin().from('tutorials').select(TUTORIAL_LIST_COLUMNS);
+    let query = visibleOnly(getSupabaseAdmin().from('tutorials').select(TUTORIAL_LIST_COLUMNS));
     if (opts.level && opts.level !== 'all') query = query.eq('level', opts.level);
     if (opts.category && opts.category !== 'all') query = query.eq('category', opts.category);
     if (opts.search) query = query.or(`title.ilike.%${opts.search}%,summary.ilike.%${opts.search}%`);
@@ -89,9 +100,9 @@ export async function getTutorialsPage(
   if (typeof window === 'undefined') {
     try {
       const { getSupabaseAdmin } = await import('@/lib/supabase');
-      let query = getSupabaseAdmin()
-        .from('tutorials')
-        .select(TUTORIAL_LIST_COLUMNS, { count: 'exact' });
+      let query = visibleOnly(
+        getSupabaseAdmin().from('tutorials').select(TUTORIAL_LIST_COLUMNS, { count: 'exact' })
+      );
       if (opts.level && opts.level !== 'all') query = query.eq('level', opts.level);
       if (opts.category && opts.category !== 'all') query = query.eq('category', opts.category);
       if (opts.search)
@@ -151,13 +162,13 @@ export async function getTutorialStats() {
       const LEVELS = ['beginner', 'intermediate', 'advanced'];
       const CATS = ['concept', 'hands-on', 'mcp', 'agent', 'workflow', 'creative', 'productivity'];
       const [totalRes, featuredRes, ...rest] = await Promise.all([
-        sb.from('tutorials').select('*', { count: 'exact', head: true }),
-        sb.from('tutorials').select('*', { count: 'exact', head: true }).eq('is_featured', true),
+        visibleOnly(sb.from('tutorials').select('*', { count: 'exact', head: true })),
+        visibleOnly(sb.from('tutorials').select('*', { count: 'exact', head: true })).eq('is_featured', true),
         ...LEVELS.map((l) =>
-          sb.from('tutorials').select('*', { count: 'exact', head: true }).eq('level', l)
+          visibleOnly(sb.from('tutorials').select('*', { count: 'exact', head: true })).eq('level', l)
         ),
         ...CATS.map((c) =>
-          sb.from('tutorials').select('*', { count: 'exact', head: true }).eq('category', c)
+          visibleOnly(sb.from('tutorials').select('*', { count: 'exact', head: true })).eq('category', c)
         )
       ]);
       if (!totalRes.error) {
@@ -200,9 +211,9 @@ export async function getFeaturedTutorials(): Promise<Tutorial[]> {
   if (typeof window === 'undefined') {
     try {
       const { getSupabaseAdmin } = await import('@/lib/supabase');
-      const { data, error } = await getSupabaseAdmin()
-        .from('tutorials')
-        .select('*')
+      const { data, error } = await visibleOnly(
+        getSupabaseAdmin().from('tutorials').select('*')
+      )
         .eq('is_featured', true)
         .order('published_at', { ascending: false })
         .limit(6);
@@ -256,17 +267,13 @@ export async function getRelatedTutorials(
       const queries: Promise<{ data: unknown[] | null }>[] = [];
       if (current.tags?.length)
         queries.push(
-          sb
-            .from('tutorials')
-            .select(TUTORIAL_LIST_COLUMNS)
+          visibleOnly(sb.from('tutorials').select(TUTORIAL_LIST_COLUMNS))
             .overlaps('tags', current.tags)
             .neq('slug', current.slug)
             .limit(30) as unknown as Promise<{ data: unknown[] | null }>
         );
       queries.push(
-        sb
-          .from('tutorials')
-          .select(TUTORIAL_LIST_COLUMNS)
+        visibleOnly(sb.from('tutorials').select(TUTORIAL_LIST_COLUMNS))
           .eq('category', current.category)
           .neq('slug', current.slug)
           .limit(30) as unknown as Promise<{ data: unknown[] | null }>
@@ -307,9 +314,9 @@ export async function getTutorialsByTags(tags: string[], limit = 6): Promise<Tut
   if (typeof window === 'undefined') {
     try {
       const { getSupabaseAdmin } = await import('@/lib/supabase');
-      const { data, error } = await getSupabaseAdmin()
-        .from('tutorials')
-        .select(TUTORIAL_LIST_COLUMNS)
+      const { data, error } = await visibleOnly(
+        getSupabaseAdmin().from('tutorials').select(TUTORIAL_LIST_COLUMNS)
+      )
         .overlaps('tags', tags)
         .order('is_featured', { ascending: false })
         .order('published_at', { ascending: false })
@@ -329,8 +336,8 @@ export async function getTutorialsByTool(name: string, slug: string, limit = 4):
       const { getSupabaseAdmin } = await import('@/lib/supabase');
       const sb = getSupabaseAdmin();
       const [byName, bySlug] = await Promise.all([
-        sb.from('tutorials').select(TUTORIAL_LIST_COLUMNS).contains('related_tools', [name]).limit(limit),
-        sb.from('tutorials').select(TUTORIAL_LIST_COLUMNS).contains('related_tools', [slug]).limit(limit)
+        visibleOnly(sb.from('tutorials').select(TUTORIAL_LIST_COLUMNS)).contains('related_tools', [name]).limit(limit),
+        visibleOnly(sb.from('tutorials').select(TUTORIAL_LIST_COLUMNS)).contains('related_tools', [slug]).limit(limit)
       ]);
       const map = new Map<string, Record<string, unknown>>();
       for (const r of [...(byName.data ?? []), ...(bySlug.data ?? [])] as Record<string, unknown>[])
@@ -357,16 +364,12 @@ export async function getTutorialsByTopic(matchTokens: string[], limit = 100): P
       const sb = getSupabaseAdmin();
       const titleOr = matchTokens.map((t) => `title.ilike.*${t}*`).join(',');
       const [byTags, byTitle] = await Promise.all([
-        sb
-          .from('tutorials')
-          .select(TUTORIAL_LIST_COLUMNS)
+        visibleOnly(sb.from('tutorials').select(TUTORIAL_LIST_COLUMNS))
           .overlaps('tags', matchTokens)
           .order('is_featured', { ascending: false })
           .order('published_at', { ascending: false })
           .limit(limit),
-        sb
-          .from('tutorials')
-          .select(TUTORIAL_LIST_COLUMNS)
+        visibleOnly(sb.from('tutorials').select(TUTORIAL_LIST_COLUMNS))
           .or(titleOr)
           .order('is_featured', { ascending: false })
           .order('published_at', { ascending: false })

@@ -51,3 +51,4 @@ next-env.d.ts
 # （link-health-check.mjs 因 GitHub Actions 依赖未列入，需单独改用 env+secret）
 scripts/insert-*.mjs
 scripts/supabase-setup.mjs
+backups-noindex-rows-*.json
