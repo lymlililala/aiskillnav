@@ -52,3 +52,4 @@ next-env.d.ts
 scripts/insert-*.mjs
 scripts/supabase-setup.mjs
 backups-noindex-rows-*.json
+backups-batch4-*.json
