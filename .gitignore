@@ -53,3 +53,4 @@ scripts/insert-*.mjs
 scripts/supabase-setup.mjs
 backups-noindex-rows-*.json
 backups-batch4-*.json
+backups-globalstrip-*.json
