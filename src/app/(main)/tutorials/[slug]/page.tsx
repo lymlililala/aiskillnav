@@ -5,6 +5,7 @@ import { getTutorialBySlug, getRelatedTutorials } from '@/features/tutorials/api
 import { NOINDEX_TUTORIAL_SLUGS } from '@/features/tutorials/noindex-slugs';
 import { getMcpSlugSet } from '@/features/mcp/api/service';
 import { matchPillarTopics } from '@/features/tutorials/topics';
+import { extractFaq, buildFaqJsonLd } from '@/features/tutorials/faq';
 import { Icons } from '@/components/icons';
 import { Badge } from '@/components/ui/badge';
 import PageContainer from '@/components/layout/page-container';
@@ -120,6 +121,11 @@ export default async function TutorialDetailPage({ params }: Props) {
   const topics = matchPillarTopics(tutorial.tags, tutorial.title);
   const html = renderMarkdown(tutorial.content);
 
+  // FAQ 结构化数据：正文带 "## FAQ" 段（重写批次的统一格式）时输出 FAQPage，
+  // 利于 AI 搜索（GEO）与问答抽取；解析不到（<2 对）则不输出。
+  const faqPairs = extractFaq(tutorial.content);
+  const faqJsonLd = faqPairs.length ? buildFaqJsonLd(faqPairs) : null;
+
   // Article 结构化数据
   const articleJsonLd = {
     '@context': 'https://schema.org',
@@ -174,6 +180,12 @@ export default async function TutorialDetailPage({ params }: Props) {
         type='application/ld+json'
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
+      {faqJsonLd && (
+        <script
+          type='application/ld+json'
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
       <div className='mx-auto max-w-3xl space-y-8'>
         <Link
           href='/tutorials'
