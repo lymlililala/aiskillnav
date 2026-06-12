@@ -6,10 +6,10 @@ import { SKILL_CATEGORIES } from '@/features/skills/categories';
 import { MODEL_SERIES } from '@/features/models/series';
 import { NOINDEX_TUTORIAL_SLUGS } from '@/features/tutorials/noindex-slugs';
 
-// 声明为动态路由，避免 build 时尝试静态生成（会触发 Supabase 查询超时）
-// sitemap 每次请求时动态生成，Googlebot 抓取时拿到最新数据
-export const dynamic = 'force-dynamic';
-export const revalidate = 3600; // 可选：CDN 级别 1h 缓存
+// ISR：build 时不预生成（首次请求时生成，避免构建期 Supabase 查询超时），
+// 之后缓存 1 小时。此前用 force-dynamic 会覆盖 revalidate，导致每次请求
+// 都全量分页查库（实测 ~15s），Googlebot 可能超时/降低抓取频率。
+export const revalidate = 3600;
 
 const BASE_URL = 'https://aiskillnav.com';
 
