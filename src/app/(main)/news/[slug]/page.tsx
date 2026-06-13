@@ -170,22 +170,39 @@ export default async function NewsDetailPage({ params }: Props) {
           <div className='border-b' />
         </header>
 
-        {/* CTA - link to original source */}
-        <div className='rounded-xl border bg-muted/30 p-5 space-y-3'>
-          <p className='text-sm font-medium'>阅读原文</p>
-          <p className='text-xs text-muted-foreground'>
-            本条资讯来源于 <strong>{item.source_name}</strong>，点击查看完整报道。
-          </p>
-          <Link
-            href={item.source_url}
-            target='_blank'
-            rel='noopener noreferrer'
-            className='inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors'
-          >
-            前往 {item.source_name}
-            <Icons.externalLink className='h-3.5 w-3.5' />
-          </Link>
-        </div>
+        {/* CTA — 站内延伸阅读（内链）或外部原文，二者皆无则不渲染 */}
+        {item.source_url &&
+          (item.source_url.startsWith('/') ? (
+            <div className='rounded-xl border bg-muted/30 p-5 space-y-3'>
+              <p className='text-sm font-medium'>延伸阅读</p>
+              <p className='text-xs text-muted-foreground'>
+                想深入了解该主题，查看站内相关教程与解析。
+              </p>
+              <Link
+                href={item.source_url}
+                className='inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors'
+              >
+                查看相关主题
+                <Icons.chevronRight className='h-3.5 w-3.5' />
+              </Link>
+            </div>
+          ) : (
+            <div className='rounded-xl border bg-muted/30 p-5 space-y-3'>
+              <p className='text-sm font-medium'>阅读原文</p>
+              <p className='text-xs text-muted-foreground'>
+                本条资讯来源于 <strong>{item.source_name}</strong>，点击查看完整报道。
+              </p>
+              <Link
+                href={item.source_url}
+                target='_blank'
+                rel='noopener noreferrer'
+                className='inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors'
+              >
+                前往 {item.source_name}
+                <Icons.externalLink className='h-3.5 w-3.5' />
+              </Link>
+            </div>
+          ))}
 
         {/* Related News — 增强内链网络，提升 Google 抓取深度 */}
         {relatedNews.length > 0 && (
