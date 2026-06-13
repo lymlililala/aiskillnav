@@ -85,6 +85,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       const { data, error } = await supabase
         .from('use_cases')
         .select('id')
+        .not('published_at', 'is', null)
         .range(ucOffset, ucOffset + PAGE - 1);
       if (error || !data || data.length === 0) break;
       allUseCases.push(...data);
