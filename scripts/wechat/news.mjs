@@ -110,13 +110,16 @@ if (!events.length) {
 }
 
 const existingSlugs = await fetchAllNewsSlugs()
-const NEWS_SYS = `你是 AI 资讯编辑。基于多家公众号对【同一事件】的报道，写一条客观、准确的中文短新闻。
+const NEWS_SYS = `你是 AI 资讯编辑。基于多家公众号对【同一事件】的报道（提供全文），写一条客观、信息充实的中文深度资讯。
 铁律：
-1. 只陈述事实，综合多源信息，不夸大、不编造数字；多源有出入时取保守表述。
-2. summary 用 Markdown，120-220 字，可用 2-4 条要点列表（- ）概括关键信息。
-3. 标题客观，不做标题党。
+1. 只陈述事实，综合多源信息，不夸大、不编造数字；多源有出入时注明分歧或取保守表述。
+2. summary 用 Markdown，500-900 字，结构化呈现：
+   - 开头一段交代事件核心（是什么、谁、何时）；
+   - 用 2-4 个 ## 小标题分层展开（如背景、关键细节、各方反应/数据、影响）；
+   - 适当用 - 要点列表和关键数据，提升信息密度与可读性。
+3. 标题客观，不做标题党。不要写"本文""综上"等套话。
 只返回 JSON：
-{"slug":"英文小写连字符slug(不含后缀)","title":"中文标题","summary":"Markdown摘要","tags":["英文小写标签"]}`
+{"slug":"英文小写连字符slug(不含后缀)","title":"中文标题","summary":"Markdown正文","tags":["英文小写标签"]}`
 
 const results = existsSync(OUT) ? JSON.parse(readFileSync(OUT, 'utf8')) : []
 const doneEvents = new Set(results.map(r => r._event))
@@ -124,17 +127,17 @@ let pub = 0
 
 for (const e of events) {
   if (doneEvents.has(e.event)) { console.log(`✓ 已处理跳过: ${e.event}`); continue }
-  // 多源标题 + 摘要拼给模型（短，不取全文，省 token 也更像"资讯综述"）
+  // 喂多源全文（每篇截断到 3500 字控 context），让模型综合出有信息量的深度资讯
   const material = e._articles
-    .map((a, i) => `${i + 1}. [${a.account}] ${a.title}\n   摘要：${truncate(a.digest || a.body_text, 300)}`)
-    .join('\n')
+    .map((a, i) => `### 报道${i + 1}：[${a.account}] ${a.title}\n${truncate(a.body_text || a.digest, 3500)}`)
+    .join('\n\n---\n\n')
 
   console.log(`生成: ${e.event}  (${e._articles.length} 源 / ${new Set(e._articles.map(a => a.account)).size} 号)`)
   let n
   try {
     n = await ds.chatJSON(
       [{ role: 'system', content: NEWS_SYS }, { role: 'user', content: `事件：${e.event}\n建议分类：${e.category}\n\n各家报道：\n${material}` }],
-      { maxTokens: 1200 }
+      { maxTokens: 2500 }
     )
   } catch (err) {
     console.log(`  ✗ 生成失败: ${err.message}`)
