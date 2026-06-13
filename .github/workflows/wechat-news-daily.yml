@@ -1,0 +1,59 @@
+name: WeChat News Daily
+
+# 每天采集公众号增量 + 生成热点资讯（news 表）。
+# 重任务（限频 API 多次调用），跑在 GitHub Actions 而非 Vercel（函数 5 分钟上限不够）。
+on:
+  schedule:
+    # 每天 UTC 04:07（北京 12:07）。错开整点降低与他人任务的并发。
+    - cron: '7 4 * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: '仅生成不写库（true=只输出）'
+        required: false
+        default: 'false'
+        type: choice
+        options: ['false', 'true']
+      days:
+        description: 'news 取最近几天的扎堆（默认 3）'
+        required: false
+        default: '3'
+
+jobs:
+  news:
+    name: Crawl + Generate Hot News
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Compute since date (7 days ago)
+        id: dates
+        run: echo "since=$(date -u -d '7 days ago' +%Y-%m-%d)" >> "$GITHUB_OUTPUT"
+
+      - name: Crawl incremental
+        env:
+          CIMIDATA_APP_ID: ${{ secrets.CIMIDATA_APP_ID }}
+          CIMIDATA_APP_SECRET: ${{ secrets.CIMIDATA_APP_SECRET }}
+        run: node scripts/wechat/1-crawl.mjs --since ${{ steps.dates.outputs.since }} --max-pages 2
+
+      - name: Generate hot news
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/wechat/news.mjs --days ${{ github.event.inputs.days || '3' }} ${{ github.event.inputs.dry_run == 'true' && '--dry-run' || '' }}
+
+      - name: Upload data artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: news-data-${{ github.run_id }}
+          path: scripts/wechat/data/*.json
+          retention-days: 14
