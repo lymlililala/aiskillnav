@@ -93,6 +93,7 @@ export async function getRelatedUseCases(
         .select('*')
         .eq('industry', current.industry)
         .neq('id', current.id)
+        .not('published_at', 'is', null)
         .limit(limit);
       if (!error && data) return data as UseCase[];
     } catch {
@@ -112,6 +113,7 @@ export async function getUseCasesByTool(tool: string, limit = 6): Promise<UseCas
         .from('use_cases')
         .select('*')
         .contains('tools', [tool])
+        .not('published_at', 'is', null)
         .limit(limit);
       if (!error && data) return data as UseCase[];
     } catch {

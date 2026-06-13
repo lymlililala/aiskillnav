@@ -6,7 +6,10 @@ export async function GET(request: NextRequest) {
   const action = searchParams.get('action');
 
   if (action === 'stats') {
-    const { data, error } = await supabaseAdmin.from('use_cases').select('*');
+    const { data, error } = await supabaseAdmin
+      .from('use_cases')
+      .select('*')
+      .not('published_at', 'is', null);
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
     const all = data ?? [];
     const total = all.length;
@@ -23,6 +26,7 @@ export async function GET(request: NextRequest) {
       .from('use_cases')
       .select('*')
       .eq('is_featured', true)
+      .not('published_at', 'is', null)
       .order('id')
       .limit(6);
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
@@ -33,7 +37,7 @@ export async function GET(request: NextRequest) {
   const industry = searchParams.get('industry') ?? undefined;
   const difficulty = searchParams.get('difficulty') ?? undefined;
 
-  let query = supabaseAdmin.from('use_cases').select('*');
+  let query = supabaseAdmin.from('use_cases').select('*').not('published_at', 'is', null);
 
   if (industry && industry !== 'all') query = query.eq('industry', industry);
   if (difficulty && Number(difficulty) > 0) query = query.eq('difficulty', Number(difficulty));
