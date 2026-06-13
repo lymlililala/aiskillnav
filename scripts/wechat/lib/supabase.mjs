@@ -67,6 +67,40 @@ export async function upsertTutorial(row) {
   return 'inserted'
 }
 
+// ── use_cases 表 ─────────────────────────────────────────
+
+/** 拉取 use_cases 全部 title（用于查重，因 use_cases 无 slug） */
+export async function fetchAllUseCaseTitles() {
+  const { base, headers } = conn()
+  const titles = new Set()
+  let offset = 0
+  for (;;) {
+    const r = await fetch(`${base}/rest/v1/use_cases?select=title&order=id&offset=${offset}&limit=1000`, { headers })
+    const rows = await r.json()
+    if (!Array.isArray(rows)) throw new Error('fetchAllUseCaseTitles 失败: ' + JSON.stringify(rows).slice(0, 200))
+    for (const row of rows) titles.add((row.title || '').trim())
+    if (rows.length < 1000) break
+    offset += 1000
+  }
+  return titles
+}
+
+/**
+ * 插入一条 use_case（无 slug，按 id 路由；id 由 DB 生成，勿传）。
+ * @param {object} row { title, description, tools[], industry, difficulty, estimated_time, steps[], tags[], is_featured, published_at }
+ *   published_at=null 草稿；不传则 DB 默认 now()。需先 ALTER 加 published_at 列。
+ */
+export async function insertUseCase(row) {
+  const { base, headers } = conn()
+  const r = await fetch(`${base}/rest/v1/use_cases`, {
+    method: 'POST',
+    headers: { ...headers, Prefer: 'return=minimal' },
+    body: JSON.stringify(row)
+  })
+  if (!r.ok) throw new Error(`use_cases POST 失败 ${r.status}: ${(await r.text()).slice(0, 200)}`)
+  return 'inserted'
+}
+
 // ── news 表 ──────────────────────────────────────────────
 
 /** 拉取 news 全部 slug（用于查重） */
