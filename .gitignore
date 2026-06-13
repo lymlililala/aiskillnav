@@ -51,6 +51,9 @@ next-env.d.ts
 # （link-health-check.mjs 因 GitHub Actions 依赖未列入，需单独改用 env+secret）
 scripts/insert-*.mjs
 scripts/supabase-setup.mjs
+# 公众号采集流水线产物（含受版权的原文正文）— 不入库
+scripts/wechat/data/
 backups-noindex-rows-*.json
 backups-batch4-*.json
 backups-globalstrip-*.json
+backups-publishedat-*.json
