@@ -4,8 +4,8 @@ name: WeChat News Daily
 # 重任务（限频 API 多次调用），跑在 GitHub Actions 而非 Vercel（函数 5 分钟上限不够）。
 on:
   schedule:
-    # 每天 UTC 15:17（北京 23:17）。只采当天新文，错开整点。
-    - cron: '17 15 * * *'
+    # 每天 UTC 14:07（北京 22:07）。只采当天新文，错开整点（GitHub 整点排队最堵、延迟最久）。
+    - cron: '7 14 * * *'
   workflow_dispatch:
     inputs:
       dry_run:
