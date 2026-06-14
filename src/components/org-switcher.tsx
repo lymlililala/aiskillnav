@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Icons } from '@/components/icons';
 import {
   SidebarMenu,
@@ -11,12 +12,14 @@ import {
 
 export function OrgSwitcher() {
   const { state } = useSidebar();
+  const pathname = usePathname();
+  const homeHref = pathname === '/en' || pathname.startsWith('/en/') ? '/en' : '/';
 
   return (
     <SidebarMenu>
       <SidebarMenuItem>
         <SidebarMenuButton size='lg' asChild>
-          <Link href='/'>
+          <Link href={homeHref}>
             <div className='bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 shrink-0 items-center justify-center rounded-lg'>
               <Icons.skillsHub className='size-4' />
             </div>

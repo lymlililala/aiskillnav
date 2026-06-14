@@ -29,6 +29,11 @@ export default function AppSidebar() {
   const pathname = usePathname();
   const { isOpen } = useMediaQuery();
   const filteredGroups = useFilteredNavGroups(navGroups);
+  // /en/* 下：导航用英文标签 + /en 前缀链接（中文路径走原逻辑，零影响）
+  const isEn = pathname === '/en' || pathname.startsWith('/en/');
+  const navLabel = (it: { title: string; titleEn?: string }) =>
+    isEn && it.titleEn ? it.titleEn : it.title;
+  const navHref = (u: string) => (isEn ? `/en${u}` : u);
 
   React.useEffect(() => {
     // Side effects based on sidebar state changes
@@ -80,12 +85,12 @@ export default function AppSidebar() {
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton
                       asChild
-                      tooltip={item.title}
-                      isActive={pathname === item.url}
+                      tooltip={navLabel(item)}
+                      isActive={pathname === navHref(item.url)}
                     >
-                      <Link href={item.url}>
+                      <Link href={navHref(item.url)}>
                         <Icon />
-                        <span>{item.title}</span>
+                        <span>{navLabel(item)}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

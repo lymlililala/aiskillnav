@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { Icons } from '@/components/icons';
 import { ThemeModeToggle } from '@/components/themes/theme-mode-toggle';
 
+// 英文营销外壳：用于 /en 首页 + 关于/联系/隐私/条款（与中文 / 首页同风格的顶栏+页脚）。
+// 内容板块在 /en/(app) 下用侧边栏外壳，互不影响。
 const NAV = [
   { label: 'Skills', href: '/en/skills' },
   { label: 'Agents', href: '/en/agents' },
@@ -12,16 +14,12 @@ const NAV = [
   { label: 'News', href: '/en/news' }
 ];
 
-export default function EnLayout({ children }: { children: React.ReactNode }) {
+export default function EnMarketingLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className='min-h-screen flex flex-col'>
-      {/* Navbar */}
+    <div className='flex min-h-screen flex-col'>
       <nav className='sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'>
         <div className='mx-auto flex h-14 max-w-6xl items-center justify-between px-4 md:px-6'>
-          <Link
-            href='/en'
-            className='flex items-center gap-2.5 font-semibold hover:opacity-80 transition-opacity'
-          >
+          <Link href='/en' className='flex items-center gap-2.5 font-semibold hover:opacity-80'>
             <div className='flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-primary-foreground'>
               <Icons.skillsHub className='h-4 w-4' />
             </div>
@@ -32,12 +30,11 @@ export default function EnLayout({ children }: { children: React.ReactNode }) {
               <Link
                 key={item.href}
                 href={item.href}
-                className='hidden rounded-md px-3.5 py-1.5 text-sm font-medium text-muted-foreground/80 transition-all hover:bg-accent/60 hover:text-foreground sm:block'
+                className='hidden rounded-md px-3 py-1.5 text-sm font-medium text-muted-foreground/80 transition-all hover:bg-accent/60 hover:text-foreground sm:block'
               >
                 {item.label}
               </Link>
             ))}
-            {/* 语言切换：回中文站 */}
             <Link
               href='/'
               className='rounded-md px-3 py-1.5 text-sm font-medium text-muted-foreground/80 hover:text-foreground'
@@ -53,7 +50,6 @@ export default function EnLayout({ children }: { children: React.ReactNode }) {
 
       <main className='flex-1'>{children}</main>
 
-      {/* Footer */}
       <footer className='border-t bg-muted/20 py-10'>
         <div className='mx-auto max-w-6xl px-4 md:px-6'>
           <div className='flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between'>
@@ -75,7 +71,7 @@ export default function EnLayout({ children }: { children: React.ReactNode }) {
                 contact@aiskillnav.com
               </a>
             </div>
-            <ul className='space-y-2'>
+            <ul className='grid grid-cols-2 gap-x-8 gap-y-2'>
               {[
                 { label: 'Skills', href: '/en/skills' },
                 { label: 'Agents', href: '/en/agents' },
