@@ -31,33 +31,31 @@ function verifyToken(token: string | undefined, secret: string): boolean {
 export default function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // 只处理 /admin 路由
-  if (!pathname.startsWith(ADMIN_ROOT)) {
-    return NextResponse.next();
+  // /admin 鉴权（登录页与认证 API 除外）
+  if (
+    pathname.startsWith(ADMIN_ROOT) &&
+    !(pathname === LOGIN_PATH || pathname.startsWith(LOGIN_PATH + '/') || pathname.startsWith('/api/admin/auth'))
+  ) {
+    const secret = process.env.ADMIN_SESSION_SECRET ?? '';
+    const sessionCookie = request.cookies.get(ADMIN_COOKIE)?.value;
+    if (!verifyToken(sessionCookie, secret)) {
+      const loginUrl = new URL(LOGIN_PATH, request.url);
+      loginUrl.searchParams.set('from', pathname);
+      return NextResponse.redirect(loginUrl);
+    }
   }
 
-  // 登录页不需要认证
-  if (pathname === LOGIN_PATH || pathname.startsWith(LOGIN_PATH + '/')) {
-    return NextResponse.next();
-  }
-
-  // API 认证路由不需要认证
-  if (pathname.startsWith('/api/admin/auth')) {
-    return NextResponse.next();
-  }
-
-  const secret = process.env.ADMIN_SESSION_SECRET ?? '';
-  const sessionCookie = request.cookies.get(ADMIN_COOKIE)?.value;
-
-  if (!verifyToken(sessionCookie, secret)) {
-    const loginUrl = new URL(LOGIN_PATH, request.url);
-    loginUrl.searchParams.set('from', pathname);
-    return NextResponse.redirect(loginUrl);
-  }
-
-  return NextResponse.next();
+  // 把当前路径写入请求头，供根布局据此设置 <html lang>（/en/* → en）。
+  // 注意：必须设在 request headers 上，headers() 才能在 Server Component 读到。
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set('x-pathname', pathname);
+  return NextResponse.next({ request: { headers: requestHeaders } });
 }
 
 export const config = {
-  matcher: ['/admin/:path*']
+  matcher: [
+    '/admin/:path*',
+    // 公开页（排除 api、静态资源、带扩展名的文件），用于注入 x-pathname
+    '/((?!api|_next/static|_next/image|favicon.ico|.*\\..*).*)'
+  ]
 };
