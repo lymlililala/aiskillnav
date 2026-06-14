@@ -19,6 +19,7 @@ export class DeepSeek {
     this.model = opts.model || process.env.DEEPSEEK_MODEL || 'deepseek-chat'
     this.maxRetries = opts.maxRetries ?? 3
     this.minIntervalMs = opts.minIntervalMs ?? 300
+    this.timeoutMs = opts.timeoutMs ?? 120000 // 单次请求超时 120s，超时中断重试
     this._lastAt = 0
     // 累计 token 用量，便于成本核算
     this.usage = { prompt: 0, completion: 0, calls: 0 }
@@ -48,11 +49,15 @@ export class DeepSeek {
     let lastErr
     for (let attempt = 0; attempt <= this.maxRetries; attempt++) {
       await this._throttle()
+      // 单次请求超时控制：卡住则中断并重试，避免一个慢请求拖死整个流程
+      const ac = new AbortController()
+      const timer = setTimeout(() => ac.abort(), this.timeoutMs)
       try {
         const res = await fetch(`${this.baseUrl}/chat/completions`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${this.apiKey}` },
-          body: JSON.stringify(body)
+          body: JSON.stringify(body),
+          signal: ac.signal
         })
         if (!res.ok) {
           const txt = await res.text()
@@ -73,6 +78,8 @@ export class DeepSeek {
       } catch (e) {
         lastErr = e
         if (attempt < this.maxRetries) await sleep(1200 * (attempt + 1))
+      } finally {
+        clearTimeout(timer)
       }
     }
     throw lastErr

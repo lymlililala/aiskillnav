@@ -1,0 +1,546 @@
+[
+  {
+    "name": "AI科技大本营",
+    "nickname": "AI科技大本营",
+    "wxid": "gh_c7f65dd80906",
+    "biz": "Mzg4NDQwNTI0OQ==",
+    "description": "为AI领域从业者提供人工智能领域热点报道和海量重磅访谈；面向技术人员，提供AI技术领域前沿研究进展和技术成长路线；面向垂直企业，实现行业应用与技术创新的对接。全方位触及人工智能时代，连接AI技术的创造者和使用者。",
+    "candidates": [
+      {
+        "nickname": "AI科技大本营",
+        "wxid": "gh_c7f65dd80906"
+      },
+      {
+        "nickname": "AI学习大本营",
+        "wxid": "gh_b02b33f75446"
+      },
+      {
+        "nickname": "AI学习者大本营",
+        "wxid": "gh_d1ece46a2ac3"
+      },
+      {
+        "nickname": "Python大本营",
+        "wxid": "gh_2dc6da409e07"
+      },
+      {
+        "nickname": "AI工具大本营",
+        "wxid": "gh_819bfbdc8c82"
+      }
+    ]
+  },
+  {
+    "name": "机器之心",
+    "nickname": "机器之心",
+    "wxid": "gh_dbc0a5474692",
+    "biz": "MzA3MzI4MjgzMw==",
+    "description": "专业的人工智能媒体和产业服务平台",
+    "candidates": [
+      {
+        "nickname": "机器之心",
+        "wxid": "gh_dbc0a5474692"
+      },
+      {
+        "nickname": "量子位",
+        "wxid": "gh_114e76fd6e5d"
+      },
+      {
+        "nickname": "新智元",
+        "wxid": "gh_108f2a2a27f4"
+      },
+      {
+        "nickname": "机器学习之心HML",
+        "wxid": "gh_c2af0b99832c"
+      },
+      {
+        "nickname": "机器之心PRO会员",
+        "wxid": "gh_373fc993131b"
+      }
+    ]
+  },
+  {
+    "name": "李rumor",
+    "nickname": "李rumor",
+    "wxid": "gh_5c1d9c3888e5",
+    "biz": "MzAxMTk4NDkwNw==",
+    "description": "AI算法小姐姐，谷歌开发者专家",
+    "candidates": [
+      {
+        "nickname": "李rumor",
+        "wxid": "gh_5c1d9c3888e5"
+      },
+      {
+        "nickname": "李哔啰",
+        "wxid": "gh_b16b2c94abae"
+      },
+      {
+        "nickname": "李Aroma",
+        "wxid": "gh_3c3c115578d6"
+      },
+      {
+        "nickname": "李珥",
+        "wxid": "gh_4f4f5074d91d"
+      },
+      {
+        "nickname": "李Mr",
+        "wxid": "gh_d81e28fbdd7b"
+      }
+    ]
+  },
+  {
+    "name": "谭少卿",
+    "nickname": "谭少卿",
+    "wxid": "gh_cf105004e9da",
+    "biz": "MjM5Nzc1OTIyMA==",
+    "description": "🚀floatboat.ai CEO\n🚢OPC 的 ALL-IN-ONE 工作空间",
+    "candidates": [
+      {
+        "nickname": "谭少卿",
+        "wxid": "gh_cf105004e9da"
+      },
+      {
+        "nickname": "谭少茹",
+        "wxid": "gh_e1c54e426467"
+      },
+      {
+        "nickname": "谭爱卿",
+        "wxid": "gh_8e734b4280c8"
+      }
+    ]
+  },
+  {
+    "name": "包包算法笔记",
+    "nickname": "包包算法笔记",
+    "wxid": "gh_e8045d3a34db",
+    "biz": "MzIwNDY1NTU5Mg==",
+    "description": "百面大模型作者，技术和行业认知。",
+    "candidates": [
+      {
+        "nickname": "包包算法笔记",
+        "wxid": "gh_e8045d3a34db"
+      },
+      {
+        "nickname": "CReep的算法笔记",
+        "wxid": "gh_46d7baa1b876"
+      },
+      {
+        "nickname": "包包笔记",
+        "wxid": "gh_58803c8b94e5"
+      },
+      {
+        "nickname": "matlab学习笔记",
+        "wxid": "gh_def003ef30f7"
+      },
+      {
+        "nickname": "背包笔记",
+        "wxid": "gh_8618519f5fef"
+      }
+    ]
+  },
+  {
+    "name": "智能超参数",
+    "nickname": "智能超参数",
+    "wxid": "gh_3bbf8e0f6ed7",
+    "biz": "MzA5MzMwNTIzMw==",
+    "description": "洞察趋势，跃升认知。记录AI技术与商业创新，提供独立思考与理性价值。",
+    "candidates": [
+      {
+        "nickname": "智能超参数",
+        "wxid": "gh_3bbf8e0f6ed7"
+      },
+      {
+        "nickname": "超参数科技",
+        "wxid": "gh_db58de27807b"
+      },
+      {
+        "nickname": "超参数招聘",
+        "wxid": "gh_b194902172e0"
+      },
+      {
+        "nickname": "Gemini AI智能体",
+        "wxid": "gh_a1fc2724dd5b"
+      },
+      {
+        "nickname": "智能超算",
+        "wxid": "gh_fde67838bec1"
+      }
+    ]
+  },
+  {
+    "name": "晚点LatePost",
+    "nickname": "晚点LatePost",
+    "wxid": "gh_44e9b2141610",
+    "biz": "MzU3Mjk1OTQ0Ng==",
+    "description": "晚一点，好一点",
+    "candidates": [
+      {
+        "nickname": "晚点LatePost",
+        "wxid": "gh_44e9b2141610"
+      },
+      {
+        "nickname": "晚点AI",
+        "wxid": "gh_c76d1535e60b"
+      },
+      {
+        "nickname": "晚点Auto",
+        "wxid": "gh_30ebd85b0f58"
+      },
+      {
+        "nickname": "晚点对话",
+        "wxid": "gh_2ce39828749a"
+      },
+      {
+        "nickname": "晚点PostLate",
+        "wxid": "gh_95833bb154fd"
+      }
+    ]
+  },
+  {
+    "name": "苏哲管理咨询",
+    "nickname": "苏哲管理咨询",
+    "wxid": "gh_f6ecddb3a749",
+    "biz": "MzU3MzM4NjI0NQ==",
+    "description": "为企业及组织提供AI+战略、数智化转型咨询及观点、建议等",
+    "candidates": [
+      {
+        "nickname": "苏哲管理咨询",
+        "wxid": "gh_f6ecddb3a749"
+      },
+      {
+        "nickname": "苏哲营销",
+        "wxid": "gh_3ecd3e9ff3f9"
+      },
+      {
+        "nickname": "思博管理咨询",
+        "wxid": "gh_4adaed594696"
+      },
+      {
+        "nickname": "成都苏哲咨询服务",
+        "wxid": "gh_ed4e348e6a5a"
+      },
+      {
+        "nickname": "汉哲管理咨询",
+        "wxid": "gh_3bd3f96ec4ee"
+      }
+    ]
+  },
+  {
+    "name": "AIGC开放社区",
+    "nickname": "AIGC开放社区",
+    "wxid": "gh_92a47dd34b3c",
+    "biz": "Mzg3Mzg5MjY3Nw==",
+    "description": "专注AIGC技术的专业社区，关注大语言模型（LLM）的发展和应用落地，聚焦LLM及AI技术的市场研究和开发者生态，欢迎关注！",
+    "candidates": [
+      {
+        "nickname": "AIGC开放社区",
+        "wxid": "gh_92a47dd34b3c"
+      },
+      {
+        "nickname": "翼狐服务号",
+        "wxid": "gh_36cf8adce3b6"
+      },
+      {
+        "nickname": "APPSO",
+        "wxid": "gh_80d2528f3dcd"
+      },
+      {
+        "nickname": "AI生成未来",
+        "wxid": "gh_5efd71616a4d"
+      },
+      {
+        "nickname": "姜学长AI学习圈",
+        "wxid": "gh_806db70cdaab"
+      }
+    ]
+  },
+  {
+    "name": "DataFunTalk",
+    "nickname": "DataFunTalk",
+    "wxid": "gh_3420d4a1369b",
+    "biz": "MzU1NTMyOTI4Mw==",
+    "description": "专注于大数据、人工智能技术应用的分享与交流。致力于成就百万数据科学家。定期组织技术分享直播，并整理大数据、推荐/搜索算法、广告算法、NLP 自然语言处理算法、智能风控、自动驾驶、机器学习/深度学习等技术应用文章。",
+    "candidates": [
+      {
+        "nickname": "DataFunTalk",
+        "wxid": "gh_3420d4a1369b"
+      },
+      {
+        "nickname": "DataFun",
+        "wxid": "gh_e45072f8f9b2"
+      },
+      {
+        "nickname": "DataFunSummit",
+        "wxid": "gh_37075cf00057"
+      },
+      {
+        "nickname": "DataFunPro",
+        "wxid": "gh_27ee0d348a00"
+      },
+      {
+        "nickname": "DataFun大川AI叨叨",
+        "wxid": "gh_1bf32dfc2fa8"
+      }
+    ]
+  },
+  {
+    "name": "夕小瑶科技说",
+    "nickname": "夕小瑶科技说",
+    "wxid": "gh_9bd170629475",
+    "biz": "MzIwNzc2NTk0NQ==",
+    "description": "低负担解码AI世界，硬核也可爱！",
+    "candidates": [
+      {
+        "nickname": "夕小瑶科技说",
+        "wxid": "gh_9bd170629475"
+      },
+      {
+        "nickname": "推理大师Club",
+        "wxid": "gh_776b70268270"
+      },
+      {
+        "nickname": "夕小瑶智能体",
+        "wxid": "gh_f203a36ac5b4"
+      },
+      {
+        "nickname": "潇湘溪苑 圈子",
+        "wxid": "gh_77dee7373dd0"
+      },
+      {
+        "nickname": "四海公考",
+        "wxid": "gh_85ab2ccb4109"
+      }
+    ]
+  },
+  {
+    "name": "量子位",
+    "nickname": "量子位",
+    "wxid": "gh_114e76fd6e5d",
+    "biz": "MzIzNjc1NzUzMw==",
+    "description": "追踪人工智能新趋势，关注科技行业新突破",
+    "candidates": [
+      {
+        "nickname": "量子位",
+        "wxid": "gh_114e76fd6e5d"
+      },
+      {
+        "nickname": "机器之心",
+        "wxid": "gh_dbc0a5474692"
+      },
+      {
+        "nickname": "新智元",
+        "wxid": "gh_108f2a2a27f4"
+      },
+      {
+        "nickname": "量子位智库",
+        "wxid": "gh_ec9d202f63d8"
+      },
+      {
+        "nickname": "量子号",
+        "wxid": "gh_e03e05387e91"
+      }
+    ]
+  },
+  {
+    "name": "Founder Park",
+    "nickname": "Founder Park",
+    "wxid": "gh_5fcd6f39aef9",
+    "biz": "Mzg5NTc0MjgwMw==",
+    "description": "来自极客公园，专注与科技创业者聊「真问题」。",
+    "candidates": [
+      {
+        "nickname": "Founder Park",
+        "wxid": "gh_5fcd6f39aef9"
+      },
+      {
+        "nickname": "朱毅 Yi Zhu",
+        "wxid": "gh_3b499a5442e3"
+      }
+    ]
+  },
+  {
+    "name": "AINLPer",
+    "nickname": "AINLPer",
+    "wxid": "gh_895a8687a10f",
+    "biz": "MzUzOTgwNDMzOQ==",
+    "description": "一个专注大模型AIGC方向的公众号。每日分享大模型(LLM)技术、智能Agent，国内外精华论文、NLP基础知识、国际学术、AI发展前沿动态，无论你是AI领域的初学者，还是资深研究者，这里都有你想要的宝藏知识！",
+    "candidates": [
+      {
+        "nickname": "AINLPer",
+        "wxid": "gh_895a8687a10f"
+      }
+    ]
+  },
+  {
+    "name": "新智元",
+    "nickname": "新智元",
+    "wxid": "gh_108f2a2a27f4",
+    "biz": "MzI3MTA0MTk1MA==",
+    "description": "智能+中国主平台，致力于推动中国从互联网+迈向智能+新纪元。重点关注人工智能、机器人等前沿领域发展，关注人机融合、人工智能和机器人革命对人类社会与文明进化的影响，领航中国新智能时代。",
+    "candidates": [
+      {
+        "nickname": "新智元",
+        "wxid": "gh_108f2a2a27f4"
+      },
+      {
+        "nickname": "量子位",
+        "wxid": "gh_114e76fd6e5d"
+      },
+      {
+        "nickname": "机器之心",
+        "wxid": "gh_dbc0a5474692"
+      },
+      {
+        "nickname": "AI科技评论",
+        "wxid": "gh_6ca2fbc2df6e"
+      },
+      {
+        "nickname": "新智元前沿",
+        "wxid": "gh_631589d4d98f"
+      }
+    ]
+  },
+  {
+    "name": "大模型最新论文",
+    "nickname": "大模型最新论文",
+    "wxid": "gh_a99a09d78829",
+    "biz": "Mzk3NTU0Mjg5MQ==",
+    "description": "全网同名，每天介绍至少一篇大模型方向的最新论文",
+    "candidates": [
+      {
+        "nickname": "大模型最新论文",
+        "wxid": "gh_a99a09d78829"
+      },
+      {
+        "nickname": "大语言模型论文跟踪",
+        "wxid": "gh_cde6fc7b77cc"
+      },
+      {
+        "nickname": "大模型真好玩",
+        "wxid": "gh_060fcf4f4854"
+      },
+      {
+        "nickname": "学术AI大模型",
+        "wxid": "gh_f7b030538e20"
+      },
+      {
+        "nickname": "大模型论文研习社",
+        "wxid": "gh_73073499aeab"
+      }
+    ]
+  },
+  {
+    "name": "甲维斯C",
+    "nickname": "甲维斯C",
+    "wxid": "gh_b14aed76ef0b",
+    "biz": "MzI2MzQ3MzUxMg==",
+    "description": "🤖大模型应用研究！🗣️自然语言编程！",
+    "candidates": [
+      {
+        "nickname": "甲维斯C",
+        "wxid": "gh_b14aed76ef0b"
+      },
+      {
+        "nickname": "甲维斯",
+        "wxid": "gh_587867767949"
+      },
+      {
+        "nickname": "甲维斯机",
+        "wxid": "gh_0993f140e05b"
+      },
+      {
+        "nickname": "维修佬技术孵化",
+        "wxid": "gh_fceebf5e54cc"
+      },
+      {
+        "nickname": "CYSC",
+        "wxid": "gh_0a84f37ad538"
+      }
+    ]
+  },
+  {
+    "name": "Z Finance",
+    "nickname": "Z Finance",
+    "wxid": "gh_b013b398b7f0",
+    "biz": "MzA3NzUxMzM5MQ==",
+    "description": "我们相信认知能够跨越阶层，致力于为年轻人提供高质量的科技和财经内容。",
+    "candidates": [
+      {
+        "nickname": "Z Finance",
+        "wxid": "gh_b013b398b7f0"
+      },
+      {
+        "nickname": "丰田金融服务",
+        "wxid": "gh_d13f8118e9f1"
+      },
+      {
+        "nickname": "招商银行",
+        "wxid": "gh_98a49c9dbbc0"
+      },
+      {
+        "nickname": "众邦银行",
+        "wxid": "gh_31c23f39d678"
+      },
+      {
+        "nickname": "中信银行",
+        "wxid": "gh_6b8b49406416"
+      }
+    ]
+  },
+  {
+    "name": "腾讯研究院",
+    "nickname": "腾讯研究院",
+    "wxid": "gh_eddde1fb5774",
+    "biz": "MjM5OTE0ODA2MQ==",
+    "description": "腾讯公司设立的社会科学研究机构，依托腾讯公司多元的产品、丰富的案例和海量的数据，围绕产业发展的焦点问题，通过开放合作的研究平台，汇集各界智慧，共同推动互联网产业健康、有序的发展，致力于成为现代科技与社会人文交叉汇聚的研究平台。\r\n",
+    "candidates": [
+      {
+        "nickname": "腾讯研究院",
+        "wxid": "gh_eddde1fb5774"
+      },
+      {
+        "nickname": "DeepSeek",
+        "wxid": "gh_bc02ff24ae0f"
+      },
+      {
+        "nickname": "谷雨实验室",
+        "wxid": "gh_c21b0eb66562"
+      },
+      {
+        "nickname": "腾讯金融研究院",
+        "wxid": "gh_3359462e187a"
+      },
+      {
+        "nickname": "腾讯新闻派",
+        "wxid": "gh_3d02321ec7a8"
+      }
+    ]
+  },
+  {
+    "name": "Datawhale",
+    "nickname": "Datawhale",
+    "wxid": "gh_7e08dd400559",
+    "biz": "MzIyNjM2MzQyNg==",
+    "description": "一个专注于AI领域的开源组织，汇聚了众多优秀学习者，使命-for the learner，和学习者一起成长。",
+    "candidates": [
+      {
+        "nickname": "Datawhale",
+        "wxid": "gh_7e08dd400559"
+      },
+      {
+        "nickname": "鲸宝",
+        "wxid": "gh_c169cabf44c9"
+      },
+      {
+        "nickname": "帷幄未来",
+        "wxid": "gh_df141a79c3a2"
+      },
+      {
+        "nickname": "Datawhale成电分部",
+        "wxid": "gh_876b6f55f4d5"
+      },
+      {
+        "nickname": "AGI-Eval大模型评测",
+        "wxid": "gh_14fc2374c73f"
+      }
+    ]
+  }
+]

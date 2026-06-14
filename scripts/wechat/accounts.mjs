@@ -5,7 +5,7 @@
 import { writeFileSync, mkdirSync, readFileSync, existsSync } from 'node:fs'
 import { join } from 'node:path'
 import { CimiClient } from './cimidata/client.mjs'
-import { DATA_DIR } from './lib/env.mjs'
+import { DATA_DIR, ACCOUNTS_FILE } from './lib/env.mjs'
 
 // 目标公众号（来自用户提供的截图）
 const ACCOUNT_NAMES = [
@@ -19,7 +19,7 @@ const only = onlyArg ? (onlyArg.split('=')[1] || process.argv[process.argv.index
 const names = only && only.length ? ACCOUNT_NAMES.filter(n => only.includes(n)) : ACCOUNT_NAMES
 
 mkdirSync(DATA_DIR, { recursive: true })
-const OUT = join(DATA_DIR, 'accounts.json')
+const OUT = ACCOUNTS_FILE
 
 // 已解析的保留（增量）
 const existing = existsSync(OUT) ? JSON.parse(readFileSync(OUT, 'utf8')) : []
