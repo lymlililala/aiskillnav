@@ -59,7 +59,8 @@ async function fetchTutorialsFromDb(opts: TutorialQuery): Promise<Tutorial[] | n
     let query = visibleOnly(getSupabaseAdmin().from('tutorials').select(TUTORIAL_LIST_COLUMNS));
     if (opts.level && opts.level !== 'all') query = query.eq('level', opts.level);
     if (opts.category && opts.category !== 'all') query = query.eq('category', opts.category);
-    if (opts.search) query = query.or(`title.ilike.%${opts.search}%,summary.ilike.%${opts.search}%`);
+    if (opts.search)
+      query = query.or(`title.ilike.%${opts.search}%,summary.ilike.%${opts.search}%`);
     const { data, error } = await query
       .order('is_featured', { ascending: false })
       .order('published_at', { ascending: false });
@@ -167,12 +168,22 @@ export async function getPublishedEnglishTutorials(): Promise<EnglishTutorial[]>
   if (typeof window === 'undefined') {
     try {
       const { getSupabaseAdmin } = await import('@/lib/supabase');
-      const { data, error } = await getSupabaseAdmin()
-        .from('tutorials')
-        .select('slug,title_en,summary_en,level,category,tags,estimated_minutes,en_status')
-        .eq('en_status', 'published')
-        .order('slug');
-      if (!error && data) return data as EnglishTutorial[];
+      const sb = getSupabaseAdmin();
+      // 分页取全量（Supabase 单次上限 1000，教程已超 1000 篇）
+      const all: EnglishTutorial[] = [];
+      const PAGE = 1000;
+      for (let from = 0; ; from += PAGE) {
+        const { data, error } = await sb
+          .from('tutorials')
+          .select('slug,title_en,summary_en,level,category,tags,estimated_minutes,en_status')
+          .eq('en_status', 'published')
+          .order('slug')
+          .range(from, from + PAGE - 1);
+        if (error || !data || data.length === 0) break;
+        all.push(...(data as EnglishTutorial[]));
+        if (data.length < PAGE) break;
+      }
+      return all;
     } catch {
       // ignore
     }
@@ -190,12 +201,21 @@ export async function getTutorialStats() {
       const CATS = ['concept', 'hands-on', 'mcp', 'agent', 'workflow', 'creative', 'productivity'];
       const [totalRes, featuredRes, ...rest] = await Promise.all([
         visibleOnly(sb.from('tutorials').select('*', { count: 'exact', head: true })),
-        visibleOnly(sb.from('tutorials').select('*', { count: 'exact', head: true })).eq('is_featured', true),
+        visibleOnly(sb.from('tutorials').select('*', { count: 'exact', head: true })).eq(
+          'is_featured',
+          true
+        ),
         ...LEVELS.map((l) =>
-          visibleOnly(sb.from('tutorials').select('*', { count: 'exact', head: true })).eq('level', l)
+          visibleOnly(sb.from('tutorials').select('*', { count: 'exact', head: true })).eq(
+            'level',
+            l
+          )
         ),
         ...CATS.map((c) =>
-          visibleOnly(sb.from('tutorials').select('*', { count: 'exact', head: true })).eq('category', c)
+          visibleOnly(sb.from('tutorials').select('*', { count: 'exact', head: true })).eq(
+            'category',
+            c
+          )
         )
       ]);
       if (!totalRes.error) {
@@ -203,7 +223,12 @@ export async function getTutorialStats() {
         const byCategory = Object.fromEntries(
           CATS.map((c, i) => [c, rest[LEVELS.length + i].count ?? 0])
         );
-        return { total: totalRes.count ?? 0, featured: featuredRes.count ?? 0, byLevel, byCategory };
+        return {
+          total: totalRes.count ?? 0,
+          featured: featuredRes.count ?? 0,
+          byLevel,
+          byCategory
+        };
       }
     } catch {
       // 走下面的 API/mock 回退
@@ -238,9 +263,7 @@ export async function getFeaturedTutorials(): Promise<Tutorial[]> {
   if (typeof window === 'undefined') {
     try {
       const { getSupabaseAdmin } = await import('@/lib/supabase');
-      const { data, error } = await visibleOnly(
-        getSupabaseAdmin().from('tutorials').select('*')
-      )
+      const { data, error } = await visibleOnly(getSupabaseAdmin().from('tutorials').select('*'))
         .eq('is_featured', true)
         .order('published_at', { ascending: false })
         .limit(6);
@@ -308,8 +331,7 @@ export async function getRelatedTutorials(
       const results = await Promise.all(queries);
       const map = new Map<string, Record<string, unknown>>();
       for (const res of results)
-        for (const r of (res.data ?? []) as Record<string, unknown>[])
-          map.set(r.slug as string, r);
+        for (const r of (res.data ?? []) as Record<string, unknown>[]) map.set(r.slug as string, r);
       const candidates = Array.from(map.values());
       if (candidates.length) {
         const { relatednessScore } = await import('@/lib/topics');
@@ -357,14 +379,22 @@ export async function getTutorialsByTags(tags: string[], limit = 6): Promise<Tut
 }
 
 /** 查 related_tools 包含某工具(name 或 slug)的教程，用于 mcp 详情页"相关教程"。 */
-export async function getTutorialsByTool(name: string, slug: string, limit = 4): Promise<Tutorial[]> {
+export async function getTutorialsByTool(
+  name: string,
+  slug: string,
+  limit = 4
+): Promise<Tutorial[]> {
   if (typeof window === 'undefined') {
     try {
       const { getSupabaseAdmin } = await import('@/lib/supabase');
       const sb = getSupabaseAdmin();
       const [byName, bySlug] = await Promise.all([
-        visibleOnly(sb.from('tutorials').select(TUTORIAL_LIST_COLUMNS)).contains('related_tools', [name]).limit(limit),
-        visibleOnly(sb.from('tutorials').select(TUTORIAL_LIST_COLUMNS)).contains('related_tools', [slug]).limit(limit)
+        visibleOnly(sb.from('tutorials').select(TUTORIAL_LIST_COLUMNS))
+          .contains('related_tools', [name])
+          .limit(limit),
+        visibleOnly(sb.from('tutorials').select(TUTORIAL_LIST_COLUMNS))
+          .contains('related_tools', [slug])
+          .limit(limit)
       ]);
       const map = new Map<string, Record<string, unknown>>();
       for (const r of [...(byName.data ?? []), ...(bySlug.data ?? [])] as Record<string, unknown>[])
