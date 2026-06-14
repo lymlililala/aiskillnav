@@ -6,7 +6,7 @@ import ThemeProvider from '@/components/themes/theme-provider';
 import { cn } from '@/lib/utils';
 import { Analytics } from '@vercel/analytics/next';
 import type { Metadata, Viewport } from 'next';
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 import NextTopLoader from 'nextjs-toploader';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import '../styles/globals.css';
@@ -111,8 +111,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const isValidTheme = THEMES.some((t) => t.value === activeThemeValue);
   const themeToApply = isValidTheme ? activeThemeValue! : DEFAULT_THEME;
 
+  // /en/* 路径用 lang='en'，其余 zh-CN（路径由 middleware 注入 x-pathname）
+  const pathname = (await headers()).get('x-pathname') ?? '';
+  const lang = pathname === '/en' || pathname.startsWith('/en/') ? 'en' : 'zh-CN';
+
   return (
-    <html lang='zh-CN' suppressHydrationWarning data-theme={themeToApply}>
+    <html lang={lang} suppressHydrationWarning data-theme={themeToApply}>
       <head>
         <script
           dangerouslySetInnerHTML={{

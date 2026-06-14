@@ -153,6 +153,33 @@ export async function getTutorialBySlug(slug: string): Promise<Tutorial | null> 
   return data;
 }
 
+/** 英文教程字段（_en 列 + 复用中文行的元数据）。 */
+export type EnglishTutorial = Tutorial & {
+  title_en?: string | null;
+  subtitle_en?: string | null;
+  summary_en?: string | null;
+  content_en?: string | null;
+  en_status?: string | null;
+};
+
+/** 取已发布英文教程（en_status='published'），供 /en 列表与 sitemap。仅服务端。 */
+export async function getPublishedEnglishTutorials(): Promise<EnglishTutorial[]> {
+  if (typeof window === 'undefined') {
+    try {
+      const { getSupabaseAdmin } = await import('@/lib/supabase');
+      const { data, error } = await getSupabaseAdmin()
+        .from('tutorials')
+        .select('slug,title_en,summary_en,level,category,tags,estimated_minutes,en_status')
+        .eq('en_status', 'published')
+        .order('slug');
+      if (!error && data) return data as EnglishTutorial[];
+    } catch {
+      // ignore
+    }
+  }
+  return [];
+}
+
 export async function getTutorialStats() {
   // 服务端直查：用 head count 并发统计，避免 select('*') 拉全量 2008 行
   if (typeof window === 'undefined') {

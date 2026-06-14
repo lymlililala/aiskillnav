@@ -53,6 +53,10 @@ scripts/insert-*.mjs
 scripts/supabase-setup.mjs
 # 公众号采集流水线产物（含受版权的原文正文）— 不入库
 scripts/wechat/data/
+# i18n 翻译流水线派生数据
+scripts/i18n/data/
+# GSC 导出（私有分析数据，二进制）
+gsc/
 backups-noindex-rows-*.json
 backups-batch4-*.json
 backups-globalstrip-*.json
