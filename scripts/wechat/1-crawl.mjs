@@ -9,7 +9,7 @@ import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'node:fs'
 import { join } from 'node:path'
 import { CimiClient } from './cimidata/client.mjs'
 import { htmlToText } from './lib/clean-html.mjs'
-import { DATA_DIR } from './lib/env.mjs'
+import { DATA_DIR, ACCOUNTS_FILE } from './lib/env.mjs'
 
 function arg(name, def) {
   const i = process.argv.indexOf(name)
@@ -23,7 +23,7 @@ const SINCE = arg('--since', null) // YYYY-MM-DD
 const NO_BODY = arg('--no-body', false) === true
 
 mkdirSync(DATA_DIR, { recursive: true })
-const ACC_FILE = join(DATA_DIR, 'accounts.json')
+const ACC_FILE = ACCOUNTS_FILE
 const OUT = join(DATA_DIR, 'sources.json')
 
 if (!existsSync(ACC_FILE)) {

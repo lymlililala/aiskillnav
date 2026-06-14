@@ -36,3 +36,6 @@ export function requireEnv(name) {
 
 // 数据目录（gitignored），各阶段产物落这里
 export const DATA_DIR = join(WECHAT_DIR, 'data')
+
+// 账号 wxid 映射（公开配置，需提交入库供 CI 使用，故放在 data/ 之外）
+export const ACCOUNTS_FILE = join(WECHAT_DIR, 'accounts.json')
