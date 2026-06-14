@@ -77,9 +77,9 @@ async function translate(row, toLang, src) {
 
 const rows = await fetchVisible()
 let targets = rows.filter(r => {
-  const zhOk = isChinese(r.content)            // content 已是中文
-  const enOk = r.content_en && r.content_en.length > 100 // 有英文
-  return !(zhOk && enOk)                       // 两者都齐才算 done
+  // 完成标记：已设 en_status=published 且有英文正文（不依赖中文字数，避免超短stub死循环）
+  const done = r.en_status === 'published' && r.content_en && r.content_en.length > 50
+  return !done
 })
 if (LIMIT) targets = targets.slice(0, LIMIT)
 
