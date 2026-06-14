@@ -245,6 +245,16 @@ const jsonLd = {
   description:
     '一站式 AI Agent 资源导航平台，收录精选 Skills、Agents、MCP Server、主流模型对比、实战教程与场景库',
   inLanguage: 'zh-CN',
+  publisher: {
+    '@type': 'Organization',
+    name: 'AI Skill Navigation',
+    url: 'https://aiskillnav.com',
+    contactPoint: {
+      '@type': 'ContactPoint',
+      email: 'contact@aiskillnav.com',
+      contactType: 'customer support'
+    }
+  },
   potentialAction: {
     '@type': 'SearchAction',
     target: {
@@ -583,7 +593,7 @@ export default async function HomePage() {
       {/* ── Footer ── */}
       <footer className='border-t bg-muted/20 py-10'>
         <div className='mx-auto max-w-6xl px-4 md:px-6'>
-          <div className='grid gap-8 sm:grid-cols-2 md:grid-cols-4'>
+          <div className='grid gap-8 sm:grid-cols-2 md:grid-cols-5'>
             {/* Brand */}
             <div className='space-y-3'>
               <div className='flex items-center gap-2'>
@@ -596,6 +606,12 @@ export default async function HomePage() {
                 一站式 AI Agent 工具导航，帮助开发者和团队发现最优质的 AI 工具。
               </p>
               <p className='text-xs text-muted-foreground'>aiskillnav.com</p>
+              <a
+                href='mailto:contact@aiskillnav.com'
+                className='text-xs text-muted-foreground hover:text-foreground transition-colors'
+              >
+                contact@aiskillnav.com
+              </a>
             </div>
 
             {/* Nav columns */}
@@ -622,6 +638,15 @@ export default async function HomePage() {
                   { label: 'AI News', href: '/news' },
                   { label: '新手教程', href: '/tutorials/what-is-ai-agent' },
                   { label: '场景库', href: '/usecases' }
+                ]
+              },
+              {
+                title: '关于',
+                links: [
+                  { label: '关于我们', href: '/about' },
+                  { label: '联系我们', href: '/contact' },
+                  { label: '隐私政策', href: '/privacy-policy' },
+                  { label: '服务条款', href: '/terms' }
                 ]
               }
             ].map((col) => (

@@ -1,110 +1,87 @@
 import { Metadata } from 'next';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy',
-  robots: {
-    index: false
-  }
+  title: '隐私政策 | AI Skill Navigation',
+  description:
+    'AI Skill Navigation（aiskillnav.com）隐私政策：说明我们如何收集、使用与保护访问者信息，以及关于 Cookie、第三方服务与联系方式的相关条款。',
+  alternates: { canonical: 'https://aiskillnav.com/privacy-policy' }
 };
 
 export default function PrivacyPolicyPage() {
   return (
     <div className='min-h-screen px-4 py-12 sm:px-6 lg:px-8'>
       <div className='mx-auto max-w-3xl space-y-8'>
-        {/* Main Heading */}
-        <h1 className='text-foreground text-3xl font-bold'>Privacy Policy</h1>
+        <Link
+          href='/'
+          className='text-muted-foreground hover:text-foreground inline-block text-sm transition-colors'
+        >
+          ← 返回首页
+        </Link>
 
-        {/* Introduction */}
+        <h1 className='text-foreground text-3xl font-bold'>隐私政策</h1>
+        <p className='text-muted-foreground text-base leading-relaxed'>
+          本隐私政策说明 AI Skill Navigation（aiskillnav.com，以下简称“本站”）如何收集、使用和保护您在访问本站时的相关信息。使用本站即表示您同意本政策所述的处理方式。
+        </p>
+
         <section>
-          <h2 className='text-foreground mb-3 text-xl font-semibold'>Introduction</h2>
+          <h2 className='text-foreground mb-3 text-xl font-semibold'>我们收集的信息</h2>
           <p className='text-muted-foreground text-base leading-relaxed'>
-            This Privacy Policy explains how we handle your personal information when you use our
-            application. We are committed to protecting your privacy and ensuring transparency about
-            our data practices. Please read this policy carefully to understand how we collect, use,
-            and safeguard your information.
+            本站以内容浏览为主，不要求注册即可访问。我们可能收集匿名的访问统计信息（如页面浏览量、来源、设备与浏览器类型、大致地理区域），用于了解内容受欢迎程度并改进体验。当您通过电子邮件联系我们时，我们会收到您主动提供的邮箱地址及邮件内容。
           </p>
         </section>
 
-        {/* Data Collection */}
         <section>
-          <h2 className='text-foreground mb-3 text-xl font-semibold'>Data Collection</h2>
+          <h2 className='text-foreground mb-3 text-xl font-semibold'>信息的使用</h2>
           <p className='text-muted-foreground text-base leading-relaxed'>
-            Our application collects minimal data necessary for authentication purposes. When you
-            sign in using our authentication provider, we receive basic profile information such as
-            your email address and name. This data is used solely to identify you within the
-            application and provide personalized access to features.
+            我们仅将上述信息用于：提供与优化网站内容、分析访问趋势、回应您的咨询与反馈、以及维护网站安全。我们不会出售、出租您的个人信息，也不会将其用于与上述目的无关的用途。
           </p>
         </section>
 
-        {/* Auth handled by Clerk */}
         <section>
-          <h2 className='text-foreground mb-3 text-xl font-semibold'>Authentication by Clerk</h2>
+          <h2 className='text-foreground mb-3 text-xl font-semibold'>Cookie 与分析工具</h2>
           <p className='text-muted-foreground text-base leading-relaxed'>
-            Our application uses{' '}
+            本站可能使用 Cookie 及第三方分析服务（如网站访问统计）来记录匿名的使用情况。您可以通过浏览器设置拒绝或清除 Cookie，但这可能影响部分功能的正常使用。
+          </p>
+        </section>
+
+        <section>
+          <h2 className='text-foreground mb-3 text-xl font-semibold'>第三方链接与内容</h2>
+          <p className='text-muted-foreground text-base leading-relaxed'>
+            本站包含指向第三方网站、工具与资源的链接，并对公开信息进行聚合与整理。这些第三方拥有各自独立的隐私政策，本站不对其内容或数据处理行为负责，建议您在使用前查阅对应方的政策。
+          </p>
+        </section>
+
+        <section>
+          <h2 className='text-foreground mb-3 text-xl font-semibold'>数据安全</h2>
+          <p className='text-muted-foreground text-base leading-relaxed'>
+            我们采取合理的技术与管理措施保护所掌握的信息，防止未经授权的访问、泄露或篡改。但请理解，互联网传输无法保证绝对安全。
+          </p>
+        </section>
+
+        <section>
+          <h2 className='text-foreground mb-3 text-xl font-semibold'>政策更新</h2>
+          <p className='text-muted-foreground text-base leading-relaxed'>
+            我们可能不时更新本隐私政策。更新后将在本页面发布，并更新下方的“最后更新”日期。重大变更会以适当方式提示。
+          </p>
+        </section>
+
+        <section>
+          <h2 className='text-foreground mb-3 text-xl font-semibold'>联系我们</h2>
+          <p className='text-muted-foreground text-base leading-relaxed'>
+            如对本隐私政策有任何疑问或请求，请通过{' '}
             <a
-              href='https://clerk.com'
-              target='_blank'
-              rel='noopener noreferrer'
+              href='mailto:contact@aiskillnav.com'
               className='text-primary font-medium hover:underline'
             >
-              Clerk
+              contact@aiskillnav.com
             </a>{' '}
-            to handle user authentication securely. All authentication processes, including sign-up,
-            sign-in, and password management, are managed by Clerk. For detailed information about
-            how Clerk processes and protects your data, please review their{' '}
-            <a
-              href='https://clerk.com/legal/privacy'
-              target='_blank'
-              rel='noopener noreferrer'
-              className='text-primary font-medium hover:underline'
-            >
-              Privacy Policy
-            </a>
-            .
+            与我们联系。
           </p>
         </section>
 
-        {/* No data misuse */}
-        <section>
-          <h2 className='text-foreground mb-3 text-xl font-semibold'>No Data Misuse</h2>
-          <p className='text-muted-foreground text-base leading-relaxed'>
-            We take your privacy seriously. We want to assure you that your personal data is never
-            sold, rented, or shared with third parties for marketing or commercial purposes. Your
-            information is used exclusively for the intended functionality of this application and
-            is never misused or exploited in any way.
-          </p>
-        </section>
-
-        {/* Demo purpose */}
-        <section>
-          <h2 className='text-foreground mb-3 text-xl font-semibold'>Demo Application</h2>
-          <p className='text-muted-foreground text-base leading-relaxed'>
-            Please note that this is a demo application created for demonstration and educational
-            purposes. It showcases various features and technologies but should not be considered a
-            production-ready service. Any data you provide may be temporary and could be removed at
-            any time as part of regular maintenance.
-          </p>
-        </section>
-
-        {/* Contact */}
-        <section>
-          <h2 className='text-foreground mb-3 text-xl font-semibold'>Contact Us</h2>
-          <p className='text-muted-foreground text-base leading-relaxed'>
-            If you have any questions, concerns, or requests regarding this Privacy Policy or our
-            data practices, please feel free to contact us at{' '}
-            <a
-              href='mailto:contact@kiranism.dev'
-              className='text-primary font-medium hover:underline'
-            >
-              contact@kiranism.dev
-            </a>
-            .
-          </p>
-        </section>
-
-        {/* Last Updated */}
         <div className='border-border border-t pt-4'>
-          <p className='text-muted-foreground text-sm'>Last updated: February 2026</p>
+          <p className='text-muted-foreground text-sm'>最后更新：2026 年 6 月</p>
         </div>
       </div>
     </div>
