@@ -8,6 +8,7 @@ import { DeepSeek } from './deepseek.mjs'
 import { truncate } from './lib/clean-html.mjs'
 import { uniqueSlug } from './lib/slug.mjs'
 import { fetchAllSlugs } from './lib/supabase.mjs'
+import { fetchSources } from './lib/sources.mjs'
 import { DATA_DIR } from './lib/env.mjs'
 
 function arg(name, def) {
@@ -15,15 +16,13 @@ function arg(name, def) {
   return i === -1 ? def : process.argv[i + 1]
 }
 const LIMIT = arg('--limit', null) ? Number(arg('--limit', null)) : null
+const DAYS = Number(arg('--days', 14))
 
-const SRC = join(DATA_DIR, 'sources.json')
 const CLU = join(DATA_DIR, 'clusters.json')
 const OUT = join(DATA_DIR, 'drafts.json')
-for (const [f, n] of [[SRC, 'sources.json'], [CLU, 'clusters.json']]) {
-  if (!existsSync(f)) { console.error(`缺少 ${n}`); process.exit(1) }
-}
+if (!existsSync(CLU)) { console.error('缺少 clusters.json，先跑 2-cluster.mjs'); process.exit(1) }
 
-const sources = JSON.parse(readFileSync(SRC, 'utf8'))
+const sources = await fetchSources({ sinceDays: DAYS })
 const bySn = new Map(sources.map(s => [s.sn, s]))
 let clusters = JSON.parse(readFileSync(CLU, 'utf8'))
 if (LIMIT) clusters = clusters.slice(0, LIMIT)

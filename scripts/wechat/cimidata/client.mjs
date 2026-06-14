@@ -149,6 +149,11 @@ export class CimiClient {
             await this.authenticate()
             continue
           }
+          // 服务端临时故障（500 内部错误 / 1002 稍后再试）→ 退避重试，不直接放弃
+          if ((json.code === 500 || json.code === 1002) && attempt < this.maxRetries) {
+            await sleep(1200 * (attempt + 1))
+            continue
+          }
           throw new CimiError(json)
         }
         return json
