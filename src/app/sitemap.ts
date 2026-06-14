@@ -5,7 +5,7 @@ import { slugify } from '@/lib/slug';
 import { SKILL_CATEGORIES } from '@/features/skills/categories';
 import { MODEL_SERIES } from '@/features/models/series';
 import { NOINDEX_TUTORIAL_SLUGS } from '@/features/tutorials/noindex-slugs';
-import { EN_TUTORIAL_SLUGS } from '@/features/tutorials/en-slugs';
+import { getPublishedEnglishTutorials } from '@/features/tutorials/api/service';
 
 // ISR：build 时不预生成（首次请求时生成，避免构建期 Supabase 查询超时），
 // 之后缓存 1 小时。此前用 force-dynamic 会覆盖 revalidate，导致每次请求
@@ -116,6 +116,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const uniqTutorials = Array.from(new Map(allTutorials.map((t) => [t.slug, t])).values());
     const uniqNews = Array.from(new Map(allNews.map((n) => [n.slug, n])).values());
 
+    // 已发布英文教程 slug 集（DB 驱动，en_status=published）
+    const enSlugs = new Set<string>(
+      (await getPublishedEnglishTutorials().catch(() => [])).map((t) => t.slug)
+    );
+
     // 排除已 noindex 的损坏模板页：sitemap 与 robots meta 保持一致，不向 Google 提交它们
     const tutorialPages: MetadataRoute.Sitemap = uniqTutorials
       .filter((t) => !NOINDEX_TUTORIAL_SLUGS.has(t.slug))
@@ -125,7 +130,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         changeFrequency: 'monthly' as const,
         priority: 0.88,
         // 有英文版的教程：声明中英 hreflang 互指
-        ...(EN_TUTORIAL_SLUGS.has(t.slug)
+        ...(enSlugs.has(t.slug)
           ? {
               alternates: {
                 languages: {
@@ -137,19 +142,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           : {})
       }));
 
-    // 英文教程页（仅 allowlist 中已翻译且过质量闸门的）
-    const enTutorialPages: MetadataRoute.Sitemap = [...EN_TUTORIAL_SLUGS].map((slug) => ({
-      url: `${BASE_URL}/en/tutorials/${slug}`,
-      lastModified: now,
-      changeFrequency: 'monthly' as const,
-      priority: 0.8,
-      alternates: {
-        languages: {
-          'zh-CN': `${BASE_URL}/tutorials/${slug}`,
-          en: `${BASE_URL}/en/tutorials/${slug}`
+    // 英文教程页（en_status=published，且不在 noindex 名单）
+    const enTutorialPages: MetadataRoute.Sitemap = [...enSlugs]
+      .filter((slug) => !NOINDEX_TUTORIAL_SLUGS.has(slug))
+      .map((slug) => ({
+        url: `${BASE_URL}/en/tutorials/${slug}`,
+        lastModified: now,
+        changeFrequency: 'monthly' as const,
+        priority: 0.8,
+        alternates: {
+          languages: {
+            'zh-CN': `${BASE_URL}/tutorials/${slug}`,
+            en: `${BASE_URL}/en/tutorials/${slug}`
+          }
         }
-      }
-    }));
+      }));
 
     const newsPages: MetadataRoute.Sitemap = uniqNews.map((n) => ({
       url: `${BASE_URL}/news/${n.slug}`,
@@ -173,7 +180,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7
     }));
 
-    const uniqModelSlugs = Array.from(new Set(allModels.map((m) => slugify(m.name)).filter(Boolean)));
+    const uniqModelSlugs = Array.from(
+      new Set(allModels.map((m) => slugify(m.name)).filter(Boolean))
+    );
     const modelPages: MetadataRoute.Sitemap = uniqModelSlugs.map((s) => ({
       url: `${BASE_URL}/models/${s}`,
       lastModified: now,
@@ -181,7 +190,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7
     }));
 
-    const uniqAgentSlugs = Array.from(new Set(allAgents.map((a) => slugify(a.name)).filter(Boolean)));
+    const uniqAgentSlugs = Array.from(
+      new Set(allAgents.map((a) => slugify(a.name)).filter(Boolean))
+    );
     const agentPages: MetadataRoute.Sitemap = uniqAgentSlugs.map((s) => ({
       url: `${BASE_URL}/agents/${s}`,
       lastModified: now,
@@ -209,20 +220,50 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/agents`, lastModified: now, changeFrequency: 'daily', priority: 0.9 },
     { url: `${BASE_URL}/mcp`, lastModified: now, changeFrequency: 'weekly', priority: 0.85 },
     { url: `${BASE_URL}/models`, lastModified: now, changeFrequency: 'weekly', priority: 0.85 },
-    { url: `${BASE_URL}/tutorials`, lastModified: newestTutorialDate, changeFrequency: 'weekly', priority: 0.85 },
+    {
+      url: `${BASE_URL}/tutorials`,
+      lastModified: newestTutorialDate,
+      changeFrequency: 'weekly',
+      priority: 0.85
+    },
     { url: `${BASE_URL}/usecases`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${BASE_URL}/news`, lastModified: newestNewsDate, changeFrequency: 'daily', priority: 0.9 },
+    {
+      url: `${BASE_URL}/news`,
+      lastModified: newestNewsDate,
+      changeFrequency: 'daily',
+      priority: 0.9
+    },
     { url: `${BASE_URL}/about`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
     { url: `${BASE_URL}/contact`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
-    { url: `${BASE_URL}/privacy-policy`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
+    {
+      url: `${BASE_URL}/privacy-policy`,
+      lastModified: now,
+      changeFrequency: 'yearly',
+      priority: 0.3
+    },
     { url: `${BASE_URL}/terms`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
     // 英文壳页（/en）
-    { url: `${BASE_URL}/en`, lastModified: now, changeFrequency: 'weekly', priority: 0.8,
-      alternates: { languages: { 'zh-CN': BASE_URL, en: `${BASE_URL}/en`, 'x-default': BASE_URL } } },
-    { url: `${BASE_URL}/en/tutorials`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
+    {
+      url: `${BASE_URL}/en`,
+      lastModified: now,
+      changeFrequency: 'weekly',
+      priority: 0.8,
+      alternates: { languages: { 'zh-CN': BASE_URL, en: `${BASE_URL}/en`, 'x-default': BASE_URL } }
+    },
+    {
+      url: `${BASE_URL}/en/tutorials`,
+      lastModified: now,
+      changeFrequency: 'weekly',
+      priority: 0.7
+    },
     { url: `${BASE_URL}/en/about`, lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
     { url: `${BASE_URL}/en/contact`, lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
-    { url: `${BASE_URL}/en/privacy-policy`, lastModified: now, changeFrequency: 'yearly', priority: 0.2 },
+    {
+      url: `${BASE_URL}/en/privacy-policy`,
+      lastModified: now,
+      changeFrequency: 'yearly',
+      priority: 0.2
+    },
     { url: `${BASE_URL}/en/terms`, lastModified: now, changeFrequency: 'yearly', priority: 0.2 },
     // 主题集群 pillar 枢纽页（高优先级，集中权重）
     ...PILLAR_TOPICS.map((t) => ({

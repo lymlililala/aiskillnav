@@ -2,7 +2,6 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getTutorialBySlug, type EnglishTutorial } from '@/features/tutorials/api/service';
-import { EN_TUTORIAL_SLUGS } from '@/features/tutorials/en-slugs';
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -13,9 +12,8 @@ const SITE = 'https://aiskillnav.com';
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  if (!EN_TUTORIAL_SLUGS.has(slug)) return { title: 'Not found' };
   const t = (await getTutorialBySlug(slug)) as EnglishTutorial | null;
-  if (!t || !t.content_en) return { title: 'Not found' };
+  if (!t || !t.content_en || t.en_status !== 'published') return { title: 'Not found' };
 
   const enUrl = `${SITE}/en/tutorials/${slug}`;
   const zhUrl = `${SITE}/tutorials/${slug}`;
@@ -35,7 +33,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       locale: 'en_US',
       publishedTime: t.published_at ?? undefined
     },
-    twitter: { card: 'summary_large_image', title: t.title_en ?? undefined, description: t.summary_en ?? undefined }
+    twitter: {
+      card: 'summary_large_image',
+      title: t.title_en ?? undefined,
+      description: t.summary_en ?? undefined
+    }
   };
 }
 
@@ -46,12 +48,19 @@ function renderMarkdown(md: string): string {
     .replace(/^### (.+)$/gm, '<h3 class="text-base font-semibold mt-6 mb-2">$1</h3>')
     .replace(/^## (.+)$/gm, '<h2 class="text-lg font-bold mt-8 mb-3">$1</h2>')
     .replace(/^# (.+)$/gm, '<h1 class="text-xl font-bold mt-8 mb-4">$1</h1>')
-    .replace(/^> (.+)$/gm, '<blockquote class="border-l-2 pl-4 text-muted-foreground italic my-4">$1</blockquote>')
-    .replace(/```([\s\S]*?)```/gm, '<pre class="rounded-lg bg-muted px-4 py-3 text-sm font-mono overflow-x-auto my-4"><code>$1</code></pre>')
+    .replace(
+      /^> (.+)$/gm,
+      '<blockquote class="border-l-2 pl-4 text-muted-foreground italic my-4">$1</blockquote>'
+    )
+    .replace(
+      /```([\s\S]*?)```/gm,
+      '<pre class="rounded-lg bg-muted px-4 py-3 text-sm font-mono overflow-x-auto my-4"><code>$1</code></pre>'
+    )
     .replace(/\*\*(.+?)\*\*/g, '<strong class="font-semibold">$1</strong>')
     .replace(/`(.+?)`/g, '<code class="rounded bg-muted px-1 py-0.5 text-sm font-mono">$1</code>')
     .replace(/\[(.+?)\]\((.+?)\)/g, (_m, text: string, url: string) => {
-      const isInternal = /^\/(en\/)?(tutorials|news|mcp|agents|models|skills|usecases)(\/|\?|$)/.test(url);
+      const isInternal =
+        /^\/(en\/)?(tutorials|news|mcp|agents|models|skills|usecases)(\/|\?|$)/.test(url);
       return isInternal
         ? `<a href="${url}" class="text-primary underline underline-offset-4 hover:no-underline">${text}</a>`
         : `<a href="${url}" class="text-primary underline underline-offset-4 hover:no-underline" target="_blank" rel="noopener">${text}</a>`;
@@ -60,7 +69,10 @@ function renderMarkdown(md: string): string {
     .replace(/^\d+\. (.+)$/gm, '<li class="ml-4 list-decimal my-0.5">$1</li>')
     .replace(/^\|(.+)\|$/gm, (match) => {
       if (match.includes('---')) return '';
-      const cells = match.split('|').filter(Boolean).map((c) => c.trim());
+      const cells = match
+        .split('|')
+        .filter(Boolean)
+        .map((c) => c.trim());
       return `<tr>${cells.map((c) => `<td class="border px-3 py-1.5 text-sm">${c}</td>`).join('')}</tr>`;
     })
     .replace(/^---$/gm, '<hr class="my-6 border-border" />')
@@ -71,10 +83,9 @@ function renderMarkdown(md: string): string {
 
 export default async function EnTutorialDetailPage({ params }: Props) {
   const { slug } = await params;
-  // 仅 allowlist（已翻译且过质量闸门）的英文教程提供页面；其余 404，杜绝英文URL+中文正文
-  if (!EN_TUTORIAL_SLUGS.has(slug)) notFound();
+  // 仅 en_status=published 且有英文正文的教程提供英文页；否则 404，杜绝英文URL+中文正文
   const t = (await getTutorialBySlug(slug)) as EnglishTutorial | null;
-  if (!t || !t.content_en) notFound();
+  if (!t || !t.content_en || t.en_status !== 'published') notFound();
 
   const enUrl = `${SITE}/en/tutorials/${slug}`;
   const jsonLd = {
@@ -100,10 +111,19 @@ export default async function EnTutorialDetailPage({ params }: Props) {
 
   return (
     <article className='mx-auto max-w-3xl px-4 py-12 md:px-6'>
-      <script type='application/ld+json' dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <script type='application/ld+json' dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
+      <script
+        type='application/ld+json'
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type='application/ld+json'
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+      />
 
-      <Link href='/en/tutorials' className='mb-6 inline-block text-sm text-muted-foreground transition-colors hover:text-foreground'>
+      <Link
+        href='/en/tutorials'
+        className='mb-6 inline-block text-sm text-muted-foreground transition-colors hover:text-foreground'
+      >
         ← Back to tutorials
       </Link>
 

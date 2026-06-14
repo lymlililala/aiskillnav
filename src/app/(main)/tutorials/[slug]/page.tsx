@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getTutorialBySlug, getRelatedTutorials } from '@/features/tutorials/api/service';
 import { NOINDEX_TUTORIAL_SLUGS } from '@/features/tutorials/noindex-slugs';
-import { EN_TUTORIAL_SLUGS } from '@/features/tutorials/en-slugs';
 import { getMcpSlugSet } from '@/features/mcp/api/service';
 import { matchPillarTopics } from '@/features/tutorials/topics';
 import { extractFaq, buildFaqJsonLd } from '@/features/tutorials/faq';
@@ -21,7 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // 损坏的批量模板页：加 noindex（仍 follow，让内链权重流动），并随名单移除而恢复
   const noindex = NOINDEX_TUTORIAL_SLUGS.has(slug);
   // 有英文版的教程：声明中英 hreflang 互指
-  const hasEn = EN_TUTORIAL_SLUGS.has(slug);
+  const hasEn = (t as { en_status?: string }).en_status === 'published';
   return {
     title: `${t.title} | 教程中心`,
     description: t.summary,
@@ -209,7 +208,7 @@ export default async function TutorialDetailPage({ params }: Props) {
           返回教程列表
         </Link>
 
-        {EN_TUTORIAL_SLUGS.has(slug) && (
+        {(tutorial as { en_status?: string }).en_status === 'published' && (
           <Link
             href={`/en/tutorials/${slug}`}
             className='inline-flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:border-primary/30 hover:text-foreground'
