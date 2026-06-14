@@ -8,6 +8,9 @@ import { NOINDEX_TUTORIAL_SLUGS } from '@/features/tutorials/noindex-slugs';
 import { getPublishedEnglishTutorials } from '@/features/tutorials/api/service';
 import { getPublishedEnglishNews } from '@/features/news/api/service';
 import { getPublishedEnglishUseCases } from '@/features/usecases/api/service';
+import { getPublishedEnglishMcp } from '@/features/mcp/api/service';
+import { getPublishedEnglishModels } from '@/features/models/api/service';
+import { getPublishedEnglishAgents } from '@/features/agents/api/service';
 
 // ISR：build 时不预生成（首次请求时生成，避免构建期 Supabase 查询超时），
 // 之后缓存 1 小时。此前用 force-dynamic 会覆盖 revalidate，导致每次请求
@@ -129,6 +132,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const enUcIds = new Set<number>(
       (await getPublishedEnglishUseCases().catch(() => [])).map((u) => u.id)
     );
+    // 英文目录详情集（mcp slug / model+agent 由 name slugify）
+    const enMcpSlugs = new Set<string>(
+      (await getPublishedEnglishMcp().catch(() => [])).map((m) => m.slug)
+    );
+    const enModelSlugs = new Set<string>(
+      (await getPublishedEnglishModels().catch(() => []))
+        .map((m) => slugify(m.name))
+        .filter(Boolean)
+    );
+    const enAgentSlugs = new Set<string>(
+      (await getPublishedEnglishAgents().catch(() => []))
+        .map((a) => slugify(a.name))
+        .filter(Boolean)
+    );
 
     // 排除已 noindex 的损坏模板页：sitemap 与 robots meta 保持一致，不向 Google 提交它们
     const tutorialPages: MetadataRoute.Sitemap = uniqTutorials
@@ -199,7 +216,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${BASE_URL}/mcp/${m.slug}`,
       lastModified: m.created_at ? new Date(m.created_at) : now,
       changeFrequency: 'monthly' as const,
-      priority: 0.8
+      priority: 0.8,
+      ...(enMcpSlugs.has(m.slug)
+        ? {
+            alternates: {
+              languages: {
+                'zh-CN': `${BASE_URL}/mcp/${m.slug}`,
+                en: `${BASE_URL}/en/mcp/${m.slug}`
+              }
+            }
+          }
+        : {})
+    }));
+    const enMcpPages: MetadataRoute.Sitemap = [...enMcpSlugs].map((slug) => ({
+      url: `${BASE_URL}/en/mcp/${slug}`,
+      lastModified: now,
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
+      alternates: {
+        languages: { 'zh-CN': `${BASE_URL}/mcp/${slug}`, en: `${BASE_URL}/en/mcp/${slug}` }
+      }
     }));
 
     const usecasePages: MetadataRoute.Sitemap = allUseCases.map((u) => ({
@@ -236,7 +272,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${BASE_URL}/models/${s}`,
       lastModified: now,
       changeFrequency: 'monthly' as const,
-      priority: 0.7
+      priority: 0.7,
+      ...(enModelSlugs.has(s)
+        ? {
+            alternates: {
+              languages: { 'zh-CN': `${BASE_URL}/models/${s}`, en: `${BASE_URL}/en/models/${s}` }
+            }
+          }
+        : {})
+    }));
+    const enModelPages: MetadataRoute.Sitemap = [...enModelSlugs].map((s) => ({
+      url: `${BASE_URL}/en/models/${s}`,
+      lastModified: now,
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
+      alternates: {
+        languages: { 'zh-CN': `${BASE_URL}/models/${s}`, en: `${BASE_URL}/en/models/${s}` }
+      }
     }));
 
     const uniqAgentSlugs = Array.from(
@@ -246,7 +298,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${BASE_URL}/agents/${s}`,
       lastModified: now,
       changeFrequency: 'monthly' as const,
-      priority: 0.7
+      priority: 0.7,
+      ...(enAgentSlugs.has(s)
+        ? {
+            alternates: {
+              languages: { 'zh-CN': `${BASE_URL}/agents/${s}`, en: `${BASE_URL}/en/agents/${s}` }
+            }
+          }
+        : {})
+    }));
+    const enAgentPages: MetadataRoute.Sitemap = [...enAgentSlugs].map((s) => ({
+      url: `${BASE_URL}/en/agents/${s}`,
+      lastModified: now,
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
+      alternates: {
+        languages: { 'zh-CN': `${BASE_URL}/agents/${s}`, en: `${BASE_URL}/en/agents/${s}` }
+      }
     }));
 
     dynamicPages = [
@@ -255,10 +323,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       ...newsPages,
       ...enNewsPages,
       ...mcpPages,
+      ...enMcpPages,
       ...usecasePages,
       ...enUseCasePages,
       ...modelPages,
-      ...agentPages
+      ...enModelPages,
+      ...agentPages,
+      ...enAgentPages
     ];
   } catch {
     // Supabase 不可用时静默降级，只返回静态页面
