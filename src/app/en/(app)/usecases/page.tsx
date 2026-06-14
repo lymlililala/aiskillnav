@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import PageContainer from '@/components/layout/page-container';
 import { getPublishedEnglishUseCases } from '@/features/usecases/api/service';
 
 export const metadata: Metadata = {
@@ -30,32 +31,33 @@ const DIFFICULTY: Record<number, string> = { 1: 'Easy', 2: 'Medium', 3: 'Advance
 export default async function EnUseCasesListPage() {
   const items = await getPublishedEnglishUseCases();
   return (
-    <div className='mx-auto max-w-6xl px-4 py-12 md:px-6'>
-      <header className='mb-10'>
-        <h1 className='text-3xl font-bold tracking-tight sm:text-4xl'>AI Use Cases</h1>
-        <p className='mt-3 text-lg text-muted-foreground'>Actionable, step-by-step AI workflows.</p>
-      </header>
+    <PageContainer
+      pageTitle='Use Cases'
+      pageDescription='Actionable, step-by-step AI workflows with recommended tool stacks.'
+    >
       {items.length === 0 ? (
-        <p className='text-muted-foreground'>English use cases are coming soon.</p>
+        <p className='text-sm text-muted-foreground'>English use cases are coming soon.</p>
       ) : (
         <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-3'>
           {items.map((u) => (
             <Link
               key={u.id}
               href={`/en/usecases/${u.id}`}
-              className='group rounded-xl border bg-card p-5 shadow-sm transition-colors hover:border-primary/30'
+              className='group flex flex-col gap-3 rounded-xl border bg-card p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md'
             >
-              <h2 className='font-semibold leading-snug group-hover:text-primary'>{u.title_en}</h2>
+              <h2 className='text-sm font-semibold leading-snug transition-colors group-hover:text-primary'>
+                {u.title_en}
+              </h2>
               {u.description_en && (
-                <p className='mt-2 line-clamp-3 text-sm text-muted-foreground'>
+                <p className='line-clamp-2 flex-1 text-xs leading-relaxed text-muted-foreground'>
                   {u.description_en}
                 </p>
               )}
-              <div className='mt-3 flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground'>
-                <span className='rounded-md border bg-muted/50 px-2 py-0.5'>
+              <div className='flex flex-wrap items-center gap-1.5 text-[10px] text-muted-foreground'>
+                <span className='rounded border bg-muted/50 px-1.5 py-0.5'>
                   {INDUSTRY[u.industry] ?? u.industry}
                 </span>
-                <span className='rounded-md border bg-muted/50 px-2 py-0.5'>
+                <span className='rounded border bg-muted/50 px-1.5 py-0.5'>
                   {DIFFICULTY[u.difficulty] ?? u.difficulty}
                 </span>
               </div>
@@ -63,6 +65,6 @@ export default async function EnUseCasesListPage() {
           ))}
         </div>
       )}
-    </div>
+    </PageContainer>
   );
 }

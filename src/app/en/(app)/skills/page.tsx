@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import PageContainer from '@/components/layout/page-container';
 import { getPublishedEnglishSkills } from '@/features/skills/api/service';
 
 export const metadata: Metadata = {
@@ -16,13 +17,12 @@ export const revalidate = 3600;
 export default async function EnSkillsPage() {
   const items = await getPublishedEnglishSkills();
   return (
-    <div className='mx-auto max-w-6xl px-4 py-12 md:px-6'>
-      <header className='mb-10'>
-        <h1 className='text-3xl font-bold tracking-tight sm:text-4xl'>AI Skills</h1>
-        <p className='mt-3 text-lg text-muted-foreground'>Curated AI skills and tools.</p>
-      </header>
+    <PageContainer
+      pageTitle='Skills'
+      pageDescription='Curated AI skills and tools — one click away.'
+    >
       {items.length === 0 ? (
-        <p className='text-muted-foreground'>Coming soon.</p>
+        <p className='text-sm text-muted-foreground'>Coming soon.</p>
       ) : (
         <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-3'>
           {items.map((s) => (
@@ -31,11 +31,13 @@ export default async function EnSkillsPage() {
               href={s.url}
               target='_blank'
               rel='noopener noreferrer'
-              className='group rounded-xl border bg-card p-5 shadow-sm transition-colors hover:border-primary/30'
+              className='group flex flex-col gap-2 rounded-xl border bg-card p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md'
             >
-              <h2 className='font-semibold leading-snug group-hover:text-primary'>{s.name}</h2>
+              <h2 className='text-sm font-semibold leading-snug transition-colors group-hover:text-primary'>
+                {s.name}
+              </h2>
               {s.description_en && (
-                <p className='mt-2 line-clamp-3 text-sm text-muted-foreground'>
+                <p className='line-clamp-3 text-xs leading-relaxed text-muted-foreground'>
                   {s.description_en}
                 </p>
               )}
@@ -43,6 +45,6 @@ export default async function EnSkillsPage() {
           ))}
         </div>
       )}
-    </div>
+    </PageContainer>
   );
 }
