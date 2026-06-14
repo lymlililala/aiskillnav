@@ -4,6 +4,8 @@ import { ThemeModeToggle } from '@/components/themes/theme-mode-toggle';
 
 const NAV = [
   { label: 'Tutorials', href: '/en/tutorials' },
+  { label: 'Use Cases', href: '/en/usecases' },
+  { label: 'News', href: '/en/news' },
   { label: 'About', href: '/en/about' },
   { label: 'Contact', href: '/en/contact' }
 ];
@@ -74,6 +76,8 @@ export default function EnLayout({ children }: { children: React.ReactNode }) {
             <ul className='space-y-2'>
               {[
                 { label: 'Tutorials', href: '/en/tutorials' },
+                { label: 'Use Cases', href: '/en/usecases' },
+                { label: 'News', href: '/en/news' },
                 { label: 'About', href: '/en/about' },
                 { label: 'Contact', href: '/en/contact' },
                 { label: 'Privacy Policy', href: '/en/privacy-policy' },

@@ -31,7 +31,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `${uc.title} — AI 应用场景与实现步骤 | AI Skill Navigation`,
     description: uc.description,
     keywords: uc.tags,
-    alternates: { canonical: url },
+    alternates: {
+      canonical: url,
+      ...((uc as { en_status?: string }).en_status === 'published'
+        ? {
+            languages: {
+              'zh-CN': url,
+              en: `https://aiskillnav.com/en/usecases/${uc.id}`
+            }
+          }
+        : {})
+    },
     openGraph: {
       type: 'article',
       url,

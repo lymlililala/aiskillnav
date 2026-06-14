@@ -18,7 +18,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: item.title,
     description: item.summary,
-    alternates: { canonical: `https://aiskillnav.com/news/${slug}` },
+    alternates: {
+      canonical: `https://aiskillnav.com/news/${slug}`,
+      ...((item as { en_status?: string }).en_status === 'published'
+        ? {
+            languages: {
+              'zh-CN': `https://aiskillnav.com/news/${slug}`,
+              en: `https://aiskillnav.com/en/news/${slug}`
+            }
+          }
+        : {})
+    },
     openGraph: {
       title: item.title,
       description: item.summary,

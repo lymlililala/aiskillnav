@@ -123,6 +123,35 @@ export async function getUseCasesByTool(tool: string, limit = 6): Promise<UseCas
   return [];
 }
 
+/** 英文 use_case 字段（_en 列） */
+export type EnglishUseCase = UseCase & {
+  title_en?: string | null;
+  description_en?: string | null;
+  steps_en?: string[] | null;
+  en_status?: string | null;
+};
+
+/** 已发布英文 use_cases（en_status='published'），供 /en/usecases 列表与 sitemap。 */
+export async function getPublishedEnglishUseCases(): Promise<EnglishUseCase[]> {
+  if (typeof window === 'undefined') {
+    try {
+      const { getSupabaseAdmin } = await import('@/lib/supabase');
+      const { data, error } = await getSupabaseAdmin()
+        .from('use_cases')
+        .select(
+          'id,title_en,description_en,steps_en,industry,difficulty,tools,tags,estimated_time,en_status'
+        )
+        .eq('en_status', 'published')
+        .not('published_at', 'is', null)
+        .order('id');
+      if (!error && data) return data as EnglishUseCase[];
+    } catch {
+      // ignore
+    }
+  }
+  return [];
+}
+
 export async function createUseCase(payload: CreateUseCasePayload): Promise<UseCase> {
   const res = await fetch(`${apiBase()}/usecases`, {
     method: 'POST',

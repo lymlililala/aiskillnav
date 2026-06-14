@@ -6,6 +6,8 @@ import { SKILL_CATEGORIES } from '@/features/skills/categories';
 import { MODEL_SERIES } from '@/features/models/series';
 import { NOINDEX_TUTORIAL_SLUGS } from '@/features/tutorials/noindex-slugs';
 import { getPublishedEnglishTutorials } from '@/features/tutorials/api/service';
+import { getPublishedEnglishNews } from '@/features/news/api/service';
+import { getPublishedEnglishUseCases } from '@/features/usecases/api/service';
 
 // ISR：build 时不预生成（首次请求时生成，避免构建期 Supabase 查询超时），
 // 之后缓存 1 小时。此前用 force-dynamic 会覆盖 revalidate，导致每次请求
@@ -120,6 +122,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const enSlugs = new Set<string>(
       (await getPublishedEnglishTutorials().catch(() => [])).map((t) => t.slug)
     );
+    // 英文 news slug 集 / 英文 usecase id 集
+    const enNewsSlugs = new Set<string>(
+      (await getPublishedEnglishNews().catch(() => [])).map((n) => n.slug)
+    );
+    const enUcIds = new Set<number>(
+      (await getPublishedEnglishUseCases().catch(() => [])).map((u) => u.id)
+    );
 
     // 排除已 noindex 的损坏模板页：sitemap 与 robots meta 保持一致，不向 Google 提交它们
     const tutorialPages: MetadataRoute.Sitemap = uniqTutorials
@@ -162,7 +171,27 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${BASE_URL}/news/${n.slug}`,
       lastModified: new Date(n.published_at),
       changeFrequency: 'monthly' as const,
-      priority: 0.87
+      priority: 0.87,
+      ...(enNewsSlugs.has(n.slug)
+        ? {
+            alternates: {
+              languages: {
+                'zh-CN': `${BASE_URL}/news/${n.slug}`,
+                en: `${BASE_URL}/en/news/${n.slug}`
+              }
+            }
+          }
+        : {})
+    }));
+
+    const enNewsPages: MetadataRoute.Sitemap = [...enNewsSlugs].map((slug) => ({
+      url: `${BASE_URL}/en/news/${slug}`,
+      lastModified: now,
+      changeFrequency: 'monthly' as const,
+      priority: 0.75,
+      alternates: {
+        languages: { 'zh-CN': `${BASE_URL}/news/${slug}`, en: `${BASE_URL}/en/news/${slug}` }
+      }
     }));
 
     const uniqMcp = Array.from(new Map(allMcp.map((m) => [m.slug, m])).values());
@@ -177,7 +206,27 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${BASE_URL}/usecases/${u.id}`,
       lastModified: now,
       changeFrequency: 'monthly' as const,
-      priority: 0.7
+      priority: 0.7,
+      ...(enUcIds.has(u.id)
+        ? {
+            alternates: {
+              languages: {
+                'zh-CN': `${BASE_URL}/usecases/${u.id}`,
+                en: `${BASE_URL}/en/usecases/${u.id}`
+              }
+            }
+          }
+        : {})
+    }));
+
+    const enUseCasePages: MetadataRoute.Sitemap = [...enUcIds].map((id) => ({
+      url: `${BASE_URL}/en/usecases/${id}`,
+      lastModified: now,
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
+      alternates: {
+        languages: { 'zh-CN': `${BASE_URL}/usecases/${id}`, en: `${BASE_URL}/en/usecases/${id}` }
+      }
     }));
 
     const uniqModelSlugs = Array.from(
@@ -204,8 +253,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       ...tutorialPages,
       ...enTutorialPages,
       ...newsPages,
+      ...enNewsPages,
       ...mcpPages,
       ...usecasePages,
+      ...enUseCasePages,
       ...modelPages,
       ...agentPages
     ];
@@ -256,6 +307,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'weekly',
       priority: 0.7
     },
+    { url: `${BASE_URL}/en/news`, lastModified: now, changeFrequency: 'daily', priority: 0.7 },
+    { url: `${BASE_URL}/en/usecases`, lastModified: now, changeFrequency: 'weekly', priority: 0.6 },
     { url: `${BASE_URL}/en/about`, lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
     { url: `${BASE_URL}/en/contact`, lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
     {

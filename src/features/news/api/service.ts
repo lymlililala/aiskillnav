@@ -43,7 +43,8 @@ async function fetchNewsFromDb(filters: NewsFilters): Promise<NewsResponse | nul
     const limit = filters.limit ?? 10;
     let query = getSupabaseAdmin().from('news').select('*', { count: 'exact' });
     if (filters.status && filters.status !== 'all') query = query.eq('status', filters.status);
-    if (filters.category && filters.category !== 'all') query = query.eq('category', filters.category);
+    if (filters.category && filters.category !== 'all')
+      query = query.eq('category', filters.category);
     if (filters.search)
       query = query.or(
         `title.ilike.%${filters.search}%,summary.ilike.%${filters.search}%,source_name.ilike.%${filters.search}%`
@@ -91,6 +92,43 @@ export async function getPublishedNews(
   filters: Omit<NewsFilters, 'status'>
 ): Promise<NewsResponse> {
   return getNews({ ...filters, status: 'published' });
+}
+
+/** 英文 news 字段（_en 列） */
+export type EnglishNews = NewsItem & {
+  title_en?: string | null;
+  summary_en?: string | null;
+  en_status?: string | null;
+};
+
+/** 已发布英文 news（en_status='published'），供 /en/news 列表与 sitemap。分页取全量。 */
+export async function getPublishedEnglishNews(): Promise<EnglishNews[]> {
+  if (typeof window === 'undefined') {
+    try {
+      const { getSupabaseAdmin } = await import('@/lib/supabase');
+      const sb = getSupabaseAdmin();
+      const all: EnglishNews[] = [];
+      const PAGE = 1000;
+      for (let from = 0; ; from += PAGE) {
+        const { data, error } = await sb
+          .from('news')
+          .select(
+            'slug,title_en,summary_en,category,tags,source_url,source_name,published_at,en_status'
+          )
+          .eq('en_status', 'published')
+          .eq('status', 'published')
+          .order('published_at', { ascending: false })
+          .range(from, from + PAGE - 1);
+        if (error || !data || data.length === 0) break;
+        all.push(...(data as EnglishNews[]));
+        if (data.length < PAGE) break;
+      }
+      return all;
+    } catch {
+      // ignore
+    }
+  }
+  return [];
 }
 
 export async function getNewsBySlug(slug: string): Promise<NewsItem | null> {
@@ -202,8 +240,7 @@ export async function getRelatedNews(
       const results = await Promise.all(queries);
       const map = new Map<string, Record<string, unknown>>();
       for (const res of results)
-        for (const r of (res.data ?? []) as Record<string, unknown>[])
-          map.set(r.slug as string, r);
+        for (const r of (res.data ?? []) as Record<string, unknown>[]) map.set(r.slug as string, r);
       const candidates = Array.from(map.values());
       if (candidates.length) {
         const { relatednessScore } = await import('@/lib/topics');
