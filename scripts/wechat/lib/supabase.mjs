@@ -119,6 +119,16 @@ export async function fetchAllNewsSlugs() {
   return slugs
 }
 
+/** 拉取最近 N 天已入库的 news 标题（用于跨运行事件去重，避免重复发布同一热点） */
+export async function fetchRecentNewsTitles(sinceDays = 7) {
+  const { base, headers } = conn()
+  const since = new Date(Date.now() - sinceDays * 86400 * 1000).toISOString()
+  const r = await fetch(`${base}/rest/v1/news?select=title&published_at=gte.${encodeURIComponent(since)}&limit=1000`, { headers })
+  const rows = await r.json()
+  if (!Array.isArray(rows)) return []
+  return rows.map(x => x.title || '')
+}
+
 /**
  * 幂等写入一条 news。
  * @param {object} row { slug, title, summary, source_url, source_name, category, tags, status, published_at }
