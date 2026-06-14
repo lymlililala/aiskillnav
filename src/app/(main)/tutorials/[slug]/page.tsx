@@ -209,6 +209,15 @@ export default async function TutorialDetailPage({ params }: Props) {
           返回教程列表
         </Link>
 
+        {EN_TUTORIAL_SLUGS.has(slug) && (
+          <Link
+            href={`/en/tutorials/${slug}`}
+            className='inline-flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:border-primary/30 hover:text-foreground'
+          >
+            🌐 Read in English
+          </Link>
+        )}
+
         <header className='space-y-4'>
           <div className='flex flex-wrap items-center gap-2'>
             <Badge variant='outline' className={`text-xs ${level.color}`}>
