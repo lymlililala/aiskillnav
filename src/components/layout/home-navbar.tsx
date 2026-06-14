@@ -57,6 +57,12 @@ export function HomeNavbar() {
 
           {/* Theme controls */}
           <div className='ml-2 flex items-center gap-1 border-l pl-2'>
+            <Link
+              href='/en'
+              className='rounded-md px-3 py-1.5 text-sm font-medium text-muted-foreground/80 hover:text-foreground'
+            >
+              EN
+            </Link>
             <ThemeModeToggle />
             <div className='hidden sm:block'>
               <ThemeSelector />
