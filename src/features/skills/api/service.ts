@@ -149,3 +149,24 @@ export async function getFeaturedSkillTools(): Promise<SkillTool[]> {
   if (!data) return [];
   return data;
 }
+
+/** 已发布英文 skills（description_en 就绪），供 /en/skills 列表。 */
+export async function getPublishedEnglishSkills(): Promise<
+  (Site & { description_en?: string | null })[]
+> {
+  if (typeof window === 'undefined') {
+    try {
+      const { getSupabaseAdmin } = await import('@/lib/supabase');
+      const { data, error } = await getSupabaseAdmin()
+        .from('skills')
+        .select('*')
+        .eq('status', 'published')
+        .eq('en_status', 'published')
+        .order('name');
+      if (!error && data) return data as (Site & { description_en?: string | null })[];
+    } catch {
+      // ignore
+    }
+  }
+  return [];
+}

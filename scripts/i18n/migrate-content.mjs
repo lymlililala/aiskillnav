@@ -29,7 +29,14 @@ const CFG = {
     txt: [['title', 'title_en'], ['description', 'description_en']], arr: [['steps', 'steps_en']],
     visible: 'published_at=not.is.null',
     select: 'id,title,description,steps,title_en,description_en,steps_en,en_status'
-  }
+  },
+  // 目录类：只翻 description（name 是专有名，不翻）
+  skills: { idCol: 'id', langField: 'description', txt: [['description', 'description_en']], arr: [], visible: 'status=eq.published', select: 'id,description,description_en,en_status' },
+  skill_tools: { idCol: 'id', langField: 'description', txt: [['description', 'description_en']], arr: [], visible: '', select: 'id,description,description_en,en_status' },
+  agents: { idCol: 'id', langField: 'description', txt: [['description', 'description_en']], arr: [], visible: 'status=eq.published', select: 'id,description,description_en,en_status' },
+  mcp_servers: { idCol: 'id', langField: 'description', txt: [['description', 'description_en']], arr: [], visible: '', select: 'id,description,description_en,en_status' },
+  ai_models: { idCol: 'id', langField: 'description', txt: [['description', 'description_en']], arr: [], visible: '', select: 'id,description,description_en,en_status' },
+  benchmarks: { idCol: 'id', langField: 'description', txt: [['description', 'description_en']], arr: [], visible: '', select: 'id,description,description_en,en_status' }
 }
 if (!CFG[TABLE]) { console.error('需 --table news|use_cases'); process.exit(1) }
 const c = CFG[TABLE]
@@ -49,7 +56,8 @@ async function fetchRows() {
   const out = []
   let off = 0
   for (;;) {
-    const r = await rfetch(`${base}/rest/v1/${TABLE}?select=${c.select}&${c.visible}&order=${c.idCol}&offset=${off}&limit=1000`, { headers: H })
+    const filter = c.visible ? `&${c.visible}` : ''
+    const r = await rfetch(`${base}/rest/v1/${TABLE}?select=${c.select}${filter}&order=${c.idCol}&offset=${off}&limit=1000`, { headers: H })
     const rows = await r.json()
     if (!Array.isArray(rows)) throw new Error(JSON.stringify(rows).slice(0, 150))
     out.push(...rows); if (rows.length < 1000) break; off += 1000
@@ -89,7 +97,7 @@ async function translate(src, toLang) {
 const rows = await fetchRows()
 let targets = rows.filter(r => {
   const enField = c.txt[c.txt.length - 1][1] // 最后一个文本 _en 字段（summary_en/description_en）
-  return !(r.en_status === 'published' && r[enField] && String(r[enField]).length > 20)
+  return !(r.en_status === 'published' && r[enField] && String(r[enField]).length > 3)
 })
 if (LIMIT) targets = targets.slice(0, LIMIT)
 console.log(`[${TABLE}] 共 ${rows.length}，待处理 ${targets.length}\n`)
@@ -98,9 +106,9 @@ let toZh = 0, toEn = 0, fail = 0
 for (const row of targets) {
   try {
     const enFieldKey = c.txt[c.txt.length - 1][1]
-    if (cjk(row[c.langField]) > 20) {
+    if (cjk(row[c.langField]) > 5) {
       // 中文原生 → 补英文
-      if (row[enFieldKey] && String(row[enFieldKey]).length > 20) continue
+      if (row[enFieldKey] && String(row[enFieldKey]).length > 3) continue
       const en = await translate(row, 'en')
       const f = { en_status: 'published' }
       for (const [z, e] of c.txt) f[e] = en[z] ?? null
@@ -110,7 +118,7 @@ for (const row of targets) {
     } else {
       // 英文原生 → 保英文到 _en，再译中文覆盖中文列
       const f = { en_status: 'published' }
-      const enFilled = row[enFieldKey] && String(row[enFieldKey]).length > 20
+      const enFilled = row[enFieldKey] && String(row[enFieldKey]).length > 3
       const enSrc = {}
       for (const [z, e] of c.txt) { enSrc[z] = enFilled ? row[e] : row[z]; if (!enFilled) f[e] = row[z] }
       for (const [z, e] of c.arr) { enSrc[z] = enFilled ? row[e] : row[z]; if (!enFilled) f[e] = row[z] }

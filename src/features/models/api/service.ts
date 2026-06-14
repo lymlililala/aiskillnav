@@ -143,8 +143,7 @@ export async function getRelatedModels(
         );
       const results = await Promise.all(queries);
       const map = new Map<number, AiModel>();
-      for (const res of results)
-        for (const r of (res.data ?? []) as AiModel[]) map.set(r.id, r);
+      for (const res of results) for (const r of (res.data ?? []) as AiModel[]) map.set(r.id, r);
       return Array.from(map.values()).slice(0, limit);
     } catch {
       // 走回退
@@ -190,4 +189,24 @@ export async function deleteModel(id: number): Promise<boolean> {
   } catch {
     return false;
   }
+}
+
+/** 已发布英文 AI models（description_en 就绪），供 /en/models 列表。 */
+export async function getPublishedEnglishModels(): Promise<
+  (AiModel & { description_en?: string | null })[]
+> {
+  if (typeof window === 'undefined') {
+    try {
+      const { getSupabaseAdmin } = await import('@/lib/supabase');
+      const { data, error } = await getSupabaseAdmin()
+        .from('ai_models')
+        .select('*')
+        .eq('en_status', 'published')
+        .order('name');
+      if (!error && data) return data as (AiModel & { description_en?: string | null })[];
+    } catch {
+      // ignore
+    }
+  }
+  return [];
 }

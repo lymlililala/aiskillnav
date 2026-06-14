@@ -178,9 +178,30 @@ export async function getAgentStats(): Promise<AgentStats> {
 }
 
 /** 按 slugify(name) 取 agent（过滤 published；表小，全量后匹配）。 */
+/** 已发布英文 agents（description_en 就绪），供 /en/agents 列表。 */
+export async function getPublishedEnglishAgents(): Promise<
+  (Agent & { description_en?: string | null })[]
+> {
+  if (typeof window === 'undefined') {
+    try {
+      const { getSupabaseAdmin } = await import('@/lib/supabase');
+      const { data, error } = await getSupabaseAdmin()
+        .from('agents')
+        .select('*')
+        .eq('status', 'published')
+        .eq('en_status', 'published')
+        .order('is_featured', { ascending: false })
+        .order('id');
+      if (!error && data) return data as (Agent & { description_en?: string | null })[];
+    } catch {
+      // ignore
+    }
+  }
+  return [];
+}
+
 export async function getAgentBySlug(rawSlug: string): Promise<Agent | null> {
   const { slugify } = await import('@/lib/slug');
-  // 生产环境 params.slug 对非 ASCII（中文）可能是 percent-encoded，
   // 与已解码的 slugify(name) 直接比会全部 404；先解码再过一遍 slugify 对齐。
   let decoded = rawSlug;
   try {

@@ -3,11 +3,13 @@ import { Icons } from '@/components/icons';
 import { ThemeModeToggle } from '@/components/themes/theme-mode-toggle';
 
 const NAV = [
+  { label: 'Skills', href: '/en/skills' },
+  { label: 'Agents', href: '/en/agents' },
+  { label: 'MCP', href: '/en/mcp' },
+  { label: 'Models', href: '/en/models' },
   { label: 'Tutorials', href: '/en/tutorials' },
   { label: 'Use Cases', href: '/en/usecases' },
-  { label: 'News', href: '/en/news' },
-  { label: 'About', href: '/en/about' },
-  { label: 'Contact', href: '/en/contact' }
+  { label: 'News', href: '/en/news' }
 ];
 
 export default function EnLayout({ children }: { children: React.ReactNode }) {
@@ -75,6 +77,10 @@ export default function EnLayout({ children }: { children: React.ReactNode }) {
             </div>
             <ul className='space-y-2'>
               {[
+                { label: 'Skills', href: '/en/skills' },
+                { label: 'Agents', href: '/en/agents' },
+                { label: 'MCP', href: '/en/mcp' },
+                { label: 'Models', href: '/en/models' },
                 { label: 'Tutorials', href: '/en/tutorials' },
                 { label: 'Use Cases', href: '/en/usecases' },
                 { label: 'News', href: '/en/news' },

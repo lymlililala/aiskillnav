@@ -129,8 +129,7 @@ export async function getRelatedMcp(
       const results = await Promise.all(queries);
       const map = new Map<string, Record<string, unknown>>();
       for (const res of results)
-        for (const r of (res.data ?? []) as Record<string, unknown>[])
-          map.set(r.slug as string, r);
+        for (const r of (res.data ?? []) as Record<string, unknown>[]) map.set(r.slug as string, r);
       const candidates = Array.from(map.values());
       if (candidates.length) {
         const { relatednessScore } = await import('@/lib/topics');
@@ -214,4 +213,33 @@ export async function deleteMcpServer(id: number): Promise<boolean> {
   } catch {
     return false;
   }
+}
+
+/** 已发布英文 MCP servers（description_en 就绪），供 /en/mcp 列表。分页取全量。 */
+export async function getPublishedEnglishMcp(): Promise<
+  (McpServer & { description_en?: string | null })[]
+> {
+  if (typeof window === 'undefined') {
+    try {
+      const { getSupabaseAdmin } = await import('@/lib/supabase');
+      const sb = getSupabaseAdmin();
+      const all: (McpServer & { description_en?: string | null })[] = [];
+      const PAGE = 1000;
+      for (let from = 0; ; from += PAGE) {
+        const { data, error } = await sb
+          .from('mcp_servers')
+          .select('*')
+          .eq('en_status', 'published')
+          .order('slug')
+          .range(from, from + PAGE - 1);
+        if (error || !data || data.length === 0) break;
+        all.push(...(data as (McpServer & { description_en?: string | null })[]));
+        if (data.length < PAGE) break;
+      }
+      return all;
+    } catch {
+      // ignore
+    }
+  }
+  return [];
 }
