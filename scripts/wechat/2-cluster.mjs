@@ -1,23 +1,26 @@
 // 2) 聚类：DeepSeek 对源文池语义聚类，产出适合写常青教程的主题簇（每簇 3-6 篇）。
-// 用法：node scripts/wechat/2-cluster.mjs
-//       node scripts/wechat/2-cluster.mjs --max-clusters 8
+// 数据源：Supabase wx_sources（读最近 N 天，无需重爬）。
+// 用法：node scripts/wechat/2-cluster.mjs --days 14 --max-clusters 8
 
-import { writeFileSync, readFileSync, existsSync } from 'node:fs'
+import { writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { DeepSeek } from './deepseek.mjs'
 import { DATA_DIR } from './lib/env.mjs'
+import { fetchSources } from './lib/sources.mjs'
+import { mkdirSync } from 'node:fs'
 
 function arg(name, def) {
   const i = process.argv.indexOf(name)
   return i === -1 ? def : process.argv[i + 1]
 }
 const MAX_CLUSTERS = Number(arg('--max-clusters', 8))
+const DAYS = Number(arg('--days', 14))
 
-const SRC = join(DATA_DIR, 'sources.json')
+mkdirSync(DATA_DIR, { recursive: true })
 const OUT = join(DATA_DIR, 'clusters.json')
-if (!existsSync(SRC)) { console.error('缺少 sources.json，先跑 1-crawl.mjs'); process.exit(1) }
 
-const sources = JSON.parse(readFileSync(SRC, 'utf8')).filter(s => s.body_text && s.body_text.length > 200)
+const sources = (await fetchSources({ sinceDays: DAYS, minBodyLen: 200 }))
+console.log(`从 wx_sources 读取最近 ${DAYS} 天：${sources.length} 篇`)
 // 给模型的精简清单（不含全文，省 token）
 const list = sources.map((s, i) => ({ id: i, account: s.account, title: s.title, digest: (s.digest || '').slice(0, 80) }))
 

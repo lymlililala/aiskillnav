@@ -6,11 +6,12 @@
 //   node scripts/wechat/usecases.mjs                  # 入库（过线 published，否则草稿）
 //   node scripts/wechat/usecases.mjs --max 6 --threshold 75
 
-import { writeFileSync, readFileSync, existsSync } from 'node:fs'
+import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'node:fs'
 import { join } from 'node:path'
 import { DeepSeek } from './deepseek.mjs'
 import { truncate } from './lib/clean-html.mjs'
 import { fetchAllUseCaseTitles, insertUseCase } from './lib/supabase.mjs'
+import { fetchSources } from './lib/sources.mjs'
 import { DATA_DIR } from './lib/env.mjs'
 
 function arg(name, def) {
@@ -22,12 +23,12 @@ function arg(name, def) {
 const DRY = arg('--dry-run', false) === true
 const MAX = Number(arg('--max', 8))
 const THRESHOLD = Number(arg('--threshold', 75))
+const DAYS = Number(arg('--days', 14))
 
-const SRC = join(DATA_DIR, 'sources.json')
+mkdirSync(DATA_DIR, { recursive: true })
 const OUT = join(DATA_DIR, 'usecases.json')
-if (!existsSync(SRC)) { console.error('缺少 sources.json，先跑 1-crawl.mjs'); process.exit(1) }
 
-const sources = JSON.parse(readFileSync(SRC, 'utf8')).filter(s => s.body_text && s.body_text.length > 300)
+const sources = await fetchSources({ sinceDays: DAYS, minBodyLen: 300 })
 
 const INDUSTRIES = ['marketing', 'engineering', 'research', 'productivity', 'industry']
 

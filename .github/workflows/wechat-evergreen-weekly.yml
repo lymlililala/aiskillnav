@@ -40,24 +40,18 @@ jobs:
         with:
           node-version-file: '.nvmrc'
 
-      - name: Compute since date (14 days ago)
-        id: dates
-        run: echo "since=$(date -u -d '14 days ago' +%Y-%m-%d)" >> "$GITHUB_OUTPUT"
-
-      - name: Crawl incremental
-        run: node scripts/wechat/1-crawl.mjs --since ${{ steps.dates.outputs.since }} --max-pages 3
-
-      - name: Cluster topics
-        run: node scripts/wechat/2-cluster.mjs
+      # 不再爬取：直接读日更已累积进 wx_sources 的最近 14 天源文
+      - name: Cluster topics (from DB)
+        run: node scripts/wechat/2-cluster.mjs --days 14
 
       - name: Synthesize tutorials
-        run: node scripts/wechat/3-synthesize.mjs
+        run: node scripts/wechat/3-synthesize.mjs --days 14
 
       - name: Publish tutorials (gate + self-score)
         run: node scripts/wechat/4-publish.mjs --threshold ${{ github.event.inputs.threshold || '75' }} ${{ env.DRY }}
 
-      - name: Generate usecases
-        run: node scripts/wechat/usecases.mjs ${{ env.DRY }}
+      - name: Generate usecases (from DB)
+        run: node scripts/wechat/usecases.mjs --days 14 ${{ env.DRY }}
 
       - name: Upload data artifact
         if: always()
@@ -66,3 +60,4 @@ jobs:
           name: evergreen-data-${{ github.run_id }}
           path: scripts/wechat/data/*.json
           retention-days: 14
+          if-no-files-found: ignore

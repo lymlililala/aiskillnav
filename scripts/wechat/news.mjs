@@ -7,12 +7,13 @@
 //   node scripts/wechat/news.mjs --days 3           # 看最近 3 天的扎堆（默认 7）
 //   node scripts/wechat/news.mjs --status draft     # 入库为草稿待审
 
-import { writeFileSync, readFileSync, existsSync } from 'node:fs'
+import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'node:fs'
 import { join } from 'node:path'
 import { DeepSeek } from './deepseek.mjs'
 import { truncate } from './lib/clean-html.mjs'
 import { uniqueSlug } from './lib/slug.mjs'
 import { fetchAllNewsSlugs, upsertNews } from './lib/supabase.mjs'
+import { fetchSources } from './lib/sources.mjs'
 import { DATA_DIR } from './lib/env.mjs'
 
 function arg(name, def) {
@@ -22,12 +23,11 @@ function arg(name, def) {
   return v && !v.startsWith('--') ? v : true
 }
 const DRY = arg('--dry-run', false) === true
-const DAYS = Number(arg('--days', 7))
+const DAYS = Number(arg('--days', 3))
 const STATUS = arg('--status', 'published')
 
-const SRC = join(DATA_DIR, 'sources.json')
+mkdirSync(DATA_DIR, { recursive: true })
 const OUT = join(DATA_DIR, 'news.json')
-if (!existsSync(SRC)) { console.error('缺少 sources.json，先跑 1-crawl.mjs'); process.exit(1) }
 
 // 站内 14 个支柱主题（对齐 src/features/tutorials/topics.ts），news 据 tags/标题匹配后做站内内链
 const TOPICS = [
@@ -54,12 +54,7 @@ function matchTopicUrl(tags, title) {
   return '' // 无匹配 → 空，详情页不渲染延伸阅读 CTA
 }
 
-const sources = JSON.parse(readFileSync(SRC, 'utf8'))
-  .filter(s => s.body_text && s.body_text.length > 150 && s.published_at)
-
-// 时间窗口过滤（按发布日）。注：data 全局禁用 Date.now，这里用脚本运行时允许（非 workflow 环境）
-const cutoff = Date.now() - DAYS * 86400 * 1000
-const recent = sources.filter(s => new Date(s.published_at).getTime() >= cutoff)
+const recent = (await fetchSources({ sinceDays: DAYS, minBodyLen: 150 })).filter(s => s.published_at)
 console.log(`最近 ${DAYS} 天内源文：${recent.length} 篇`)
 
 // 给模型的精简清单（含发布日，引导它按「同日+同事件」聚类）
