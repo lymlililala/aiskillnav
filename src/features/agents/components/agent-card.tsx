@@ -58,48 +58,57 @@ export function AgentCard({ agent }: { agent: Agent }) {
   const detailHref = `${isEn ? '/en' : ''}/agents/${slug}`;
 
   const cardClass = cn(
-    'group relative flex h-[180px] flex-col rounded-xl border border-border/60 bg-card p-4 transition-all duration-200',
-    hasDetail && 'hover:-translate-y-0.5 hover:border-border hover:shadow-md'
+    'group relative flex h-[180px] flex-col overflow-hidden rounded-xl border border-border/50 bg-card p-4',
+    'shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] transition-all duration-300 ease-out',
+    hasDetail &&
+      'cursor-pointer hover:-translate-y-1 hover:border-primary/30 hover:shadow-[0_12px_24px_-6px_hsl(var(--primary)/0.12)]'
   );
 
   const inner = (
     <>
+      {/* hover 时浮现的主色背景光晕 */}
+      {hasDetail && (
+        <div className='pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-primary/5 opacity-0 blur-2xl transition-opacity duration-300 group-hover:opacity-100' />
+      )}
+
       {/* Header */}
-      <div className='relative mb-3 flex items-start gap-3'>
-        <div className='flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-muted/50'>
+      <div className='relative mb-2.5 flex items-start gap-3'>
+        <div
+          className={cn(
+            'flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-105',
+            isGithub ? 'bg-muted/60' : 'bg-gradient-to-br from-muted/70 to-muted/30'
+          )}
+        >
           {isGithub ? (
-            <Icons.github className='h-4.5 w-4.5 text-foreground/70' />
+            <Icons.github className='h-5 w-5 text-foreground/70' />
           ) : (
-            <TypeIcon className={cn('h-4.5 w-4.5', typeColor)} />
+            <TypeIcon className={cn('h-5 w-5', typeColor)} />
           )}
         </div>
         <div className='min-w-0 flex-1 pt-0.5'>
-          <h3 className='flex items-center gap-1 truncate text-sm font-semibold leading-tight text-foreground'>
-            <span className='truncate'>{displayName}</span>
+          <h3 className='truncate text-sm font-semibold leading-tight text-foreground transition-colors group-hover:text-primary'>
+            {displayName}
           </h3>
           <p className='mt-0.5 truncate text-[11px] text-muted-foreground/70'>
             {isExternal ? agent.url.replace(/^https?:\/\//, '') : t.inBeta}
           </p>
         </div>
         {agent.is_featured && (
-          <span className='absolute -right-1 -top-1 rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-medium text-amber-600 ring-1 ring-amber-200/80 dark:bg-amber-500/10 dark:text-amber-400 dark:ring-amber-500/20'>
+          <span className='absolute -right-1 -top-1 inline-flex items-center gap-0.5 rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-medium text-amber-600 ring-1 ring-amber-200/80 dark:bg-amber-500/10 dark:text-amber-400 dark:ring-amber-500/20'>
+            <Icons.sparkles className='h-2.5 w-2.5' />
             {t.featuredBadge}
           </span>
         )}
       </div>
 
-      {/* Body */}
-      <p className='mb-auto line-clamp-2 text-xs leading-relaxed text-muted-foreground'>
-        {displayDesc}
-      </p>
-
-      {/* Footer */}
-      <div className='mt-4 flex items-center justify-between border-t border-border/40 pt-3'>
-        <div className='flex items-center gap-1.5'>
+      {/* Body — 描述 + 标签紧贴聚拢，填补空洞 */}
+      <div className='mb-auto space-y-2'>
+        <p className='line-clamp-2 text-xs leading-relaxed text-muted-foreground'>{displayDesc}</p>
+        <div className='flex flex-wrap items-center gap-1'>
           {visibleTags.map((tag) => (
             <span
               key={tag}
-              className='rounded-md bg-muted/60 px-2 py-0.5 text-[10px] font-medium text-muted-foreground'
+              className='rounded-md bg-primary/[0.06] px-2 py-0.5 text-[10px] font-medium text-primary/70'
             >
               {tag}
             </span>
@@ -110,18 +119,22 @@ export function AgentCard({ agent }: { agent: Agent }) {
             </span>
           )}
           {tagsLen === 0 && (
-            <span className='rounded-md bg-muted/60 px-2 py-0.5 text-[10px] font-medium text-muted-foreground'>
+            <span className='rounded-md bg-primary/[0.06] px-2 py-0.5 text-[10px] font-medium text-primary/70'>
               {isGithub ? 'GitHub' : typeLabel}
             </span>
           )}
         </div>
-        {hasDetail && (
-          <span className='flex items-center gap-1 text-xs font-medium text-muted-foreground/50 group-hover:text-primary transition-colors'>
-            {t.viewDetails}
-            <Icons.chevronRight className='h-3 w-3' />
-          </span>
-        )}
       </div>
+
+      {/* Footer — CTA 胶囊按钮，hover 实色化 + 箭头平移 */}
+      {hasDetail && (
+        <div className='mt-3 flex items-center justify-end'>
+          <span className='inline-flex items-center gap-1 rounded-lg bg-primary/[0.06] px-2.5 py-1 text-[11px] font-semibold text-primary/80 transition-all duration-200 group-hover:bg-primary group-hover:text-primary-foreground'>
+            {t.viewDetails}
+            <Icons.chevronRight className='h-3 w-3 transition-transform duration-200 group-hover:translate-x-0.5' />
+          </span>
+        </div>
+      )}
     </>
   );
 

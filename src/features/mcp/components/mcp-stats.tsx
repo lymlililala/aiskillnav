@@ -35,20 +35,20 @@ export function McpStats() {
   ];
 
   return (
-    <div className='grid grid-cols-3 gap-3'>
+    <div className='grid grid-cols-2 gap-3 sm:grid-cols-3'>
       {statItems.map((item) => (
         <div
           key={item.label}
-          className='flex items-center gap-3 rounded-xl border bg-card px-4 py-3 shadow-sm'
+          className='flex min-w-0 items-center gap-3 rounded-xl border bg-card px-4 py-3 shadow-sm'
         >
           <div
             className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${item.bg}`}
           >
             <item.icon className={`h-4 w-4 ${item.color}`} />
           </div>
-          <div>
+          <div className='min-w-0'>
             <p className='text-xl font-bold leading-tight'>{item.value}</p>
-            <p className='text-xs text-muted-foreground'>{item.label}</p>
+            <p className='truncate text-xs text-muted-foreground'>{item.label}</p>
           </div>
         </div>
       ))}

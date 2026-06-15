@@ -58,23 +58,30 @@ function McpCard({ server, t, isEn }: { server: McpServer; t: McpStrings; isEn: 
   return (
     <Link
       href={href}
-      className='group relative flex flex-col rounded-xl border bg-card p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md'
+      className='group relative flex flex-col overflow-hidden rounded-xl border border-border/50 bg-card p-4 shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] transition-all duration-300 ease-out hover:-translate-y-1 hover:border-primary/30 hover:shadow-[0_12px_24px_-6px_hsl(var(--primary)/0.12)]'
     >
+      {/* hover 主色光晕 */}
+      <div className='pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-primary/5 opacity-0 blur-2xl transition-opacity duration-300 group-hover:opacity-100' />
+
       {server.is_featured && (
-        <div className='absolute -top-2 right-3'>
-          <span className='inline-flex items-center gap-0.5 rounded-full bg-primary px-2 py-0.5 text-[10px] font-semibold text-primary-foreground'>
+        <div className='absolute right-3 top-3'>
+          <span className='inline-flex items-center gap-0.5 rounded-full bg-primary px-2 py-0.5 text-[10px] font-semibold text-primary-foreground shadow-sm'>
             <Icons.sparkles className='h-2.5 w-2.5' />
             {t.recommended}
           </span>
         </div>
       )}
       <div className='mb-3 flex items-center gap-2.5'>
-        <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${cfg.bg}`}>
-          <CatIcon className={`h-4 w-4 ${cfg.color}`} />
+        <div
+          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-105 ${cfg.bg}`}
+        >
+          <CatIcon className={`h-5 w-5 ${cfg.color}`} />
         </div>
         <div className='min-w-0'>
           <div className='flex items-center gap-1.5'>
-            <span className='truncate font-mono text-sm font-semibold'>{displayName}</span>
+            <span className='truncate font-mono text-sm font-semibold transition-colors group-hover:text-primary'>
+              {displayName}
+            </span>
             {server.is_official && (
               <Badge
                 variant='outline'
@@ -89,31 +96,38 @@ function McpCard({ server, t, isEn }: { server: McpServer; t: McpStrings; isEn: 
           </Badge>
         </div>
       </div>
-      <p className='mb-3 flex-1 line-clamp-2 text-xs leading-relaxed text-muted-foreground'>
+      <p className='mb-3 line-clamp-2 text-xs leading-relaxed text-muted-foreground'>
         {displayDesc}
       </p>
       {server.install_cmd && (
-        <code className='mb-3 block truncate rounded-md bg-muted px-2 py-1.5 text-[10px] font-mono text-foreground/80'>
+        <code className='mb-3 block truncate rounded-md bg-muted px-2 py-1.5 font-mono text-[10px] text-foreground/80'>
           {server.install_cmd}
         </code>
       )}
-      <div className='flex items-center justify-between'>
-        <div className='flex flex-wrap gap-1'>
-          {displayTags.slice(0, 2).map((t) => (
-            <span
-              key={t}
-              className='rounded border bg-muted/50 px-1.5 py-0.5 text-[10px] text-muted-foreground'
-            >
-              {t}
-            </span>
-          ))}
-        </div>
-        {server.stars !== undefined && server.stars > 0 && (
+      <div className='mb-3 flex flex-wrap gap-1'>
+        {displayTags.slice(0, 2).map((tg) => (
+          <span
+            key={tg}
+            className='rounded-md bg-primary/[0.06] px-2 py-0.5 text-[10px] font-medium text-primary/70'
+          >
+            {tg}
+          </span>
+        ))}
+      </div>
+      {/* Footer — 左 star，右 CTA 胶囊 */}
+      <div className='mt-auto flex items-center justify-between'>
+        {server.stars !== undefined && server.stars > 0 ? (
           <span className='flex items-center gap-1 text-[11px] text-muted-foreground'>
             <Icons.exclusive className='h-3 w-3' />
             {server.stars >= 1000 ? `${(server.stars / 1000).toFixed(1)}k` : server.stars}
           </span>
+        ) : (
+          <span />
         )}
+        <span className='inline-flex items-center gap-1 rounded-lg bg-primary/[0.06] px-2.5 py-1 text-[11px] font-semibold text-primary/80 transition-all duration-200 group-hover:bg-primary group-hover:text-primary-foreground'>
+          {t.viewDetails}
+          <Icons.chevronRight className='h-3 w-3 transition-transform duration-200 group-hover:translate-x-0.5' />
+        </span>
       </div>
     </Link>
   );
