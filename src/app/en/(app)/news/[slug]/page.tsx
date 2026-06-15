@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { getNewsBySlug, type EnglishNews } from '@/features/news/api/service';
+import { enNewsCategory } from '@/features/news/category-i18n';
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -61,7 +62,7 @@ export default async function EnNewsDetailPage({ params }: Props) {
         ← Back to news
       </Link>
       <div className='flex items-center gap-2 text-xs text-muted-foreground'>
-        <span className='rounded-md border bg-muted/50 px-2 py-0.5'>{n.category}</span>
+        <span className='rounded-md border bg-muted/50 px-2 py-0.5'>{enNewsCategory(n.category)}</span>
         <span>
           {new Date(n.published_at).toLocaleDateString('en-US', {
             year: 'numeric',

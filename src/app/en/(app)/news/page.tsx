@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import PageContainer from '@/components/layout/page-container';
 import { getPublishedEnglishNews } from '@/features/news/api/service';
+import { enNewsCategory } from '@/features/news/category-i18n';
 
 export const metadata: Metadata = {
   title: 'AI News in English | AI Skill Navigation',
@@ -33,7 +34,9 @@ export default async function EnNewsListPage() {
               className='group flex flex-col gap-2 rounded-xl border bg-card p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md'
             >
               <div className='flex items-center gap-2 text-[10px] text-muted-foreground'>
-                <span className='rounded border bg-muted/50 px-1.5 py-0.5'>{n.category}</span>
+                <span className='rounded border bg-muted/50 px-1.5 py-0.5'>
+                  {enNewsCategory(n.category)}
+                </span>
                 <span>
                   {new Date(n.published_at).toLocaleDateString('en-US', {
                     year: 'numeric',

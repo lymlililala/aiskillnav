@@ -7,6 +7,7 @@ import { getModelStats } from '@/features/models/api/service';
 import { getUseCaseStats } from '@/features/usecases/api/service';
 import { getTutorialStats, getPublishedEnglishTutorials } from '@/features/tutorials/api/service';
 import { getNewsStats, getPublishedEnglishNews } from '@/features/news/api/service';
+import { enNewsCategory } from '@/features/news/category-i18n';
 
 export const metadata: Metadata = {
   title: 'AI Skill Navigation — Curated AI Tools, Models & Tutorials',
@@ -423,7 +424,9 @@ export default async function EnHomePage() {
                     {n.title_en}
                   </h3>
                   <div className='flex items-center justify-between'>
-                    <span className='text-[11px] text-muted-foreground'>{n.category}</span>
+                    <span className='text-[11px] text-muted-foreground'>
+                      {enNewsCategory(n.category)}
+                    </span>
                     <span className='text-[11px] text-muted-foreground'>
                       {new Date(n.published_at).toLocaleDateString('en-US', {
                         month: 'short',
