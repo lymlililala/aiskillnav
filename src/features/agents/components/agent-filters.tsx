@@ -4,34 +4,14 @@ import { parseAsString, useQueryStates } from 'nuqs';
 import { Icons } from '@/components/icons';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
-
-const TYPE_TABS = [
-  { value: 'all', label: '全部' },
-  { value: 'general', label: '🤖 通用自主' },
-  { value: 'research', label: '🔍 深度研究' },
-  { value: 'builder', label: '🏗️ 构建平台' },
-  { value: 'computer', label: '🖥️ 电脑操控' },
-  { value: 'creative', label: '🎨 创意生成' },
-  { value: 'proactive', label: '🔮 主动感知' }
-];
-
-/** 热门场景快捷筛选 */
-const SCENE_TAGS = [
-  { label: '小说生成', query: '小说' },
-  { label: '简历生成', query: '简历' },
-  { label: '周报生成', query: '周报' },
-  { label: '漫剧生成', query: '漫剧' },
-  { label: '短视频生成', query: '短视频' }
-];
-
-/** 来源分类 */
-const SOURCE_TABS = [
-  { value: 'all', label: '全部' },
-  { value: 'app', label: '应用产品' },
-  { value: 'github', label: '开源项目' }
-];
+import { useIsEn } from '@/hooks/use-is-en';
+import { agentsStrings } from '../i18n';
 
 export function AgentFilters() {
+  const t = agentsStrings(useIsEn());
+  const TYPE_TABS = t.typeTabs;
+  const SCENE_TAGS = t.sceneTags;
+  const SOURCE_TABS = t.sourceTabs;
   const [params, setParams] = useQueryStates(
     {
       agent_search: parseAsString.withDefault(''),
@@ -53,7 +33,7 @@ export function AgentFilters() {
       <div className='relative'>
         <Icons.search className='absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/60' />
         <Input
-          placeholder='搜索 Agent 名称、描述、标签...'
+          placeholder={t.searchPlaceholder}
           value={params.agent_search}
           onChange={(e) => setParams({ ...params, agent_search: e.target.value || '' })}
           className='h-10 border-0 bg-muted/50 pl-9 pr-8 text-sm placeholder:text-muted-foreground/50 focus-visible:bg-muted/70 focus-visible:ring-1 focus-visible:ring-border'
@@ -71,7 +51,7 @@ export function AgentFilters() {
       {/* 热门场景快捷筛选 */}
       {showSceneTags && (
         <div className='flex flex-wrap items-center gap-2'>
-          <span className='text-[11px] text-muted-foreground/60'>热门需求：</span>
+          <span className='text-[11px] text-muted-foreground/60'>{t.popularNeeds}</span>
           {SCENE_TAGS.map((tag) => (
             <button
               key={tag.query}
@@ -129,7 +109,7 @@ export function AgentFilters() {
             onClick={() => setParams({ agent_search: '', agent_type: 'all', agent_source: 'all' })}
           >
             <Icons.close className='h-3 w-3' />
-            重置筛选
+            {t.resetFilters}
           </button>
         )}
       </div>

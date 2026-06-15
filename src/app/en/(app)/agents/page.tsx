@@ -1,12 +1,13 @@
-import { Metadata } from 'next';
-import Link from 'next/link';
 import PageContainer from '@/components/layout/page-container';
-import { slugify } from '@/lib/slug';
-import { getPublishedEnglishAgents } from '@/features/agents/api/service';
+import AgentListingPage from '@/features/agents/components/agent-listing';
+import { searchParamsCache } from '@/lib/searchparams';
+import type { SearchParams } from 'nuqs/server';
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AI Agents Directory | AI Skill Navigation',
-  description: 'Discover AI agents and autonomous tools across categories.',
+  title: 'Agent Hub — Top AI Agent tools | AI Skill Navigation',
+  description:
+    'Browse top AI agents like Manus, Devin, OpenClaw and Dify — filter by type and compare side by side.',
   alternates: {
     canonical: 'https://aiskillnav.com/en/agents',
     languages: { 'zh-CN': 'https://aiskillnav.com/agents', en: 'https://aiskillnav.com/en/agents' }
@@ -16,50 +17,32 @@ export const metadata: Metadata = {
 export const dynamic = 'force-dynamic';
 export const revalidate = 3600;
 
-export default async function EnAgentsPage() {
-  const items = await getPublishedEnglishAgents();
+type PageProps = {
+  searchParams: Promise<SearchParams>;
+};
+
+const agentsItemListJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Agent Hub — top AI Agent tools',
+  url: 'https://aiskillnav.com/en/agents',
+  description: 'Top AI agents like Manus, Devin, OpenClaw and Dify — filter by type and compare.'
+};
+
+export default async function EnAgentsPage(props: PageProps) {
+  const searchParams = await props.searchParams;
+  searchParamsCache.parse(searchParams);
+
   return (
     <PageContainer
-      pageTitle='Agents'
-      pageDescription='Top AI agents and autonomous frameworks — filter and compare.'
+      pageTitle='Agent Hub'
+      pageDescription='Top AI agents worldwide — general autonomy, deep research, build platforms, computer control, vertical creativity, proactive sensing'
     >
-      {items.length === 0 ? (
-        <p className='text-sm text-muted-foreground'>Coming soon.</p>
-      ) : (
-        <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-3'>
-          {items.map((a) => {
-            const slug = slugify(a.name);
-            const inner = (
-              <>
-                <h2 className='text-sm font-semibold leading-snug transition-colors group-hover:text-primary'>
-                  {a.name}
-                </h2>
-                {a.description_en && (
-                  <p className='line-clamp-3 text-xs leading-relaxed text-muted-foreground'>
-                    {a.description_en}
-                  </p>
-                )}
-              </>
-            );
-            return slug ? (
-              <Link
-                key={a.id}
-                href={`/en/agents/${slug}`}
-                className='group flex flex-col gap-2 rounded-xl border bg-card p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md'
-              >
-                {inner}
-              </Link>
-            ) : (
-              <div
-                key={a.id}
-                className='flex flex-col gap-2 rounded-xl border bg-card p-5 shadow-sm'
-              >
-                {inner}
-              </div>
-            );
-          })}
-        </div>
-      )}
+      <script
+        type='application/ld+json'
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(agentsItemListJsonLd) }}
+      />
+      <AgentListingPage />
     </PageContainer>
   );
 }

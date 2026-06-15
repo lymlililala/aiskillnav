@@ -2,32 +2,35 @@
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Icons } from '@/components/icons';
+import { useIsEn } from '@/hooks/use-is-en';
+import { agentsStrings } from '../i18n';
 import { agentStatsOptions } from '../api/queries';
 
 export function AgentStats() {
+  const t = agentsStrings(useIsEn());
   const { data: stats } = useSuspenseQuery(agentStatsOptions());
 
   const statItems = [
     {
-      label: '收录 Agent',
+      label: t.statTotal,
       value: stats.total,
       icon: Icons.sparkles,
       iconColor: 'text-violet-500'
     },
     {
-      label: '精选推荐',
+      label: t.statFeatured,
       value: stats.featured,
       icon: Icons.exclusive,
       iconColor: 'text-amber-500'
     },
     {
-      label: '开源项目',
+      label: t.statOpenSource,
       value: stats.openCount,
       icon: Icons.github,
       iconColor: 'text-emerald-500'
     },
     {
-      label: '6 大分类',
+      label: t.statCategories,
       value: 6,
       icon: Icons.adjustments,
       iconColor: 'text-blue-500'

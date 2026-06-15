@@ -34,6 +34,9 @@ export type Agent = {
   review_note?: string;
   created_at: string;
   updated_at: string;
+  // 英文站字段（DB select('*') 运行时携带）
+  name_en?: string | null;
+  description_en?: string | null;
 };
 
 export type CreateAgentPayload = Omit<Agent, 'id' | 'created_at' | 'updated_at'>;

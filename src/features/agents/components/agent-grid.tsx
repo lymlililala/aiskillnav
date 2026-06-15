@@ -5,6 +5,8 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { parseAsInteger, parseAsString, useQueryStates } from 'nuqs';
 import { Icons } from '@/components/icons';
 import { Button } from '@/components/ui/button';
+import { useIsEn } from '@/hooks/use-is-en';
+import { agentsStrings } from '../i18n';
 import { agentsQueryOptions } from '../api/queries';
 import { AgentCard, AgentCardSkeleton } from './agent-card';
 
@@ -37,6 +39,7 @@ function sourceToUrlGroup(source: string): string | undefined {
 }
 
 export function AgentGrid() {
+  const t = agentsStrings(useIsEn());
   const [params, setParams] = useQueryStates(
     {
       agent_page: parseAsInteger.withDefault(1),
@@ -72,8 +75,8 @@ export function AgentGrid() {
         <div className='mb-3 flex h-11 w-11 items-center justify-center rounded-xl border border-border/60 bg-muted/40'>
           <Icons.search className='h-4.5 w-4.5 text-muted-foreground/60' />
         </div>
-        <p className='text-sm font-medium text-foreground'>未找到相关 Agent</p>
-        <p className='mt-1 text-xs text-muted-foreground'>尝试调整搜索词或分类筛选</p>
+        <p className='text-sm font-medium text-foreground'>{t.noAgents}</p>
+        <p className='mt-1 text-xs text-muted-foreground'>{t.noAgentsHint}</p>
       </div>
     );
   }
@@ -82,8 +85,8 @@ export function AgentGrid() {
     <div className='space-y-5'>
       {/* 计数行 */}
       <p className='text-[11px] text-muted-foreground'>
-        共 <span className='font-medium text-foreground'>{data.total_items}</span> 个 Agent
-        {hasFilter && <span className='ml-1 text-muted-foreground/60'>（已过滤）</span>}
+        {t.agentsCount(data.total_items)}
+        {hasFilter && <span className='ml-1 text-muted-foreground/60'>{t.filtered}</span>}
       </p>
 
       <div className='grid gap-3 sm:grid-cols-2 lg:grid-cols-3'>

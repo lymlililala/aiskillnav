@@ -7,152 +7,63 @@ import { Icons } from '@/components/icons';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useIsEn } from '@/hooks/use-is-en';
+import { mcpStrings, type McpStrings } from '../i18n';
 import { mcpQueryOptions } from '../api/queries';
 import type { McpServer, McpCategory } from '../api/service';
 
 const PAGE_SIZE = 24;
 
+// 分类样式（icon/color/bg）；标签走 i18n
 const CATEGORY_CONFIG: Record<
   McpCategory,
-  { label: string; icon: React.ComponentType<{ className?: string }>; color: string; bg: string }
+  { icon: React.ComponentType<{ className?: string }>; color: string; bg: string }
 > = {
-  utility: {
-    label: '通用工具',
-    icon: Icons.settings,
-    color: 'text-sky-600 dark:text-sky-400',
-    bg: 'bg-sky-500/10'
-  },
-  devtools: {
-    label: '开发工具',
-    icon: Icons.github,
-    color: 'text-slate-600 dark:text-slate-400',
-    bg: 'bg-slate-500/10'
-  },
-  productivity: {
-    label: '效率工具',
-    icon: Icons.checks,
-    color: 'text-violet-600 dark:text-violet-400',
-    bg: 'bg-violet-500/10'
-  },
-  data: {
-    label: '数据处理',
-    icon: Icons.trendingUp,
-    color: 'text-cyan-600 dark:text-cyan-400',
-    bg: 'bg-cyan-500/10'
-  },
-  database: {
-    label: '数据库',
-    icon: Icons.page,
-    color: 'text-emerald-600 dark:text-emerald-400',
-    bg: 'bg-emerald-500/10'
-  },
-  cloud: {
-    label: '云服务',
-    icon: Icons.laptop,
-    color: 'text-blue-600 dark:text-blue-400',
-    bg: 'bg-blue-500/10'
-  },
-  automation: {
-    label: '自动化',
-    icon: Icons.sparkles,
-    color: 'text-indigo-600 dark:text-indigo-400',
-    bg: 'bg-indigo-500/10'
-  },
-  browser: {
-    label: '浏览器',
-    icon: Icons.laptop,
-    color: 'text-orange-600 dark:text-orange-400',
-    bg: 'bg-orange-500/10'
-  },
-  monitoring: {
-    label: '监控运维',
-    icon: Icons.trendingUp,
-    color: 'text-red-600 dark:text-red-400',
-    bg: 'bg-red-500/10'
-  },
-  location: {
-    label: '地理位置',
-    icon: Icons.search,
-    color: 'text-green-600 dark:text-green-400',
-    bg: 'bg-green-500/10'
-  },
-  filesystem: {
-    label: '文件系统',
-    icon: Icons.page,
-    color: 'text-blue-600 dark:text-blue-400',
-    bg: 'bg-blue-500/10'
-  },
-  search: {
-    label: '搜索',
-    icon: Icons.search,
-    color: 'text-amber-600 dark:text-amber-400',
-    bg: 'bg-amber-500/10'
-  },
-  ai: {
-    label: 'AI 模型',
-    icon: Icons.sparkles,
-    color: 'text-pink-600 dark:text-pink-400',
-    bg: 'bg-pink-500/10'
-  },
-  knowledge: {
-    label: '知识管理',
-    icon: Icons.post,
-    color: 'text-teal-600 dark:text-teal-400',
-    bg: 'bg-teal-500/10'
-  },
-  finance: {
-    label: '金融',
-    icon: Icons.trendingUp,
-    color: 'text-yellow-600 dark:text-yellow-400',
-    bg: 'bg-yellow-500/10'
-  },
-  memory: {
-    label: '记忆存储',
-    icon: Icons.settings,
-    color: 'text-purple-600 dark:text-purple-400',
-    bg: 'bg-purple-500/10'
-  },
-  reasoning: {
-    label: '推理',
-    icon: Icons.sparkles,
-    color: 'text-rose-600 dark:text-rose-400',
-    bg: 'bg-rose-500/10'
-  },
-  creative: {
-    label: '创意内容',
-    icon: Icons.palette,
-    color: 'text-fuchsia-600 dark:text-fuchsia-400',
-    bg: 'bg-fuchsia-500/10'
-  },
-  media: {
-    label: '媒体/视频',
-    icon: Icons.video,
-    color: 'text-orange-600 dark:text-orange-400',
-    bg: 'bg-orange-500/10'
-  }
+  utility: { icon: Icons.settings, color: 'text-sky-600 dark:text-sky-400', bg: 'bg-sky-500/10' },
+  devtools: { icon: Icons.github, color: 'text-slate-600 dark:text-slate-400', bg: 'bg-slate-500/10' },
+  productivity: { icon: Icons.checks, color: 'text-violet-600 dark:text-violet-400', bg: 'bg-violet-500/10' },
+  data: { icon: Icons.trendingUp, color: 'text-cyan-600 dark:text-cyan-400', bg: 'bg-cyan-500/10' },
+  database: { icon: Icons.page, color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-500/10' },
+  cloud: { icon: Icons.laptop, color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-500/10' },
+  automation: { icon: Icons.sparkles, color: 'text-indigo-600 dark:text-indigo-400', bg: 'bg-indigo-500/10' },
+  browser: { icon: Icons.laptop, color: 'text-orange-600 dark:text-orange-400', bg: 'bg-orange-500/10' },
+  monitoring: { icon: Icons.trendingUp, color: 'text-red-600 dark:text-red-400', bg: 'bg-red-500/10' },
+  location: { icon: Icons.search, color: 'text-green-600 dark:text-green-400', bg: 'bg-green-500/10' },
+  filesystem: { icon: Icons.page, color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-500/10' },
+  search: { icon: Icons.search, color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-500/10' },
+  ai: { icon: Icons.sparkles, color: 'text-pink-600 dark:text-pink-400', bg: 'bg-pink-500/10' },
+  knowledge: { icon: Icons.post, color: 'text-teal-600 dark:text-teal-400', bg: 'bg-teal-500/10' },
+  finance: { icon: Icons.trendingUp, color: 'text-yellow-600 dark:text-yellow-400', bg: 'bg-yellow-500/10' },
+  memory: { icon: Icons.settings, color: 'text-purple-600 dark:text-purple-400', bg: 'bg-purple-500/10' },
+  reasoning: { icon: Icons.sparkles, color: 'text-rose-600 dark:text-rose-400', bg: 'bg-rose-500/10' },
+  creative: { icon: Icons.palette, color: 'text-fuchsia-600 dark:text-fuchsia-400', bg: 'bg-fuchsia-500/10' },
+  media: { icon: Icons.video, color: 'text-orange-600 dark:text-orange-400', bg: 'bg-orange-500/10' }
 };
 
 const CATEGORY_FALLBACK = {
-  label: '其他',
   icon: Icons.settings,
   color: 'text-muted-foreground',
   bg: 'bg-muted/30'
 };
 
-function McpCard({ server }: { server: McpServer }) {
+function McpCard({ server, t, isEn }: { server: McpServer; t: McpStrings; isEn: boolean }) {
   const cfg = CATEGORY_CONFIG[server.category] ?? CATEGORY_FALLBACK;
   const CatIcon = cfg.icon;
+  const catLabel = t.cat[server.category] ?? t.cat.other;
+  const displayName = isEn ? server.name_en || server.name : server.name;
+  const displayDesc = isEn ? server.description_en || server.description : server.description;
+  const href = `${isEn ? '/en' : ''}/mcp/${server.slug ?? server.id}`;
 
   return (
     <Link
-      href={`/mcp/${server.slug ?? server.id}`}
+      href={href}
       className='group relative flex flex-col rounded-xl border bg-card p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md'
     >
       {server.is_featured && (
         <div className='absolute -top-2 right-3'>
           <span className='inline-flex items-center gap-0.5 rounded-full bg-primary px-2 py-0.5 text-[10px] font-semibold text-primary-foreground'>
             <Icons.sparkles className='h-2.5 w-2.5' />
-            推荐
+            {t.recommended}
           </span>
         </div>
       )}
@@ -162,23 +73,23 @@ function McpCard({ server }: { server: McpServer }) {
         </div>
         <div className='min-w-0'>
           <div className='flex items-center gap-1.5'>
-            <span className='truncate font-mono text-sm font-semibold'>{server.name}</span>
+            <span className='truncate font-mono text-sm font-semibold'>{displayName}</span>
             {server.is_official && (
               <Badge
                 variant='outline'
                 className='shrink-0 border-blue-500/30 px-1 py-0 text-[9px] text-blue-600'
               >
-                官方
+                {t.official}
               </Badge>
             )}
           </div>
           <Badge variant='outline' className={cn('mt-0.5 text-[10px] font-normal', cfg.color)}>
-            {cfg.label}
+            {catLabel}
           </Badge>
         </div>
       </div>
       <p className='mb-3 flex-1 line-clamp-2 text-xs leading-relaxed text-muted-foreground'>
-        {server.description}
+        {displayDesc}
       </p>
       {server.install_cmd && (
         <code className='mb-3 block truncate rounded-md bg-muted px-2 py-1.5 text-[10px] font-mono text-foreground/80'>
@@ -231,6 +142,8 @@ export function McpCardSkeleton() {
 }
 
 export function McpGrid() {
+  const isEn = useIsEn();
+  const t = mcpStrings(isEn);
   const [params, setParams] = useQueryStates(
     {
       mcp_page: parseAsInteger.withDefault(1),
@@ -257,8 +170,8 @@ export function McpGrid() {
         <div className='mb-3 flex h-12 w-12 items-center justify-center rounded-xl border bg-muted/50'>
           <Icons.search className='h-5 w-5 text-muted-foreground' />
         </div>
-        <p className='text-sm font-medium'>未找到相关 MCP Server</p>
-        <p className='mt-1 text-xs text-muted-foreground'>尝试调整搜索词或分类筛选</p>
+        <p className='text-sm font-medium'>{t.noResults}</p>
+        <p className='mt-1 text-xs text-muted-foreground'>{t.noResultsHint}</p>
       </div>
     );
   }
@@ -266,13 +179,13 @@ export function McpGrid() {
   return (
     <div className='space-y-6'>
       <p className='text-xs text-muted-foreground'>
-        共 <span className='font-medium text-foreground'>{data.total_items}</span> 个 MCP Server
-        {hasFilter && <span>（已过滤）</span>}
+        {t.count(data.total_items)}
+        {hasFilter && <span>{t.filtered}</span>}
       </p>
 
       <div className='grid gap-3 sm:grid-cols-2 lg:grid-cols-3'>
         {data.items.map((server) => (
-          <McpCard key={server.id} server={server} />
+          <McpCard key={server.id} server={server} t={t} isEn={isEn} />
         ))}
       </div>
 

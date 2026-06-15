@@ -39,6 +39,9 @@ export type McpServer = {
   stars?: number; // GitHub stars (近似)
   is_featured: boolean;
   created_at: string;
+  // 英文站字段（DB select('*') 运行时携带）
+  name_en?: string | null;
+  description_en?: string | null;
 };
 
 const MCP_DATA: Omit<McpServer, 'id' | 'created_at'>[] = [

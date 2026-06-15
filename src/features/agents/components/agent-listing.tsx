@@ -7,6 +7,7 @@ import { AgentStats, AgentStatsSkeleton } from './agent-stats';
 import { FeaturedAgents, FeaturedAgentsSkeleton } from './featured-agents';
 import { AgentFilters } from './agent-filters';
 import { AgentGrid, AgentGridSkeleton } from './agent-grid';
+import { AllListedDivider } from './all-listed-divider';
 
 export default function AgentListingPage() {
   const page = searchParamsCache.get('agent_page') ?? 1;
@@ -42,11 +43,7 @@ export default function AgentListingPage() {
           <FeaturedAgents />
         </Suspense>
 
-        <div className='flex items-center gap-3'>
-          <div className='h-px flex-1 bg-border/50' />
-          <span className='text-[11px] text-muted-foreground/60'>全部收录</span>
-          <div className='h-px flex-1 bg-border/50' />
-        </div>
+        <AllListedDivider />
 
         <AgentFilters />
 

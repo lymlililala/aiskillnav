@@ -2,28 +2,31 @@
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Icons } from '@/components/icons';
+import { useIsEn } from '@/hooks/use-is-en';
+import { mcpStrings } from '../i18n';
 import { mcpStatsOptions } from '../api/queries';
 
 export function McpStats() {
+  const t = mcpStrings(useIsEn());
   const { data: stats } = useSuspenseQuery(mcpStatsOptions());
 
   const statItems = [
     {
-      label: '收录 Server',
+      label: t.statTotal,
       value: stats.total,
       icon: Icons.settings,
       color: 'text-blue-600 dark:text-blue-400',
       bg: 'bg-blue-500/10'
     },
     {
-      label: '官方维护',
+      label: t.statOfficial,
       value: stats.official,
       icon: Icons.badgeCheck,
       color: 'text-emerald-600 dark:text-emerald-400',
       bg: 'bg-emerald-500/10'
     },
     {
-      label: '社区贡献',
+      label: t.statCommunity,
       value: stats.total - stats.official,
       icon: Icons.github,
       color: 'text-violet-600 dark:text-violet-400',

@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { Icons } from '@/components/icons';
 import { cn } from '@/lib/utils';
 import { slugify } from '@/lib/slug';
+import { useIsEn } from '@/hooks/use-is-en';
+import { agentsStrings } from '../i18n';
 import type { Agent, AgentType, AgentOpenSource } from '../api/types';
 
 export const AGENT_TYPE_CONFIG: Record<
@@ -35,10 +37,16 @@ const AGENT_TYPE_FALLBACK: (typeof AGENT_TYPE_CONFIG)[AgentType] = {
 };
 
 export function AgentCard({ agent }: { agent: Agent }) {
-  const type = AGENT_TYPE_CONFIG[agent.agent_type] ?? AGENT_TYPE_FALLBACK;
-  const TypeIcon = type.icon;
+  const isEn = useIsEn();
+  const t = agentsStrings(isEn);
+  const typeCfg = AGENT_TYPE_CONFIG[agent.agent_type] ?? AGENT_TYPE_FALLBACK;
+  const TypeIcon = typeCfg.icon;
+  const typeColor = typeCfg.color;
+  const typeLabel = t.typeLabel[agent.agent_type] ?? t.typeLabel.other;
   const isExternal = agent.url !== '#';
   const isGithub = agent.url.includes('github.com');
+  const displayName = isEn ? agent.name_en || agent.name : agent.name;
+  const displayDesc = isEn ? agent.description_en || agent.description : agent.description;
 
   const visibleTags = agent.tags.slice(0, 2);
   const extraTagCount = agent.tags.length > 2 ? agent.tags.length - 2 : 0;
@@ -46,6 +54,7 @@ export function AgentCard({ agent }: { agent: Agent }) {
   // slug 为空（名称无字母/数字/中文）时站内详情页打不开，整卡不可点、不显示「查看详情」
   const slug = slugify(agent.name);
   const hasDetail = slug.length > 0;
+  const detailHref = `${isEn ? '/en' : ''}/agents/${slug}`;
 
   const cardClass = cn(
     'group relative flex h-[180px] flex-col rounded-xl border border-border/60 bg-card p-4 transition-all duration-200',
@@ -60,27 +69,27 @@ export function AgentCard({ agent }: { agent: Agent }) {
           {isGithub ? (
             <Icons.github className='h-4.5 w-4.5 text-foreground/70' />
           ) : (
-            <TypeIcon className={cn('h-4.5 w-4.5', type.color)} />
+            <TypeIcon className={cn('h-4.5 w-4.5', typeColor)} />
           )}
         </div>
         <div className='min-w-0 flex-1 pt-0.5'>
           <h3 className='flex items-center gap-1 truncate text-sm font-semibold leading-tight text-foreground'>
-            <span className='truncate'>{agent.name}</span>
+            <span className='truncate'>{displayName}</span>
           </h3>
           <p className='mt-0.5 truncate text-[11px] text-muted-foreground/70'>
-            {isExternal ? agent.url.replace(/^https?:\/\//, '') : '内测中'}
+            {isExternal ? agent.url.replace(/^https?:\/\//, '') : t.inBeta}
           </p>
         </div>
         {agent.is_featured && (
           <span className='absolute -right-1 -top-1 rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-medium text-amber-600 ring-1 ring-amber-200/80 dark:bg-amber-500/10 dark:text-amber-400 dark:ring-amber-500/20'>
-            精选
+            {t.featuredBadge}
           </span>
         )}
       </div>
 
       {/* Body */}
       <p className='mb-auto line-clamp-2 text-xs leading-relaxed text-muted-foreground'>
-        {agent.description}
+        {displayDesc}
       </p>
 
       {/* Footer */}
@@ -101,13 +110,13 @@ export function AgentCard({ agent }: { agent: Agent }) {
           )}
           {agent.tags.length === 0 && (
             <span className='rounded-md bg-muted/60 px-2 py-0.5 text-[10px] font-medium text-muted-foreground'>
-              {isGithub ? 'GitHub' : type.label}
+              {isGithub ? 'GitHub' : typeLabel}
             </span>
           )}
         </div>
         {hasDetail && (
           <span className='flex items-center gap-1 text-xs font-medium text-muted-foreground/50 group-hover:text-primary transition-colors'>
-            查看详情
+            {t.viewDetails}
             <Icons.chevronRight className='h-3 w-3' />
           </span>
         )}
@@ -120,7 +129,7 @@ export function AgentCard({ agent }: { agent: Agent }) {
     return <div className={cardClass}>{inner}</div>;
   }
   return (
-    <Link href={`/agents/${slug}`} className={cardClass}>
+    <Link href={detailHref} className={cardClass}>
       {inner}
     </Link>
   );
