@@ -1,4 +1,4 @@
-import { AI_TIMELINE, fakeNews } from '@/constants/mock-api-news';
+import { AI_TIMELINE, AI_TIMELINE_EN, fakeNews } from '@/constants/mock-api-news';
 import type {
   NewsItem,
   NewsFilters,
@@ -294,4 +294,9 @@ export async function deleteNews(id: number): Promise<boolean> {
 /** 时间线数据保持静态（不存数据库） */
 export function getTimeline(): TimelineEvent[] {
   return AI_TIMELINE;
+}
+
+/** 英文站时间线 */
+export function getTimelineEn(): TimelineEvent[] {
+  return AI_TIMELINE_EN;
 }

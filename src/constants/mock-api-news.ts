@@ -116,6 +116,23 @@ export const AI_TIMELINE: TimelineEvent[] = [
   }
 ];
 
+// 英文站时间线（与 AI_TIMELINE 对应的英文版）
+export const AI_TIMELINE_EN: TimelineEvent[] = [
+  { date: '2024-03', title: 'Devin launches', description: "The world's first autonomous AI software engineer, able to complete full coding tasks on its own", category: 'Agent' },
+  { date: '2024-10', title: 'Claude Computer Use', description: 'Anthropic lets AI directly control the computer screen for the first time, opening a new paradigm', category: 'Agent' },
+  { date: '2024-11', title: 'MCP protocol born', description: 'Anthropic releases the Model Context Protocol, the de facto standard for Agent interfaces', category: '框架' },
+  { date: '2025-01', title: 'DeepSeek-R1 stuns the world', description: 'Open-source reasoning model at just 3% of OpenAI cost, reshaping the global AI landscape', category: '模型' },
+  { date: '2025-02', title: 'OpenAI Deep Research', description: 'OpenAI ships a deep-research Agent that generates professional reports in one click', category: 'Agent' },
+  { date: '2025-03', title: 'Manus goes viral overnight', description: "The world's first general-purpose AI Agent draws unprecedented attention", category: 'Agent' },
+  { date: '2025-12', title: 'Meta acquires Manus for $2B', description: 'Meta acquires Manus AI for $2B, locking in the general-purpose Agent race', category: 'Agent' },
+  { date: '2026-01', title: 'OpenClaw erupts on GitHub', description: 'OpenClaw hits global GitHub Top 10 in 10 days, outpacing the Linux kernel star growth', category: 'Agent' },
+  { date: '2024-06', title: 'Claude 3.5 tops SWE-bench', description: 'The strongest coding AI, bug-fixing at a junior engineer level', category: 'Agent' },
+  { date: '2024-08', title: 'Cursor ARR passes $100M', description: 'The fastest-growing SaaS ever, the new king of AI coding tools', category: '工具' },
+  { date: '2024-09', title: 'Replit Agent full-stack automation', description: 'Natural language to a shipped product, aimed at non-engineers', category: 'Agent' },
+  { date: '2025-02', title: 'MCP Servers pass 500', description: 'The MCP ecosystem erupts — 500+ servers built in 3 months', category: '框架' },
+  { date: '2025-04', title: 'DeepSeek-V3 open-sourced', description: 'The value king, at just 5% of GPT-4 cost', category: '模型' }
+];
+
 // ── 真实新闻数据 ──────────────────────────────────────────────────────────────
 
 const NEWS_DATA: Omit<NewsItem, 'id' | 'created_at' | 'updated_at'>[] = [

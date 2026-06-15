@@ -210,3 +210,17 @@ export async function getPublishedEnglishModels(): Promise<
   }
   return [];
 }
+
+/** 英文 benchmarks（description_en 就绪则用，否则回退中文），供 /en/models 排行。直查 DB。 */
+export async function getBenchmarksEn(): Promise<(Benchmark & { description_en?: string | null })[]> {
+  if (typeof window === 'undefined') {
+    try {
+      const { getSupabaseAdmin } = await import('@/lib/supabase');
+      const { data, error } = await getSupabaseAdmin().from('benchmarks').select('*');
+      if (!error && data) return data as (Benchmark & { description_en?: string | null })[];
+    } catch {
+      // ignore
+    }
+  }
+  return getBenchmarks();
+}
