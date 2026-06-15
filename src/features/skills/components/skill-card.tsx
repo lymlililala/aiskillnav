@@ -72,7 +72,7 @@ interface SiteCardProps {
  * 2. 直接 /favicon.ico
  * 3. 首字母占位块
  */
-function SiteFavicon({ site }: { site: Site }) {
+function SiteFavicon({ site, displayName }: { site: Site; displayName: string }) {
   // 0 = 用 duckduckgo, 1 = 用 /favicon.ico, 2 = 用首字母
   const [fallbackLevel, setFallbackLevel] = useState(0);
 
@@ -83,7 +83,7 @@ function SiteFavicon({ site }: { site: Site }) {
   if (fallbackLevel >= 2 || !primaryUrl) {
     return (
       <div className='flex h-9 w-9 items-center justify-center rounded-lg bg-muted text-sm font-bold text-muted-foreground'>
-        {site.name.charAt(0).toUpperCase()}
+        {displayName.charAt(0).toUpperCase()}
       </div>
     );
   }
@@ -92,7 +92,7 @@ function SiteFavicon({ site }: { site: Site }) {
     // eslint-disable-next-line @next/next/no-img-element
     <img
       src={currentSrc}
-      alt={site.name}
+      alt={displayName}
       width={36}
       height={36}
       loading='lazy'
@@ -146,7 +146,7 @@ export function SkillCard({ site }: SiteCardProps) {
     >
       {/* Favicon / Logo 图标区 */}
       <div className='relative h-9 w-9 shrink-0'>
-        <SiteFavicon site={site} />
+        <SiteFavicon site={site} displayName={displayName} />
 
         {/* 精选角标 */}
         {site.is_featured && (
