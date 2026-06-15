@@ -138,6 +138,7 @@ function SkillToolCard({ tool, t, isEn }: { tool: SkillTool; t: SkillsStrings; i
   const catLabel = isEn
     ? (t.cat[tool.category] ?? tool.category).replace(/^[^\p{L}]+/u, '')
     : tool.category;
+  const displayTags = isEn ? tool.tags_en || tool.tags : tool.tags;
 
   return (
     <div
@@ -203,9 +204,9 @@ function SkillToolCard({ tool, t, isEn }: { tool: SkillTool; t: SkillsStrings; i
       </p>
 
       {/* ── Tags ── */}
-      {tool.tags && tool.tags.length > 0 && (
+      {displayTags && displayTags.length > 0 && (
         <div className='flex flex-wrap gap-1'>
-          {tool.tags.slice(0, 4).map((tag) => (
+          {displayTags.slice(0, 4).map((tag) => (
             <span
               key={tag}
               className='rounded border bg-muted/40 px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground'
@@ -213,9 +214,9 @@ function SkillToolCard({ tool, t, isEn }: { tool: SkillTool; t: SkillsStrings; i
               {tag}
             </span>
           ))}
-          {tool.tags.length > 4 && (
+          {displayTags.length > 4 && (
             <span className='rounded border bg-muted/40 px-1.5 py-0.5 text-[10px] text-muted-foreground/60'>
-              +{tool.tags.length - 4}
+              +{displayTags.length - 4}
             </span>
           )}
         </div>

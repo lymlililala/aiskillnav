@@ -56,6 +56,7 @@ export type SkillTool = {
   // 英文站字段（DB select('*') 运行时携带）
   name_en?: string | null;
   description_en?: string | null;
+  tags_en?: string[] | null;
 };
 
 export type CreateSkillToolPayload = Omit<SkillTool, 'id' | 'created_at'>;

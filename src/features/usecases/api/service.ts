@@ -128,6 +128,7 @@ export type EnglishUseCase = UseCase & {
   title_en?: string | null;
   description_en?: string | null;
   steps_en?: string[] | null;
+  tags_en?: string[] | null;
   en_status?: string | null;
 };
 
@@ -139,7 +140,7 @@ export async function getPublishedEnglishUseCases(): Promise<EnglishUseCase[]> {
       const { data, error } = await getSupabaseAdmin()
         .from('use_cases')
         .select(
-          'id,title_en,description_en,steps_en,industry,difficulty,tools,tags,estimated_time,en_status'
+          'id,title_en,description_en,steps_en,industry,difficulty,tools,tags,tags_en,estimated_time,en_status'
         )
         .eq('en_status', 'published')
         .not('published_at', 'is', null)

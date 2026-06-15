@@ -52,6 +52,7 @@ function McpCard({ server, t, isEn }: { server: McpServer; t: McpStrings; isEn: 
   const catLabel = t.cat[server.category] ?? t.cat.other;
   const displayName = isEn ? server.name_en || server.name : server.name;
   const displayDesc = isEn ? server.description_en || server.description : server.description;
+  const displayTags = isEn ? server.tags_en || server.tags : server.tags;
   const href = `${isEn ? '/en' : ''}/mcp/${server.slug ?? server.id}`;
 
   return (
@@ -98,7 +99,7 @@ function McpCard({ server, t, isEn }: { server: McpServer; t: McpStrings; isEn: 
       )}
       <div className='flex items-center justify-between'>
         <div className='flex flex-wrap gap-1'>
-          {server.tags.slice(0, 2).map((t) => (
+          {displayTags.slice(0, 2).map((t) => (
             <span
               key={t}
               className='rounded border bg-muted/50 px-1.5 py-0.5 text-[10px] text-muted-foreground'

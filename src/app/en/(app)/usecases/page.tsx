@@ -95,7 +95,7 @@ function UseCaseCard({ uc }: { uc: EnglishUseCase }) {
       </div>
 
       <div className='flex flex-wrap gap-1'>
-        {uc.tags.slice(0, 3).map((t) => (
+        {(uc.tags_en && uc.tags_en.length ? uc.tags_en : uc.tags).slice(0, 3).map((t) => (
           <span key={t} className='rounded border bg-muted/30 px-1.5 py-0.5 text-[10px] text-muted-foreground'>
             {t}
           </span>

@@ -42,6 +42,7 @@ export type McpServer = {
   // 英文站字段（DB select('*') 运行时携带）
   name_en?: string | null;
   description_en?: string | null;
+  tags_en?: string[] | null;
 };
 
 const MCP_DATA: Omit<McpServer, 'id' | 'created_at'>[] = [

@@ -37,6 +37,7 @@ export type Agent = {
   // 英文站字段（DB select('*') 运行时携带）
   name_en?: string | null;
   description_en?: string | null;
+  tags_en?: string[] | null;
 };
 
 export type CreateAgentPayload = Omit<Agent, 'id' | 'created_at' | 'updated_at'>;

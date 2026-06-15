@@ -48,8 +48,9 @@ export function AgentCard({ agent }: { agent: Agent }) {
   const displayName = isEn ? agent.name_en || agent.name : agent.name;
   const displayDesc = isEn ? agent.description_en || agent.description : agent.description;
 
-  const visibleTags = agent.tags.slice(0, 2);
-  const extraTagCount = agent.tags.length > 2 ? agent.tags.length - 2 : 0;
+  const visibleTags = (isEn ? agent.tags_en || agent.tags : agent.tags).slice(0, 2);
+  const tagsLen = (isEn ? agent.tags_en || agent.tags : agent.tags).length;
+  const extraTagCount = tagsLen > 2 ? tagsLen - 2 : 0;
 
   // slug 为空（名称无字母/数字/中文）时站内详情页打不开，整卡不可点、不显示「查看详情」
   const slug = slugify(agent.name);
@@ -108,7 +109,7 @@ export function AgentCard({ agent }: { agent: Agent }) {
               +{extraTagCount}
             </span>
           )}
-          {agent.tags.length === 0 && (
+          {tagsLen === 0 && (
             <span className='rounded-md bg-muted/60 px-2 py-0.5 text-[10px] font-medium text-muted-foreground'>
               {isGithub ? 'GitHub' : typeLabel}
             </span>
