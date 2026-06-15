@@ -3,6 +3,8 @@
 import { parseAsString, useQueryState } from 'nuqs';
 import { Suspense } from 'react';
 import { cn } from '@/lib/utils';
+import { useIsEn } from '@/hooks/use-is-en';
+import { skillsStrings } from '../i18n';
 import { SkillFilters } from './skill-filters';
 import { SkillGrid, SkillGridSkeleton } from './skill-grid';
 import { SkillToolFilters } from './skill-tool-filters';
@@ -12,6 +14,8 @@ import { FeaturedSkills, FeaturedSkillsSkeleton } from './featured-skills';
 import { Icons } from '@/components/icons';
 
 export function SkillTabContent() {
+  const isEn = useIsEn();
+  const t = skillsStrings(isEn);
   const [tab] = useQueryState('skill_tab', parseAsString.withDefault('tools'));
   const isTools = tab === 'tools';
 
@@ -38,19 +42,15 @@ export function SkillTabContent() {
             <>
               <Icons.terminal className='h-3.5 w-3.5 text-violet-500' />
               <span className='text-[11px] font-semibold text-violet-600 dark:text-violet-400'>
-                Skills 市场
+                {t.marketLabel}
               </span>
-              <span className='text-[10px] text-muted-foreground/60'>
-                — 安装原子化 AI 能力到你的本地 Agent
-              </span>
+              <span className='text-[10px] text-muted-foreground/60'>{t.marketHint}</span>
             </>
           ) : (
             <>
               <Icons.skillsHub className='h-3.5 w-3.5 text-primary/70' />
-              <span className='text-[11px] font-semibold text-primary/80'>收录平台</span>
-              <span className='text-[10px] text-muted-foreground/60'>
-                — 按官方 / 社区 / 工作流分区展示，点击卡片直达平台
-              </span>
+              <span className='text-[11px] font-semibold text-primary/80'>{t.sitesLabel}</span>
+              <span className='text-[10px] text-muted-foreground/60'>{t.sitesHint}</span>
             </>
           )}
         </div>
@@ -73,7 +73,7 @@ export function SkillTabContent() {
 
               <div className='flex items-center gap-3'>
                 <div className='h-px flex-1 bg-border' />
-                <span className='text-xs font-medium text-muted-foreground'>全部收录站点</span>
+                <span className='text-xs font-medium text-muted-foreground'>{t.allListedSites}</span>
                 <div className='h-px flex-1 bg-border' />
               </div>
 

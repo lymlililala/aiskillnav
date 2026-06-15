@@ -3,6 +3,8 @@
 import { useState, useCallback, useRef } from 'react';
 import { Icons } from '@/components/icons';
 import { cn } from '@/lib/utils';
+import { useIsEn } from '@/hooks/use-is-en';
+import { skillsStrings } from '../i18n';
 import type { Site, SitePlatform, SiteRegion } from '../api/types';
 
 /** hover 时预连接外部域名，加速后续跳转 */
@@ -106,8 +108,13 @@ function SiteFavicon({ site }: { site: Site }) {
  * 设计语言：紧凑横向、Favicon 大图标优先、整卡可点、hover 显示跳转箭头
  */
 export function SkillCard({ site }: SiteCardProps) {
-  const badge = PLATFORM_BADGE[site.platform] ?? { label: '其他', color: 'text-muted-foreground' };
-  const region = REGION_CONFIG[site.region] ?? { label: '', flag: '🌐' };
+  const isEn = useIsEn();
+  const t = skillsStrings(isEn);
+  const badgeColor = (PLATFORM_BADGE[site.platform] ?? { color: 'text-muted-foreground' }).color;
+  const badgeLabel = t.platform[site.platform] ?? t.platform.other;
+  const regionFlag = (REGION_CONFIG[site.region] ?? { flag: '🌐' }).flag;
+  const displayName = isEn ? site.name_en || site.name : site.name;
+  const displayDesc = isEn ? site.description_en || site.description : site.description;
 
   const [clicking, setClicking] = useState(false);
   const resetTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -153,14 +160,14 @@ export function SkillCard({ site }: SiteCardProps) {
       <div className='min-w-0 flex-1'>
         <div className='flex items-center gap-1.5'>
           <span className='truncate text-sm font-semibold leading-tight text-foreground transition-colors group-hover:text-primary'>
-            {site.name}
+            {displayName}
           </span>
           {/* 平台类型 + 地区 */}
-          <span className={cn('shrink-0 text-[10px] font-medium', badge.color)}>{badge.label}</span>
-          <span className='shrink-0 text-[10px] text-muted-foreground/60'>{region.flag}</span>
+          <span className={cn('shrink-0 text-[10px] font-medium', badgeColor)}>{badgeLabel}</span>
+          <span className='shrink-0 text-[10px] text-muted-foreground/60'>{regionFlag}</span>
         </div>
         <p className='mt-0.5 truncate text-[11px] leading-tight text-muted-foreground'>
-          {site.description}
+          {displayDesc}
         </p>
       </div>
 

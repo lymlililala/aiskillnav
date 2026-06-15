@@ -2,50 +2,42 @@
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { cn } from '@/lib/utils';
+import { useIsEn } from '@/hooks/use-is-en';
+import { skillsStrings } from '../i18n';
 import { featuredSitesOptions } from '../api/queries';
 import { SkillCard } from './skill-card';
 import type { SitePlatform } from '../api/types';
 
-// 平台分区配置
+// 平台分区配置（title/desc/tagline 走 i18n，按 key 取）
 const HUB_ZONES: {
   key: string;
-  title: string;
-  desc: string;
   platforms: SitePlatform[];
   accent: string;
   iconColor: string;
-  tagline: string;
 }[] = [
   {
     key: 'official',
-    title: '官方生态',
-    desc: '原生 · 标准',
     platforms: ['official'],
     accent: 'border-blue-500/20 bg-blue-500/3',
-    iconColor: 'text-blue-600 dark:text-blue-400',
-    tagline: '由各大 AI 平台官方维护'
+    iconColor: 'text-blue-600 dark:text-blue-400'
   },
   {
     key: 'community',
-    title: '社区开发者',
-    desc: '海量 · 灵感',
     platforms: ['community', 'aggregator'],
     accent: 'border-violet-500/20 bg-violet-500/3',
-    iconColor: 'text-violet-600 dark:text-violet-400',
-    tagline: '社区贡献，创意无限'
+    iconColor: 'text-violet-600 dark:text-violet-400'
   },
   {
     key: 'deploy',
-    title: '私有化 & 工作流',
-    desc: '生产力 · 工作流',
     platforms: ['tool', 'github', 'mirror'],
     accent: 'border-emerald-500/20 bg-emerald-500/3',
-    iconColor: 'text-emerald-600 dark:text-emerald-400',
-    tagline: '深度集成，企业自部署'
+    iconColor: 'text-emerald-600 dark:text-emerald-400'
   }
 ];
 
 export function FeaturedSkills() {
+  const isEn = useIsEn();
+  const t = skillsStrings(isEn);
   const { data: featured } = useSuspenseQuery(featuredSitesOptions());
 
   return (
@@ -53,17 +45,18 @@ export function FeaturedSkills() {
       {HUB_ZONES.map((zone) => {
         const zoneSites = featured.filter((s) => zone.platforms.includes(s.platform));
         if (zoneSites.length === 0) return null;
+        const z = t.zones[zone.key];
 
         return (
           <div key={zone.key} className={cn('rounded-xl border p-3.5', zone.accent)}>
             {/* Zone Header */}
             <div className='mb-2.5 flex items-center gap-2'>
-              <span className={cn('text-xs font-semibold', zone.iconColor)}>{zone.title}</span>
+              <span className={cn('text-xs font-semibold', zone.iconColor)}>{z.title}</span>
               <span className='rounded-full border px-1.5 py-0.5 text-[9px] font-medium text-muted-foreground'>
-                {zone.desc}
+                {z.desc}
               </span>
               <div className='h-px flex-1 bg-border/50' />
-              <span className='text-[10px] text-muted-foreground/60'>{zone.tagline}</span>
+              <span className='text-[10px] text-muted-foreground/60'>{z.tagline}</span>
             </div>
 
             {/* Zone Cards — 紧凑 4 列横向布局 */}

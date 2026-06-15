@@ -5,24 +5,26 @@ import { Icons } from '@/components/icons';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-
-const REGIONS: { value: string; label: string; flag?: string }[] = [
-  { value: 'all', label: '全部地区' },
-  { value: 'global', label: '🌐 国际', flag: '🌐' },
-  { value: 'cn', label: '🇨🇳 中文', flag: '🇨🇳' }
-];
-
-const PLATFORMS: { value: string; label: string }[] = [
-  { value: 'all', label: '全部类型' },
-  { value: 'official', label: '官方' },
-  { value: 'aggregator', label: '聚合导航' },
-  { value: 'mirror', label: '镜像站' },
-  { value: 'github', label: 'GitHub' },
-  { value: 'community', label: '社区' },
-  { value: 'tool', label: '工具' }
-];
+import { useIsEn } from '@/hooks/use-is-en';
+import { skillsStrings } from '../i18n';
 
 export function SkillFilters() {
+  const isEn = useIsEn();
+  const t = skillsStrings(isEn);
+  const REGIONS: { value: string; label: string }[] = [
+    { value: 'all', label: t.allRegions },
+    { value: 'global', label: t.regionIntl },
+    { value: 'cn', label: t.regionCn }
+  ];
+  const PLATFORMS: { value: string; label: string }[] = [
+    { value: 'all', label: t.allTypes },
+    { value: 'official', label: t.platformOptions.official },
+    { value: 'aggregator', label: t.platformOptions.aggregator },
+    { value: 'mirror', label: t.platformOptions.mirror },
+    { value: 'github', label: 'GitHub' },
+    { value: 'community', label: t.platformOptions.community },
+    { value: 'tool', label: t.platformOptions.tool }
+  ];
   const [params, setParams] = useQueryStates(
     {
       search: parseAsString.withDefault(''),
@@ -40,7 +42,7 @@ export function SkillFilters() {
       <div className='relative'>
         <Icons.search className='absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground' />
         <Input
-          placeholder='搜索 Hub 名称，如「Coze」「Dify」「FlowGPT」…'
+          placeholder={t.siteSearchPlaceholder}
           value={params.search}
           onChange={(e) => setParams({ ...params, search: e.target.value || '' })}
           className='h-9 pl-9 pr-8'
@@ -96,7 +98,7 @@ export function SkillFilters() {
             onClick={() => setParams({ search: '', region: 'all', platform: 'all' })}
           >
             <Icons.close className='h-3 w-3' />
-            重置
+            {t.reset}
           </Button>
         )}
       </div>

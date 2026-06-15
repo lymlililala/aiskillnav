@@ -8,6 +8,8 @@ import { Icons } from '@/components/icons';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useIsEn } from '@/hooks/use-is-en';
+import { skillsStrings, type SkillsStrings } from '../i18n';
 import { skillToolsQueryOptions } from '../api/queries';
 import type { SkillTool } from '../api/types';
 
@@ -79,7 +81,7 @@ function getInstallCmd(tool: SkillTool): string {
 }
 
 // 复制按钮组件
-function CopyButton({ text }: { text: string }) {
+function CopyButton({ text, t }: { text: string; t: SkillsStrings }) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = useCallback(
@@ -106,17 +108,17 @@ function CopyButton({ text }: { text: string }) {
           ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400'
           : 'bg-muted/60 text-muted-foreground hover:bg-muted hover:text-foreground'
       )}
-      title='复制安装命令'
+      title={t.copyInstall}
     >
       {copied ? (
         <>
           <Icons.copyCheck className='h-3 w-3' />
-          已复制
+          {t.copied}
         </>
       ) : (
         <>
           <Icons.copy className='h-3 w-3' />
-          复制
+          {t.copy}
         </>
       )}
     </button>
@@ -127,10 +129,15 @@ function CopyButton({ text }: { text: string }) {
  * OpenClaw Skills 卡片 — 宽版列表风格
  * 设计语言：极客/开发者工具感，突出终端命令块，不做整卡跳转
  */
-function SkillToolCard({ tool }: { tool: SkillTool }) {
+function SkillToolCard({ tool, t, isEn }: { tool: SkillTool; t: SkillsStrings; isEn: boolean }) {
   const style = getStyle(tool.category);
   const isClawhub = tool.url.includes('clawhub.ai');
   const installCmd = getInstallCmd(tool);
+  const displayName = isEn ? tool.name_en || tool.name : tool.name;
+  const displayDesc = isEn ? tool.description_en || tool.description : tool.description;
+  const catLabel = isEn
+    ? (t.cat[tool.category] ?? tool.category).replace(/^[^\p{L}]+/u, '')
+    : tool.category;
 
   return (
     <div
@@ -145,7 +152,7 @@ function SkillToolCard({ tool }: { tool: SkillTool }) {
         <div className='absolute -top-2 right-3'>
           <span className='inline-flex items-center gap-0.5 rounded-full bg-violet-500 px-2 py-0.5 text-[10px] font-semibold text-white shadow-sm'>
             <Icons.sparkles className='h-2.5 w-2.5' />
-            推荐
+            {t.recommended}
           </span>
         </div>
       )}
@@ -157,7 +164,7 @@ function SkillToolCard({ tool }: { tool: SkillTool }) {
           <div className={cn('mt-0.5 h-2 w-2 shrink-0 rounded-full', style.dot)} />
           <div className='min-w-0'>
             <div className='flex flex-wrap items-center gap-2'>
-              <span className='font-mono text-sm font-semibold text-foreground'>{tool.name}</span>
+              <span className='font-mono text-sm font-semibold text-foreground'>{displayName}</span>
               {/* 版本号占位 */}
               <span className='rounded bg-muted px-1.5 py-0.5 font-mono text-[9px] text-muted-foreground'>
                 v1.0
@@ -166,11 +173,11 @@ function SkillToolCard({ tool }: { tool: SkillTool }) {
                 variant='outline'
                 className={cn('h-4 px-1.5 text-[9px] font-normal', style.color, style.bg)}
               >
-                {tool.category}
+                {catLabel}
               </Badge>
             </div>
             <p className='mt-0.5 line-clamp-1 text-[11px] text-muted-foreground'>
-              {tool.description}
+              {displayDesc}
             </p>
           </div>
         </div>
@@ -180,11 +187,11 @@ function SkillToolCard({ tool }: { tool: SkillTool }) {
           {isClawhub ? (
             <span className='flex items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-500/8 px-2 py-0.5 text-[9px] font-medium text-emerald-600 dark:text-emerald-400'>
               <span className='h-1.5 w-1.5 rounded-full bg-emerald-500' />
-              已验证
+              {t.verified}
             </span>
           ) : (
             <span className='flex items-center gap-1 rounded-full border bg-muted/40 px-2 py-0.5 text-[9px] font-medium text-muted-foreground'>
-              社区
+              {t.community}
             </span>
           )}
         </div>
@@ -192,7 +199,7 @@ function SkillToolCard({ tool }: { tool: SkillTool }) {
 
       {/* ── 描述（完整两行）── */}
       <p className='line-clamp-2 text-xs leading-relaxed text-muted-foreground'>
-        {tool.description}
+        {displayDesc}
       </p>
 
       {/* ── Tags ── */}
@@ -229,7 +236,7 @@ function SkillToolCard({ tool }: { tool: SkillTool }) {
             <span className='shrink-0 font-mono text-[11px] text-green-400/80'>$</span>
             <span className='truncate font-mono text-[11px] text-green-300'>{installCmd}</span>
           </div>
-          <CopyButton text={installCmd} />
+          <CopyButton text={installCmd} t={t} />
         </div>
       </div>
 
@@ -253,7 +260,7 @@ function SkillToolCard({ tool }: { tool: SkillTool }) {
           onClick={(e) => e.stopPropagation()}
           className='flex items-center gap-1 rounded-lg border bg-background px-3 py-1.5 text-[11px] font-medium text-foreground transition-all hover:border-primary/30 hover:bg-accent hover:text-primary'
         >
-          查看详情
+          {t.viewDetails}
           <Icons.externalLink className='h-3 w-3' />
         </Link>
       </div>
@@ -293,6 +300,8 @@ export function SkillToolCardSkeleton() {
 }
 
 export function SkillToolGrid() {
+  const isEn = useIsEn();
+  const t = skillsStrings(isEn);
   const [params, setParams] = useQueryStates(
     {
       skill_tool_page: parseAsInteger.withDefault(1),
@@ -320,8 +329,8 @@ export function SkillToolGrid() {
         <div className='mb-3 flex h-12 w-12 items-center justify-center rounded-xl border bg-muted/50'>
           <Icons.terminal className='h-5 w-5 text-muted-foreground' />
         </div>
-        <p className='text-sm font-medium'>未找到相关 Skill</p>
-        <p className='mt-1 text-xs text-muted-foreground'>尝试描述你的需求，比如"帮我分析代码"</p>
+        <p className='text-sm font-medium'>{t.noTools}</p>
+        <p className='mt-1 text-xs text-muted-foreground'>{t.noToolsHint}</p>
       </div>
     );
   }
@@ -329,15 +338,15 @@ export function SkillToolGrid() {
   return (
     <div className='space-y-5'>
       <p className='text-xs text-muted-foreground'>
-        共 <span className='font-medium text-foreground'>{data.total_items}</span> 个 Skills
-        {hasFilter && <span>（已过滤）</span>}
-        <span className='ml-2 text-muted-foreground/50'>— 点击"查看详情"或复制安装命令</span>
+        {t.toolsCount(data.total_items)}
+        {hasFilter && <span>{t.filtered}</span>}
+        <span className='ml-2 text-muted-foreground/50'>{t.toolsClickHint}</span>
       </p>
 
       {/* 宽版 2 列列表 — Skills 市场风格 */}
       <div className='grid gap-3 lg:grid-cols-2'>
         {data.items.map((tool) => (
-          <SkillToolCard key={tool.id} tool={tool} />
+          <SkillToolCard key={tool.id} tool={tool} t={t} isEn={isEn} />
         ))}
       </div>
 

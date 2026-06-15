@@ -2,26 +2,30 @@
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Icons } from '@/components/icons';
+import { useIsEn } from '@/hooks/use-is-en';
+import { skillsStrings } from '../i18n';
 import { siteStatsOptions, skillToolStatsOptions } from '../api/queries';
 
 export function SkillStats() {
+  const isEn = useIsEn();
+  const t = skillsStrings(isEn);
   const { data: siteStats } = useSuspenseQuery(siteStatsOptions());
   const { data: toolStats } = useSuspenseQuery(skillToolStatsOptions());
 
   const statItems = [
     {
-      label: '收录 Hub 站点',
+      label: t.statHubSites,
       value: siteStats.total,
-      sub: `${siteStats.byRegion['cn'] ?? 0} 中文  ·  ${siteStats.byRegion['global'] ?? 0} 国际`,
+      sub: `${siteStats.byRegion['cn'] ?? 0} ${t.cnUnit}  ·  ${siteStats.byRegion['global'] ?? 0} ${t.intlUnit}`,
       icon: Icons.skillsHub,
       color: 'text-blue-600 dark:text-blue-400',
       bg: 'bg-blue-500/10',
       accent: 'border-l-2 border-l-blue-500'
     },
     {
-      label: '精选推荐',
+      label: t.statFeatured,
       value: siteStats.featured,
-      sub: '编辑精选站点',
+      sub: t.statEditorPicks,
       icon: Icons.sparkles,
       color: 'text-amber-600 dark:text-amber-400',
       bg: 'bg-amber-500/10',
@@ -30,16 +34,16 @@ export function SkillStats() {
     {
       label: 'OpenClaw Skills',
       value: toolStats.total,
-      sub: `${toolStats.featured} 个推荐 · clawhub.ai`,
+      sub: `${toolStats.featured} ${t.featuredSuffix} · clawhub.ai`,
       icon: Icons.sparkles,
       color: 'text-violet-600 dark:text-violet-400',
       bg: 'bg-violet-500/10',
       accent: 'border-l-2 border-l-violet-500'
     },
     {
-      label: 'Skill 分类',
+      label: t.statCategories,
       value: Object.keys(toolStats.byCategory).length,
-      sub: '覆盖场景分类',
+      sub: t.statScenarioCoverage,
       icon: Icons.adjustments,
       color: 'text-emerald-600 dark:text-emerald-400',
       bg: 'bg-emerald-500/10',

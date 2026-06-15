@@ -4,9 +4,13 @@ import { parseAsString, useQueryState } from 'nuqs';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { cn } from '@/lib/utils';
 import { Icons } from '@/components/icons';
+import { useIsEn } from '@/hooks/use-is-en';
+import { skillsStrings } from '../i18n';
 import { siteStatsOptions, skillToolStatsOptions } from '../api/queries';
 
 export function SkillTabSwitcher() {
+  const isEn = useIsEn();
+  const t = skillsStrings(isEn);
   const [tab, setTab] = useQueryState(
     'skill_tab',
     parseAsString.withDefault('tools').withOptions({ shallow: true })
@@ -33,7 +37,7 @@ export function SkillTabSwitcher() {
       <div className='relative p-4'>
         {/* 顶部说明文字 */}
         <p className='mb-3 text-[11px] font-medium uppercase tracking-wider text-muted-foreground/60'>
-          选择内容频道
+          {t.chooseChannel}
         </p>
 
         {/* Tab 分段控制器 */}
@@ -84,7 +88,7 @@ export function SkillTabSwitcher() {
                   isSites ? 'text-foreground' : 'text-muted-foreground group-hover:text-foreground'
                 )}
               >
-                🌐 Hub 导航站
+                {t.hubTitle}
               </div>
               <p
                 className={cn(
@@ -92,13 +96,13 @@ export function SkillTabSwitcher() {
                   isSites ? 'text-muted-foreground' : 'text-muted-foreground/50'
                 )}
               >
-                发现优质 AI Skill 资源平台，一键直达
+                {t.hubDesc}
               </p>
             </div>
 
             {/* 底部标签 */}
             <div className='flex flex-wrap gap-1 pt-0.5'>
-              {['聚合平台', '跳转导航', '开箱即用'].map((tag) => (
+              {t.hubTags.map((tag) => (
                 <span
                   key={tag}
                   className={cn(
@@ -162,7 +166,7 @@ export function SkillTabSwitcher() {
                   isTools ? 'text-foreground' : 'text-muted-foreground group-hover:text-foreground'
                 )}
               >
-                🧩 Skills 市场
+                {t.marketTitle}
               </div>
               <p
                 className={cn(
@@ -170,13 +174,13 @@ export function SkillTabSwitcher() {
                   isTools ? 'text-muted-foreground' : 'text-muted-foreground/50'
                 )}
               >
-                原子化能力库，复制命令即可安装到本地 Agent
+                {t.marketDesc}
               </p>
             </div>
 
             {/* 底部标签 */}
             <div className='flex flex-wrap gap-1 pt-0.5'>
-              {['安装部署', '极客工具', 'clawhub.ai'].map((tag) => (
+              {t.marketTags.map((tag) => (
                 <span
                   key={tag}
                   className={cn(
@@ -197,7 +201,7 @@ export function SkillTabSwitcher() {
         {isTools && (
           <div className='mt-3 flex items-center gap-2 rounded-lg bg-violet-500/8 px-3 py-2 text-[11px] text-violet-600/70 dark:text-violet-400/70 transition-all duration-300'>
             <Icons.terminal className='h-3 w-3 shrink-0' />
-            <span>复制安装命令，配置到本地 AI Agent — 你是在「安装和使用」</span>
+            <span>{t.installTip}</span>
           </div>
         )}
       </div>

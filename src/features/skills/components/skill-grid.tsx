@@ -5,6 +5,8 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { parseAsInteger, parseAsString, useQueryStates } from 'nuqs';
 import { Icons } from '@/components/icons';
 import { Button } from '@/components/ui/button';
+import { useIsEn } from '@/hooks/use-is-en';
+import { skillsStrings } from '../i18n';
 import { sitesQueryOptions } from '../api/queries';
 import { SkillCard, SkillCardSkeleton } from './skill-card';
 
@@ -29,6 +31,8 @@ function batchPrefetch(urls: string[]) {
 const PAGE_SIZE = 24;
 
 export function SkillGrid() {
+  const isEn = useIsEn();
+  const t = skillsStrings(isEn);
   const [params, setParams] = useQueryStates(
     {
       page: parseAsInteger.withDefault(1),
@@ -63,8 +67,8 @@ export function SkillGrid() {
         <div className='mb-3 flex h-12 w-12 items-center justify-center rounded-xl border bg-muted/50'>
           <Icons.search className='h-5 w-5 text-muted-foreground' />
         </div>
-        <p className='text-sm font-medium'>未找到相关站点</p>
-        <p className='mt-1 text-xs text-muted-foreground'>尝试调整搜索词或筛选条件</p>
+        <p className='text-sm font-medium'>{t.noSites}</p>
+        <p className='mt-1 text-xs text-muted-foreground'>{t.noSitesHint}</p>
       </div>
     );
   }
@@ -73,9 +77,9 @@ export function SkillGrid() {
     <div className='space-y-5'>
       {/* Results count */}
       <p className='text-xs text-muted-foreground'>
-        共 <span className='font-medium text-foreground'>{data.total_items}</span> 个站点
+        {t.sitesCount(data.total_items)}
         {(params.region !== 'all' || params.platform !== 'all' || params.search) && (
-          <span>（已过滤）</span>
+          <span>{t.filtered}</span>
         )}
       </p>
 

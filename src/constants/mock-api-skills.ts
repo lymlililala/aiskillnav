@@ -33,6 +33,9 @@ export type Site = {
   review_note?: string;
   created_at: string;
   updated_at: string;
+  // 英文站字段（DB select('*') 运行时携带）
+  name_en?: string | null;
+  description_en?: string | null;
 };
 
 export type CreateSitePayload = Omit<Site, 'id' | 'created_at' | 'updated_at'>;
@@ -50,6 +53,9 @@ export type SkillTool = {
   is_featured: boolean;
   status: SiteStatus;
   created_at: string;
+  // 英文站字段（DB select('*') 运行时携带）
+  name_en?: string | null;
+  description_en?: string | null;
 };
 
 export type CreateSkillToolPayload = Omit<SkillTool, 'id' | 'created_at'>;
