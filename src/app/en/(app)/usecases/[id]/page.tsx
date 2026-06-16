@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getUseCaseById, type EnglishUseCase } from '@/features/usecases/api/service';
+import { enEstimatedTime } from '@/features/usecases/estimated-time-i18n';
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -75,7 +76,7 @@ export default async function EnUseCaseDetailPage({ params }: Props) {
         <span className='rounded-md border bg-muted/50 px-2 py-0.5'>
           {DIFFICULTY[u.difficulty] ?? u.difficulty}
         </span>
-        {u.estimated_time && <span>{u.estimated_time}</span>}
+        {u.estimated_time && <span>{enEstimatedTime(u.estimated_time)}</span>}
       </div>
       <h1 className='mt-3 text-3xl font-bold leading-tight tracking-tight'>{u.title_en}</h1>
       <p className='mt-4 text-lg leading-relaxed text-muted-foreground'>{u.description_en}</p>

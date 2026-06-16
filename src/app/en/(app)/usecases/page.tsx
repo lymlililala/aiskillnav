@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import PageContainer from '@/components/layout/page-container';
 import { getPublishedEnglishUseCases, type EnglishUseCase } from '@/features/usecases/api/service';
+import { enEstimatedTime } from '@/features/usecases/estimated-time-i18n';
 import { Icons } from '@/components/icons';
 import { Badge } from '@/components/ui/badge';
 import type { SearchParams } from 'nuqs/server';
@@ -57,7 +58,9 @@ function UseCaseCard({ uc }: { uc: EnglishUseCase }) {
             {diff.stars}
           </Badge>
         </div>
-        <span className='text-[10px] text-muted-foreground shrink-0'>{uc.estimated_time}</span>
+        <span className='text-[10px] text-muted-foreground shrink-0'>
+          {enEstimatedTime(uc.estimated_time)}
+        </span>
       </div>
 
       <h3 className='mb-2 text-sm font-semibold leading-snug'>{uc.title_en}</h3>
