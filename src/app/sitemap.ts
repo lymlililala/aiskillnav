@@ -340,7 +340,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // 静态入口页面（仅保留核心列表页，详情页完全由 Supabase 动态生成）
   const staticPages: MetadataRoute.Sitemap = [
-    { url: BASE_URL, lastModified: now, changeFrequency: 'weekly', priority: 1.0 },
+    {
+      url: BASE_URL,
+      lastModified: now,
+      changeFrequency: 'weekly',
+      priority: 1.0,
+      // hreflang 双向自指：与下方 /en 壳页的 languages 簇对称，否则 Google 视为无效 hreflang
+      alternates: { languages: { 'zh-CN': BASE_URL, en: `${BASE_URL}/en`, 'x-default': BASE_URL } }
+    },
     { url: `${BASE_URL}/skills`, lastModified: now, changeFrequency: 'daily', priority: 0.9 },
     { url: `${BASE_URL}/agents`, lastModified: now, changeFrequency: 'daily', priority: 0.9 },
     { url: `${BASE_URL}/mcp`, lastModified: now, changeFrequency: 'weekly', priority: 0.85 },

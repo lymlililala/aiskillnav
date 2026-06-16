@@ -5,9 +5,21 @@ import { SEO_404_REDIRECTS } from './src/lib/seo-redirects';
 // Define the base Next.js configuration
 const baseConfig: NextConfig = {
   output: process.env.BUILD_STANDALONE === 'true' ? 'standalone' : undefined,
-  // GSC 404 修复：历史模板 slug 308 跳转到最近的已发布文章（见 src/lib/seo-redirects.ts）
+  // GSC 修复：
+  // 1) www → 非-www（apex）规范化 —— 代码级兜底，杜绝「重复网页，用户未选定规范网页」复发。
+  //    此前仅靠 Vercel 域名层 308，换平台/改配置即失效；这里用 host 条件锁死，www/任意路径
+  //    单跳归并到 https://aiskillnav.com，与 metadataBase / canonical / sitemap 的 BASE_URL 一致。
+  // 2) 历史模板 slug 308 跳转到最近的已发布文章（见 src/lib/seo-redirects.ts）
   async redirects() {
-    return SEO_404_REDIRECTS;
+    return [
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'www.aiskillnav.com' }],
+        destination: 'https://aiskillnav.com/:path*',
+        permanent: true
+      },
+      ...SEO_404_REDIRECTS
+    ];
   },
   images: {
     remotePatterns: [
