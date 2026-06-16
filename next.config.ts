@@ -1,9 +1,14 @@
 import type { NextConfig } from 'next';
 import { withSentryConfig } from '@sentry/nextjs';
+import { SEO_404_REDIRECTS } from './src/lib/seo-redirects';
 
 // Define the base Next.js configuration
 const baseConfig: NextConfig = {
   output: process.env.BUILD_STANDALONE === 'true' ? 'standalone' : undefined,
+  // GSC 404 修复：历史模板 slug 308 跳转到最近的已发布文章（见 src/lib/seo-redirects.ts）
+  async redirects() {
+    return SEO_404_REDIRECTS;
+  },
   images: {
     remotePatterns: [
       {
