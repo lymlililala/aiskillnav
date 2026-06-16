@@ -12,6 +12,7 @@ import {
   getTutorialsBySlugs
 } from '@/features/tutorials/api/service';
 import { HOT_TUTORIAL_SLUGS } from '@/features/tutorials/hot';
+import { INDEX_BOOST_LINKS } from '@/lib/index-boost';
 
 // ISR: 按需渲染，1 小时内复用缓存
 export const dynamic = 'force-dynamic';
@@ -553,6 +554,36 @@ export default async function HomePage() {
                 </Link>
               ))}
             </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── 深度指南 · 延伸阅读（首页直链，把高质量待收录页的抓取深度降到 1，助推 Google 收录） ── */}
+      {INDEX_BOOST_LINKS.length > 0 && (
+        <section className='border-t py-14 md:py-16'>
+          <div className='mx-auto max-w-6xl px-4 md:px-6'>
+            <div className='mb-6'>
+              <h2 className='flex items-center gap-2 text-xl font-bold tracking-tight md:text-2xl'>
+                <Icons.post className='h-5 w-5 text-primary' />
+                深度指南 · 延伸阅读
+              </h2>
+              <p className='mt-1 text-sm text-muted-foreground'>
+                精选进阶实战与主题合集，覆盖 RAG、Agent 工程化、后训练等高价值方向
+              </p>
+            </div>
+            <ul className='grid gap-x-6 gap-y-2 sm:grid-cols-2 lg:grid-cols-3'>
+              {INDEX_BOOST_LINKS.map((l) => (
+                <li key={l.href}>
+                  <Link
+                    href={l.href}
+                    className='group flex items-start gap-1.5 py-1 text-sm text-muted-foreground transition-colors hover:text-primary'
+                  >
+                    <Icons.chevronRight className='mt-0.5 h-3.5 w-3.5 shrink-0 text-primary/50 transition-colors group-hover:text-primary' />
+                    <span className='leading-snug'>{l.label}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
       )}
