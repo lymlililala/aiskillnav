@@ -46,6 +46,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       const { data, error } = await supabase
         .from('tutorials')
         .select('slug, published_at')
+        // 与全站 visibleOnly 约定一致：noindex/草稿页 published_at 置空，必须排除，
+        // 否则会把「被 noindex 标记」的页提交进 sitemap，触发 GSC「已提交但被 noindex」冲突。
+        .not('published_at', 'is', null)
         .order('published_at', { ascending: false })
         .range(tutOffset, tutOffset + PAGE - 1);
       if (error || !data || data.length === 0) break;
