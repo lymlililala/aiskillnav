@@ -462,46 +462,6 @@ const NEWS_DATA: Omit<NewsItem, 'id' | 'created_at' | 'updated_at'>[] = [
     is_featured: false,
     published_at: '2025-04-30T16:00:00Z'
   },
-  // ── 2026-05-21 新增 SEO/GEO 优化批次 ────────────────────────────────────────
-  {
-    slug: 'ai-agent-market-2026-mid-year-review',
-    title: '2026 年中 AI Agent 市场全景：融资、爆款产品与下半年趋势预判',
-    summary:
-      '2026 年上半年，AI Agent 市场经历了从「概念爆发」到「产品落地」的关键转折。本文梳理了上半年 10 大重要融资事件、3 个意外爆款、5 个消失的「独角兽」，并结合产业信号预判下半年的三大趋势：垂直 Agent 爆发、Agent-to-Agent 协作标准化、企业采购从试点走向规模化部署。如果你在 AI 赛道做决策，这篇值得精读。',
-    source_url: 'https://aiskillnav.com/news',
-    source_name: 'AI Skill Nav 编辑部',
-    category: 'Agent',
-    tags: ['市场分析', 'AI Agent', '2026年中', '融资', '趋势'],
-    status: 'published',
-    is_featured: true,
-    published_at: '2026-05-21T08:00:00Z'
-  },
-  {
-    slug: 'best-ai-developer-tools-may-2026',
-    title: '2026年5月最值得关注的 10 款 AI 开发工具',
-    summary:
-      '本月 AI 开发工具领域有几个值得重点关注的动向：Claude Code 新增 Agent 模式让代码补全变成「自主修 Bug」；GitHub Copilot Workspace 正式发布支持跨文件重构；Cursor 0.45 版本的 AI Review 功能让 PR Review 时间减少 60%。本文对 10 款工具做了详细评测，包括定价、适用场景和与竞品的横向对比，帮开发者做出正确的工具选择。',
-    source_url: 'https://aiskillnav.com/news',
-    source_name: 'AI Skill Nav 编辑部',
-    category: '工具',
-    tags: ['AI开发工具', 'Claude Code', 'Cursor', 'GitHub Copilot', '月度盘点'],
-    status: 'published',
-    is_featured: true,
-    published_at: '2026-05-21T10:00:00Z'
-  },
-  {
-    slug: 'llm-hallucination-mitigation-techniques-2026',
-    title: 'AI 幻觉问题还没解决？2026年最新缓解方案全梳理',
-    summary:
-      '大语言模型的幻觉（Hallucination）问题困扰着每一个将 AI 用于生产环境的团队。2026年，行业出现了几个真正有效的缓解方向：RAG+验证双链路架构、结构化输出强制合规、思维链自我校验、以及基于用户反馈的在线微调。本文从工程实践角度梳理每种方案的适用场景、实施成本和局限性，附带真实案例数据，是目前最完整的幻觉治理参考。',
-    source_url: 'https://aiskillnav.com/news',
-    source_name: 'AI Skill Nav 编辑部',
-    category: '研究',
-    tags: ['AI幻觉', 'RAG', '模型可靠性', '生产部署', 'LLM'],
-    status: 'published',
-    is_featured: true,
-    published_at: '2026-05-21T12:00:00Z'
-  },
   // ── 新增（2026-05-24）SEO/GEO 优化批次 ──────────────────────────────────
   {
     slug: 'ai-search-revolution-perplexity-vs-google-sge-2026',
