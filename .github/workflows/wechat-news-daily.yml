@@ -48,6 +48,20 @@ jobs:
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: node scripts/wechat/news.mjs --days ${{ github.event.inputs.days || '3' }} ${{ github.event.inputs.dry_run == 'true' && '--dry-run' || '' }}
 
+      # 写库后主动刷新 ISR：news 直写 Supabase 不触发 Vercel 重部署，
+      # sitemap.xml 等低流量 ISR 页不会自更，调 revalidate 让新文章当天进 sitemap。
+      - name: Revalidate sitemap + news listings
+        if: github.event.inputs.dry_run != 'true'
+        env:
+          SITE_URL: ${{ vars.SITE_URL || 'https://aiskillnav.com' }}
+          REVALIDATE_SECRET: ${{ secrets.REVALIDATE_SECRET }}
+        run: |
+          curl -fsSL -X POST "$SITE_URL/api/revalidate" \
+            -H "X-Revalidate-Secret: $REVALIDATE_SECRET" \
+            -H 'Content-Type: application/json' \
+            -d '{"paths":["/sitemap.xml","/news","/en/news"]}' \
+            || echo "::warning::revalidate 调用失败（检查 Vercel + GitHub 的 REVALIDATE_SECRET 是否一致），不阻塞日更"
+
       - name: Upload data artifact
         if: always()
         uses: actions/upload-artifact@v4
