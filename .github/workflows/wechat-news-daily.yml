@@ -48,19 +48,16 @@ jobs:
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: node scripts/wechat/news.mjs --days ${{ github.event.inputs.days || '3' }} ${{ github.event.inputs.dry_run == 'true' && '--dry-run' || '' }}
 
-      # 写库后主动刷新 ISR：news 直写 Supabase 不触发 Vercel 重部署，
-      # sitemap.xml 等低流量 ISR 页不会自更，调 revalidate 让新文章当天进 sitemap。
-      - name: Revalidate sitemap + news listings
+      # 写库后触发 Vercel 重新部署刷新 sitemap：news 直写 Supabase 不触发重部署，
+      # 而 revalidatePath 对 metadata 路由 sitemap.xml 无效（Vercel CDN 缓存击不穿），
+      # 唯有重部署能可靠重建 sitemap，故用 Deploy Hook（轻量、当天必进 sitemap）。
+      - name: Trigger Vercel redeploy (refresh sitemap)
         if: github.event.inputs.dry_run != 'true'
         env:
-          SITE_URL: ${{ vars.SITE_URL || 'https://aiskillnav.com' }}
-          REVALIDATE_SECRET: ${{ secrets.REVALIDATE_SECRET }}
+          VERCEL_DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
         run: |
-          curl -fsSL -X POST "$SITE_URL/api/revalidate" \
-            -H "X-Revalidate-Secret: $REVALIDATE_SECRET" \
-            -H 'Content-Type: application/json' \
-            -d '{"paths":["/sitemap.xml","/news","/en/news"]}' \
-            || echo "::warning::revalidate 调用失败（检查 Vercel + GitHub 的 REVALIDATE_SECRET 是否一致），不阻塞日更"
+          curl -fsS -X POST "$VERCEL_DEPLOY_HOOK" \
+            || echo "::warning::Deploy Hook 调用失败（检查 GitHub secret VERCEL_DEPLOY_HOOK），不阻塞日更"
 
       - name: Upload data artifact
         if: always()

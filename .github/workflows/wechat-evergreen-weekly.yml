@@ -53,19 +53,15 @@ jobs:
       - name: Generate usecases (from DB)
         run: node scripts/wechat/usecases.mjs --days 14 ${{ env.DRY }}
 
-      # 写库后主动刷新 ISR：tutorials/usecases 直写 Supabase 不触发重部署，
-      # 刷新 sitemap + 两个列表页，让新常青内容当天进 sitemap。
-      - name: Revalidate sitemap + tutorials/usecases listings
+      # 写库后触发 Vercel 重新部署刷新 sitemap：revalidatePath 对 sitemap.xml 无效，
+      # 用 Deploy Hook 可靠重建（与日更同款）。
+      - name: Trigger Vercel redeploy (refresh sitemap)
         if: github.event.inputs.dry_run != 'true'
         env:
-          SITE_URL: ${{ vars.SITE_URL || 'https://aiskillnav.com' }}
-          REVALIDATE_SECRET: ${{ secrets.REVALIDATE_SECRET }}
+          VERCEL_DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
         run: |
-          curl -fsSL -X POST "$SITE_URL/api/revalidate" \
-            -H "X-Revalidate-Secret: $REVALIDATE_SECRET" \
-            -H 'Content-Type: application/json' \
-            -d '{"paths":["/sitemap.xml","/tutorials","/usecases","/en/tutorials","/en/usecases"]}' \
-            || echo "::warning::revalidate 调用失败（检查 Vercel + GitHub 的 REVALIDATE_SECRET 是否一致），不阻塞周更"
+          curl -fsS -X POST "$VERCEL_DEPLOY_HOOK" \
+            || echo "::warning::Deploy Hook 调用失败（检查 GitHub secret VERCEL_DEPLOY_HOOK），不阻塞周更"
 
       - name: Upload data artifact
         if: always()
