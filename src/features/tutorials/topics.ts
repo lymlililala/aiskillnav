@@ -101,6 +101,13 @@ export const PILLAR_TOPICS: PillarTopic[] = [
     description:
       '把 AI 接入你的应用：API 集成、函数/工具调用、Webhook 与多语言/多框架（Next.js、Django、Vue 等）实战。',
     matchTokens: ['api', 'integration', 'function-calling', 'tool-calling', 'webhook', 'streaming', 'sdk']
+  },
+  {
+    slug: 'ai-worldcup',
+    title: 'AI 与世界杯',
+    description:
+      'AI 如何走进世界杯：比分预测的机器学习建模、RAG 赛事知识问答、LLM Agent 实时解说、计算机视觉做越位识别与集锦自动剪辑——把热门赛事拆成可动手的 AI 实战。',
+    matchTokens: ['世界杯', 'worldcup', 'world cup', '足球', 'football', 'soccer']
   }
 ];
 
