@@ -11,6 +11,7 @@ import { Icons } from '@/components/icons';
 import { Badge } from '@/components/ui/badge';
 import type { SearchParams } from 'nuqs/server';
 import type { NewsCategory } from '@/constants/mock-api-news';
+import { hreflangFor } from '@/features/seo/hreflang';
 
 export async function generateMetadata(): Promise<Metadata> {
   const { resolvePageMeta } = await import('@/features/seo/api/service');
@@ -19,7 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: meta.title,
     description: meta.description,
     keywords: meta.keywords,
-    alternates: { canonical: 'https://aiskillnav.com/news' },
+    alternates: hreflangFor('/news'),
     openGraph: meta.openGraph,
     twitter: meta.twitter
   };

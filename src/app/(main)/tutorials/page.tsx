@@ -7,6 +7,7 @@ import Link from 'next/link';
 import type { Tutorial, TutorialLevel, TutorialCategory } from '@/features/tutorials/api/service';
 import type { SearchParams } from 'nuqs/server';
 import type { Metadata } from 'next';
+import { hreflangFor } from '@/features/seo/hreflang';
 
 export async function generateMetadata(): Promise<Metadata> {
   const { resolvePageMeta } = await import('@/features/seo/api/service');
@@ -15,7 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: meta.title,
     description: meta.description,
     keywords: meta.keywords,
-    alternates: { canonical: 'https://aiskillnav.com/tutorials' },
+    alternates: hreflangFor('/tutorials'),
     openGraph: meta.openGraph,
     twitter: meta.twitter
   };

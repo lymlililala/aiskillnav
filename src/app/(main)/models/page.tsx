@@ -7,6 +7,7 @@ import { slugify } from '@/lib/slug';
 import { MODEL_SERIES } from '@/features/models/series';
 import type { AiModel, Benchmark } from '@/features/models/api/service';
 import type { Metadata } from 'next';
+import { hreflangFor } from '@/features/seo/hreflang';
 
 // 动态渲染：模型库会更新，确保列表始终反映最新数据
 export const dynamic = 'force-dynamic';
@@ -19,7 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: meta.title,
     description: meta.description,
     keywords: meta.keywords,
-    alternates: { canonical: 'https://aiskillnav.com/models' },
+    alternates: hreflangFor('/models'),
     openGraph: meta.openGraph,
     twitter: meta.twitter
   };

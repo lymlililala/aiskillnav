@@ -5,6 +5,7 @@ import { SKILL_CATEGORIES } from '@/features/skills/categories';
 import { searchParamsCache } from '@/lib/searchparams';
 import type { SearchParams } from 'nuqs/server';
 import type { Metadata } from 'next';
+import { hreflangFor } from '@/features/seo/hreflang';
 
 export async function generateMetadata(): Promise<Metadata> {
   const { resolvePageMeta } = await import('@/features/seo/api/service');
@@ -13,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: meta.title,
     description: meta.description,
     keywords: meta.keywords,
-    alternates: { canonical: 'https://aiskillnav.com/skills' },
+    alternates: hreflangFor('/skills'),
     openGraph: meta.openGraph,
     twitter: meta.twitter
   };

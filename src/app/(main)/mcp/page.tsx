@@ -3,6 +3,7 @@ import { searchParamsCache } from '@/lib/searchparams';
 import McpListingPage from '@/features/mcp/components/mcp-listing';
 import type { SearchParams } from 'nuqs/server';
 import type { Metadata } from 'next';
+import { hreflangFor } from '@/features/seo/hreflang';
 
 export async function generateMetadata(): Promise<Metadata> {
   const { resolvePageMeta } = await import('@/features/seo/api/service');
@@ -11,7 +12,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: meta.title,
     description: meta.description,
     keywords: meta.keywords,
-    alternates: { canonical: 'https://aiskillnav.com/mcp' },
+    alternates: hreflangFor('/mcp'),
     openGraph: meta.openGraph,
     twitter: meta.twitter
   };

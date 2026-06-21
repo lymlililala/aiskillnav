@@ -13,6 +13,7 @@ import {
 } from '@/features/tutorials/api/service';
 import { HOT_TUTORIAL_SLUGS } from '@/features/tutorials/hot';
 import { INDEX_BOOST_LINKS } from '@/lib/index-boost';
+import { hreflangFor } from '@/features/seo/hreflang';
 
 // ISR: 按需渲染，1 小时内复用缓存
 export const dynamic = 'force-dynamic';
@@ -47,9 +48,7 @@ export const metadata: Metadata = {
     'AI Agent 教程',
     'AI Agent 场景'
   ],
-  alternates: {
-    canonical: 'https://aiskillnav.com'
-  },
+  alternates: hreflangFor('/'),
   openGraph: {
     title: 'AI Skill Navigation — AI Agent 工具导航',
     description:
