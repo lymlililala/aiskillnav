@@ -42,7 +42,11 @@ export default function robots(): MetadataRoute.Robots {
         ]
       }
     ],
-    sitemap: `${BASE_URL}/sitemap.xml`,
+    sitemap: [
+      `${BASE_URL}/sitemap.xml`,
+      `${BASE_URL}/sitemap-zh.xml`,
+      `${BASE_URL}/sitemap-en.xml`
+    ],
     host: BASE_URL
   };
 }

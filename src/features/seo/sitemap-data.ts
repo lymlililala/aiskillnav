@@ -12,21 +12,24 @@ import { getPublishedEnglishMcp } from '@/features/mcp/api/service';
 import { getPublishedEnglishModels } from '@/features/models/api/service';
 import { getPublishedEnglishAgents } from '@/features/agents/api/service';
 
-// ISR：build 时不预生成（首次请求时生成，避免构建期 Supabase 查询超时），
-// 之后缓存 1 小时。此前用 force-dynamic 会覆盖 revalidate，导致每次请求
-// 都全量分页查库（实测 ~15s），Googlebot 可能超时/降低抓取频率。
-export const revalidate = 3600;
-
-const BASE_URL = 'https://aiskillnav.com';
+export const BASE_URL = 'https://aiskillnav.com';
 
 /**
- * 动态生成 sitemap.xml — 静态入口页 + 从 Supabase 分页读取全量文章
- * 访问地址: /sitemap.xml
- *
- * 注意：仅收录规范的公开 URL（(main) 路由组下的 /news、/tutorials 等）。
- * 旧的 /dashboard/* 路径已 308 永久重定向到这些规范页面，因此不应出现在 sitemap 中。
+ * 判断一个 sitemap URL 是否属于英文站（/en 壳页或 /en/* 子页）。
+ * 用前缀精确匹配，避免误伤含 "en" 子串的中文 slug（如 /tutorials/...-enterprise-...）。
  */
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+export function isEnglishUrl(url: string): boolean {
+  return url === `${BASE_URL}/en` || url.startsWith(`${BASE_URL}/en/`);
+}
+
+/**
+ * 生成站点全部规范公开 URL（中文 + 英文合并）。
+ * 逻辑由原 app/sitemap.ts 原样迁移，供 sitemap-zh.xml / sitemap-en.xml 路由按 URL 前缀切分。
+ *
+ * 仅收录规范的公开 URL（(main) 路由组下的 /news、/tutorials 等）；
+ * 旧 /dashboard/* 已 308 重定向，不出现在 sitemap 中。
+ */
+export async function getSitemapEntries(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 
   // 动态页面 — 从 Supabase 分页读取全量 tutorials 和 news
