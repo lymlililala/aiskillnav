@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import type { SearchParams } from 'nuqs/server';
 
 export const metadata: Metadata = {
-  title: 'AI News in English | AI Skill Navigation',
+  title: 'AI News in English',
   description:
     'Track major events across the AI Agent landscape — model releases, funding, frameworks and breakthroughs.',
   alternates: {

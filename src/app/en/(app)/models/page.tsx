@@ -16,7 +16,7 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: 'AI Model Comparison — capability, pricing & benchmarks | AI Skill Navigation',
+  title: 'AI Model Comparison — capability, pricing & benchmarks',
   description:
     'Compare mainstream AI models side by side: capability scores, pricing, context windows and benchmark rankings.',
   alternates: {

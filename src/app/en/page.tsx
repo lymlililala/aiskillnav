@@ -10,7 +10,7 @@ import { getNewsStats, getPublishedEnglishNews } from '@/features/news/api/servi
 import { enNewsCategory } from '@/features/news/category-i18n';
 
 export const metadata: Metadata = {
-  title: 'AI Skill Navigation — Curated AI Tools, Models & Tutorials',
+  title: { absolute: 'AI Skill Navigation — Curated AI Tools, Models & Tutorials' },
   description:
     'A one-stop navigation hub for AI Agent tools: Skills, Agents, MCP servers, model comparisons, in-depth tutorials and use cases — for developers and teams.',
   alternates: {

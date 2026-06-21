@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!m || m.en_status !== 'published') return { title: 'Not found' };
   const enUrl = `${SITE}/en/mcp/${slug}`;
   return {
-    title: `${m.name} | MCP Servers | AI Skill Navigation`,
+    title: `${m.name} | MCP Servers`,
     description: m.description_en ?? undefined,
     alternates: { canonical: enUrl, languages: { 'zh-CN': `${SITE}/mcp/${slug}`, en: enUrl } },
     openGraph: {

@@ -5,7 +5,7 @@ import type { SearchParams } from 'nuqs/server';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Agent Hub — Top AI Agent tools | AI Skill Navigation',
+  title: 'Agent Hub — Top AI Agent tools',
   description:
     'Browse top AI agents like Manus, Devin, OpenClaw and Dify — filter by type and compare side by side.',
   alternates: {

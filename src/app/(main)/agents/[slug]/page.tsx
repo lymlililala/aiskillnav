@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!agent) return { title: 'Agent 不存在' };
   const url = `https://aiskillnav.com/agents/${slug}`;
   return {
-    title: `${agent.name} — AI Agent 介绍与同类对比 | AI Skill Navigation`,
+    title: `${agent.name} — AI Agent 介绍与同类对比`,
     description: agent.description,
     keywords: agent.tags,
     alternates: { canonical: url },

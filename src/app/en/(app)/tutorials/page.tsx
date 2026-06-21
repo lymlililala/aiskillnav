@@ -15,7 +15,7 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: 'AI Tutorials | AI Skill Navigation',
+  title: 'AI Tutorials',
   description:
     'In-depth, practical tutorials for AI engineers — RAG, agents, deployment, fine-tuning and more.',
   alternates: {

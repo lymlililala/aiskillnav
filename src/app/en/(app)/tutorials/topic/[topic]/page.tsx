@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const label = TOPIC_EN[t.slug] ?? t.slug;
   const url = `https://aiskillnav.com/en/tutorials/topic/${t.slug}`;
   return {
-    title: `${label} — AI Tutorials | AI Skill Navigation`,
+    title: `${label} — AI Tutorials`,
     description: `Curated ${label} tutorials for AI engineers.`,
     keywords: t.matchTokens,
     alternates: {

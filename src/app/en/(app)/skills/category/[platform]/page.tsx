@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!cat) return { title: 'Category not found' };
   const url = `https://aiskillnav.com/en/skills/category/${cat.slug}`;
   return {
-    title: `${cat.labelEn} — AI Skill resource sites | AI Skill Navigation`,
+    title: `${cat.labelEn} — AI Skill resource sites`,
     description: cat.descriptionEn,
     alternates: {
       canonical: url,

@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const enUrl = `${SITE}/en/usecases/${id}`;
   const zhUrl = `${SITE}/usecases/${id}`;
   return {
-    title: `${u.title_en} — AI Use Case | AI Skill Navigation`,
+    title: `${u.title_en} — AI Use Case`,
     description: u.description_en ?? undefined,
     keywords: u.tags,
     alternates: { canonical: enUrl, languages: { 'zh-CN': zhUrl, en: enUrl, 'x-default': zhUrl } },

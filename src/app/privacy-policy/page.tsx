@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: '隐私政策 | AI Skill Navigation',
+  title: '隐私政策',
   description:
     'AI Skill Navigation（aiskillnav.com）隐私政策：说明我们如何收集、使用与保护访问者信息，以及关于 Cookie、第三方服务与联系方式的相关条款。',
   alternates: { canonical: 'https://aiskillnav.com/privacy-policy' }

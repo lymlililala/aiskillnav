@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy | AI Skill Navigation',
+  title: 'Privacy Policy',
   description:
     'Privacy Policy for AI Skill Navigation (aiskillnav.com): how we collect, use and protect visitor information, plus cookies, third-party services and contact details.',
   alternates: {

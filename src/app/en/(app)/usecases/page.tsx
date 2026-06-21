@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import type { SearchParams } from 'nuqs/server';
 
 export const metadata: Metadata = {
-  title: 'AI Use Cases — real-world AI Agent workflows | AI Skill Navigation',
+  title: 'AI Use Cases — real-world AI Agent workflows',
   description:
     'Real-world AI Agent use cases from marketing to engineering, research to productivity — with recommended tool stacks and step-by-step guides.',
   alternates: {

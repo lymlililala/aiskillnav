@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Terms of Service | AI Skill Navigation',
+  title: 'Terms of Service',
   description:
     'Terms of Service for AI Skill Navigation (aiskillnav.com): content use, intellectual property, disclaimers and scope.',
   alternates: {

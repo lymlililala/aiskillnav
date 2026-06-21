@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: '关于我们 | AI Skill Navigation',
+  title: '关于我们',
   description:
     'AI Skill Navigation（aiskillnav.com）是一站式 AI Agent 工具导航与学习平台，聚合优质 AI 工具、MCP 服务、模型对比、实战教程与应用场景，帮助开发者和团队高效发现并用好 AI。',
   alternates: { canonical: 'https://aiskillnav.com/about' },

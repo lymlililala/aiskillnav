@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const enUrl = `${SITE}/en/news/${slug}`;
   const zhUrl = `${SITE}/news/${slug}`;
   return {
-    title: `${n.title_en} | AI Skill Navigation`,
+    title: `${n.title_en}`,
     description: (n.summary_en || '').replace(/[#*`>\-]/g, '').slice(0, 160),
     keywords: n.tags,
     alternates: { canonical: enUrl, languages: { 'zh-CN': zhUrl, en: enUrl, 'x-default': zhUrl } },

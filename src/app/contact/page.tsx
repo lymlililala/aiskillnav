@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: '联系我们 | AI Skill Navigation',
+  title: '联系我们',
   description:
     '联系 AI Skill Navigation（aiskillnav.com）：合作洽谈、内容纠错、工具收录、建议反馈，请通过 contact@aiskillnav.com 与我们联系。',
   alternates: { canonical: 'https://aiskillnav.com/contact' },

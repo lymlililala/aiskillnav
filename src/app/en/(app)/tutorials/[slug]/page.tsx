@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const enUrl = `${SITE}/en/tutorials/${slug}`;
   const zhUrl = `${SITE}/tutorials/${slug}`;
   return {
-    title: `${t.title_en} | AI Skill Navigation`,
+    title: `${t.title_en}`,
     description: t.summary_en ?? undefined,
     keywords: t.tags,
     alternates: {

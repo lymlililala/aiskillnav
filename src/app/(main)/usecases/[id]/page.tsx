@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!uc) return { title: '场景不存在' };
   const url = `https://aiskillnav.com/usecases/${uc.id}`;
   return {
-    title: `${uc.title} — AI 应用场景与实现步骤 | AI Skill Navigation`,
+    title: `${uc.title} — AI 应用场景与实现步骤`,
     description: uc.description,
     keywords: uc.tags,
     alternates: {

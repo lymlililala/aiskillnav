@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!s) return { title: 'Series not found' };
   const url = `https://aiskillnav.com/en/models/series/${s.slug}`;
   return {
-    title: `${s.labelEn} series comparison — versions, pricing & capabilities | AI Skill Navigation`,
+    title: `${s.labelEn} series comparison — versions, pricing & capabilities`,
     description: s.descriptionEn,
     alternates: {
       canonical: url,

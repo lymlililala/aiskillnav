@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!model) return { title: '模型不存在' };
   const url = `https://aiskillnav.com/models/${slug}`;
   return {
-    title: `${model.name}（${model.vendor}）— 参数、价格与能力评测 | AI Skill Navigation`,
+    title: `${model.name}（${model.vendor}）— 参数、价格与能力评测`,
     description: model.description,
     keywords: model.tags,
     alternates: { canonical: url },

@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: '服务条款 | AI Skill Navigation',
+  title: '服务条款',
   description:
     'AI Skill Navigation（aiskillnav.com）服务条款：网站内容使用、知识产权、免责声明与适用范围等相关约定。',
   alternates: { canonical: 'https://aiskillnav.com/terms' }

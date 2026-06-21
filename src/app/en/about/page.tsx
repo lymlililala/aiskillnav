@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'About Us | AI Skill Navigation',
+  title: 'About Us',
   description:
     'AI Skill Navigation (aiskillnav.com) is a navigation and learning platform for AI Agent tools, MCP servers, model comparisons, hands-on tutorials and use cases for developers and teams.',
   alternates: {

@@ -5,7 +5,7 @@ import type { SearchParams } from 'nuqs/server';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'MCP Servers Directory | AI Skill Navigation',
+  title: 'MCP Servers Directory',
   description:
     'Curated Model Context Protocol (MCP) servers — connect AI to files, databases, GitHub, Notion and more.',
   alternates: {

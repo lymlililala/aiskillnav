@@ -7,7 +7,7 @@ import type { SearchParams } from 'nuqs/server';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AI Skills Directory | AI Skill Navigation',
+  title: 'AI Skills Directory',
   description:
     'Discover, save and use community-curated AI Skills & Agent resources — official platforms, mirrors and aggregators.',
   alternates: {

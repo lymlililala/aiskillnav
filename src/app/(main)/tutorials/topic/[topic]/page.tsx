@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!t) return { title: '主题不存在' };
   const url = `https://aiskillnav.com/tutorials/topic/${t.slug}`;
   return {
-    title: `${t.title} — AI 教程合集 | AI Skill Navigation`,
+    title: `${t.title} — AI 教程合集`,
     description: t.description,
     keywords: t.matchTokens,
     alternates: { canonical: url },

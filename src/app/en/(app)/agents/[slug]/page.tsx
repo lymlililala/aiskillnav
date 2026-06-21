@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!a || a.en_status !== 'published') return { title: 'Not found' };
   const enUrl = `${SITE}/en/agents/${slug}`;
   return {
-    title: `${a.name} | AI Agents | AI Skill Navigation`,
+    title: `${a.name} | AI Agents`,
     description: a.description_en ?? undefined,
     alternates: { canonical: enUrl, languages: { 'zh-CN': `${SITE}/agents/${slug}`, en: enUrl } },
     openGraph: {

@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!s) return { title: '系列不存在' };
   const url = `https://aiskillnav.com/models/series/${s.slug}`;
   return {
-    title: `${s.label} 全系列对比 — 各版本参数、价格与能力 | AI Skill Navigation`,
+    title: `${s.label} 全系列对比 — 各版本参数、价格与能力`,
     description: s.description,
     alternates: { canonical: url },
     openGraph: { type: 'website', url, title: `${s.label} 全系列对比`, description: s.description, siteName: 'AI Skill Navigation' }

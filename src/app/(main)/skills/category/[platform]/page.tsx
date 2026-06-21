@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!cat) return { title: '分类不存在' };
   const url = `https://aiskillnav.com/skills/category/${cat.slug}`;
   return {
-    title: `${cat.label} — AI Skill 资源站合集 | AI Skill Navigation`,
+    title: `${cat.label} — AI Skill 资源站合集`,
     description: cat.description,
     alternates: { canonical: url },
     openGraph: {

@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Contact Us | AI Skill Navigation',
+  title: 'Contact Us',
   description:
     'Contact AI Skill Navigation (aiskillnav.com): partnerships, content corrections, tool submissions and feedback — reach us at contact@aiskillnav.com.',
   alternates: {
