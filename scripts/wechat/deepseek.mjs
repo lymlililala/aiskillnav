@@ -91,19 +91,40 @@ export class DeepSeek {
     return json.choices?.[0]?.message?.content ?? ''
   }
 
-  /** 强制 JSON 输出并解析；解析失败自动重试一次（提高 temperature 不利于稳定，故降到 0.2） */
+  /**
+   * 强制 JSON 输出并解析。多重兜底，确保不因一次截断/脏输出整条流水线崩溃：
+   *  1) 若本次因 max_tokens 截断（finish_reason==='length'），加倍上限重试一次；
+   *  2) 解析失败 → 附加强约束、原 maxTokens 重试一次；
+   *  3) 仍失败 → 尝试修复被截断的 JSON（裁掉尾部不完整元素 + 补齐括号）作为最后防线。
+   * （temperature 降到 0.2 求稳；提高反而不利于稳定）
+   */
   async chatJSON(messages, opts = {}) {
-    const o = { temperature: 0.2, ...opts, jsonMode: true }
-    let raw = await this.chat(messages, o)
+    const o = { temperature: 0.2, maxTokens: 8000, ...opts, jsonMode: true }
+
+    let json = await this._complete(messages, o)
+    let raw = json.choices?.[0]?.message?.content ?? ''
+    // 被 max_tokens 截断：加大上限重来一次（封顶 16000，避免无限膨胀）
+    if (json.choices?.[0]?.finish_reason === 'length') {
+      const bigger = { ...o, maxTokens: Math.min((o.maxTokens || 8000) * 2, 16000) }
+      json = await this._complete(messages, bigger)
+      raw = json.choices?.[0]?.message?.content ?? ''
+    }
     try {
       return JSON.parse(sanitizeJSON(stripFence(raw)))
     } catch {
       // 再试一次，附加更强约束
-      raw = await this.chat(
+      const retry = await this.chat(
         [...messages, { role: 'system', content: '上次输出不是合法 JSON。只输出一个合法 JSON 对象，字符串内的换行/制表符等必须转义（\\n \\t），不要任何解释或代码围栏。' }],
         o
       )
-      return JSON.parse(sanitizeJSON(stripFence(raw)))
+      try {
+        return JSON.parse(sanitizeJSON(stripFence(retry)))
+      } catch (e) {
+        // 最后防线：修复被截断的 JSON（保留最长可解析前缀）。修不出来才真正抛错。
+        const repaired = repairTruncatedJSON(sanitizeJSON(stripFence(retry))) ?? repairTruncatedJSON(sanitizeJSON(stripFence(raw)))
+        if (repaired) return repaired
+        throw e
+      }
     }
   }
 
@@ -140,6 +161,55 @@ function sanitizeJSON(s) {
     }
   }
   return out
+}
+
+// 兜底：修复被 max_tokens 截断的 JSON。策略——逐字符扫描，记录“处于字符串外、栈深度回到能闭合的位置”
+// 的最后一个合法断点，截到那里，再把未闭合的 { / [ 反向补齐。能解析就返回，否则返回 null。
+// 注意：输入应已过 sanitizeJSON（字符串内裸控制字符已转义），这里只处理结构性截断。
+function repairTruncatedJSON(s) {
+  if (!s) return null
+  const stack = []
+  let inStr = false
+  let esc = false
+  let lastGood = -1 // 可安全截断的位置（字符串外、且刚闭合完一个值之后）
+  for (let i = 0; i < s.length; i++) {
+    const ch = s[i]
+    if (inStr) {
+      if (esc) esc = false
+      else if (ch === '\\') esc = true
+      else if (ch === '"') inStr = false
+      continue
+    }
+    if (ch === '"') { inStr = true; continue }
+    if (ch === '{' || ch === '[') { stack.push(ch === '{' ? '}' : ']'); continue }
+    if (ch === '}' || ch === ']') {
+      if (stack[stack.length - 1] === ch) stack.pop()
+      // 闭合一个容器后是个干净断点（外层若还有未闭合括号，可在此截断再补齐）
+      if (stack.length) lastGood = i
+      continue
+    }
+  }
+  // 从 lastGood 处截断，丢弃尾部不完整元素，再按剩余栈补齐闭合括号
+  const tryParse = str => { try { return JSON.parse(str) } catch { return undefined } }
+  for (const end of [s.length - 1, lastGood]) {
+    if (end < 0) continue
+    let head = s.slice(0, end + 1).replace(/,\s*$/, '')
+    // 重新计算该前缀仍未闭合的括号并补齐
+    const st = []
+    let str = false, e2 = false
+    for (const ch of head) {
+      if (str) { if (e2) e2 = false; else if (ch === '\\') e2 = true; else if (ch === '"') str = false; continue }
+      if (ch === '"') str = true
+      else if (ch === '{') st.push('}')
+      else if (ch === '[') st.push(']')
+      else if (ch === '}' || ch === ']') st.pop()
+    }
+    if (str) head += '"' // 末尾仍在字符串内（理论上 sanitize 后少见），先闭合
+    const closed = head + st.reverse().join('')
+    const parsed = tryParse(closed)
+    if (parsed !== undefined) return parsed
+  }
+  return null
 }
 
 export default DeepSeek

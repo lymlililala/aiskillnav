@@ -75,6 +75,7 @@ const CLUSTER_SYS = `你是 AI 资讯编辑。下面是最近若干天 AI/科技
 1. 每个热点至少由 2 篇来自【不同公众号】的文章构成（同一公众号的多篇不算扎堆）。
 2. 只保留真正的「事件型热点」，剔除：常青技术教程、个人观点、营销推广、无明确事件的泛泛而谈。
 3. 给每个热点起一个准确的中文事件名。
+4. 按热度（扎堆篇数、跨号数）从高到低排序，最多返回 15 个最热的事件，避免输出过长被截断。
 
 只返回 JSON：
 {"events":[{
@@ -86,8 +87,7 @@ const CLUSTER_SYS = `你是 AI 资讯编辑。下面是最近若干天 AI/科技
 
 console.log('识别热点事件 …')
 const clustered = await ds.chatJSON(
-  [{ role: 'system', content: CLUSTER_SYS }, { role: 'user', content: JSON.stringify(list) }],
-  { maxTokens: 3000 }
+  [{ role: 'system', content: CLUSTER_SYS }, { role: 'user', content: JSON.stringify(list) }]
 )
 
 // 校验：≥2 篇且来自不同公众号
