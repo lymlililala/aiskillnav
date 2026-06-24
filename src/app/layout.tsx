@@ -93,12 +93,8 @@ export const metadata: Metadata = {
   // 规范链接
   alternates: {
     canonical: 'https://aiskillnav.com'
-  },
-  // 图标
-  icons: {
-    icon: '/favicon.ico',
-    shortcut: '/favicon.ico'
   }
+  // 图标由 Next.js 文件约定自动生成：src/app/favicon.ico + icon.png + apple-icon.png
 };
 
 export const viewport: Viewport = {
