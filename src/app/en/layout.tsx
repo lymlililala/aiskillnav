@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import Image from 'next/image';
+import { Icons } from '@/components/icons';
 import { ThemeModeToggle } from '@/components/themes/theme-mode-toggle';
 
 // 英文营销外壳：用于 /en 首页 + 关于/联系/隐私/条款（与中文 / 首页同风格的顶栏+页脚）。
@@ -19,15 +19,11 @@ export default function EnMarketingLayout({ children }: { children: React.ReactN
     <div className='flex min-h-screen flex-col'>
       <nav className='sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'>
         <div className='mx-auto flex h-14 max-w-6xl items-center justify-between px-4 md:px-6'>
-          <Link href='/en' className='flex items-center hover:opacity-80'>
-            <Image
-              src='/logo.png'
-              alt='AI Skill Navigation'
-              width={143}
-              height={80}
-              priority
-              className='h-7 w-auto'
-            />
+          <Link href='/en' className='flex items-center gap-2.5 font-semibold hover:opacity-80'>
+            <div className='flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-primary-foreground'>
+              <Icons.skillsHub className='h-4 w-4' />
+            </div>
+            <span className='text-sm font-semibold'>AI Skill Navigation</span>
           </Link>
           <div className='flex items-center gap-0.5'>
             {NAV.map((item) => (
@@ -58,13 +54,12 @@ export default function EnMarketingLayout({ children }: { children: React.ReactN
         <div className='mx-auto max-w-6xl px-4 md:px-6'>
           <div className='flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between'>
             <div className='space-y-2'>
-              <Image
-                src='/logo.png'
-                alt='AI Skill Navigation'
-                width={143}
-                height={80}
-                className='h-7 w-auto'
-              />
+              <div className='flex items-center gap-2'>
+                <div className='flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-primary-foreground'>
+                  <Icons.skillsHub className='h-4 w-4' />
+                </div>
+                <span className='text-sm font-semibold'>AI Skill Navigation</span>
+              </div>
               <p className='max-w-sm text-xs leading-relaxed text-muted-foreground'>
                 A curated navigation hub for AI Agent tools, helping developers and teams discover
                 the best AI tools, models, and tutorials.
