@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Icons } from '@/components/icons';
 import { HomeNavbar } from '@/components/layout/home-navbar';
 import { getAgentStats } from '@/features/agents/api/service';
@@ -626,12 +627,15 @@ export default async function HomePage() {
           <div className='grid gap-8 sm:grid-cols-2 md:grid-cols-5'>
             {/* Brand */}
             <div className='space-y-3'>
-              <div className='flex items-center gap-2'>
-                <div className='flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-primary-foreground'>
-                  <Icons.skillsHub className='h-4 w-4' />
-                </div>
-                <span className='text-sm font-semibold'>AI Skill Navigation</span>
-              </div>
+              <span className='inline-flex items-center rounded-lg bg-[#111827] px-2.5 py-1.5'>
+                <Image
+                  src='/logo.png'
+                  alt='AI Skill Navigation'
+                  width={405}
+                  height={160}
+                  className='h-6 w-auto'
+                />
+              </span>
               <p className='text-xs leading-relaxed text-muted-foreground'>
                 一站式 AI Agent 工具导航，帮助开发者和团队发现最优质的 AI 工具。
               </p>

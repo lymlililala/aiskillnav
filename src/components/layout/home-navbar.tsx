@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Icons } from '@/components/icons';
 import { ThemeSelector } from '@/components/themes/theme-selector';
 import { ThemeModeToggle } from '@/components/themes/theme-mode-toggle';
 
@@ -24,12 +24,18 @@ export function HomeNavbar() {
       <div className='mx-auto flex h-14 max-w-6xl items-center justify-between px-4 md:px-6'>
         <Link
           href='/'
-          className='flex items-center gap-2.5 font-semibold hover:opacity-80 transition-opacity'
+          className='flex items-center hover:opacity-80 transition-opacity'
         >
-          <div className='flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-primary-foreground'>
-            <Icons.skillsHub className='h-4 w-4' />
-          </div>
-          <span className='text-sm font-semibold'>AI Skill Navigation</span>
+          <span className='flex items-center rounded-lg bg-[#111827] px-2.5 py-1.5'>
+            <Image
+              src='/logo.png'
+              alt='AI Skill Navigation'
+              width={405}
+              height={160}
+              priority
+              className='h-6 w-auto'
+            />
+          </span>
         </Link>
 
         <div className='flex items-center gap-0.5'>
