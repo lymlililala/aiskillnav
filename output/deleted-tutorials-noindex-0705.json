@@ -1,0 +1,1780 @@
+[
+  {
+    "id": 521,
+    "slug": "agi-timeline-capabilities-research-2025",
+    "title": "AGI进展追踪：当前AI能力边界与通用智能的距离",
+    "subtitle": "客观评估2025年AI在推理、规划、创造力和常识理解方面的真实水平",
+    "summary": "系统梳理迈向AGI的关键能力维度，基于最新研究评估当前AI在推理、常识理解、长期规划、工具使用和学习效率方面的进展，提供对AGI时间线的理性判断。",
+    "content": "AGI能力维度评估：推理能力（数学奥赛AoPS：o3达到竞赛级别；但仍依赖大量训练数据，few-shot推理与人类不同；错误模式异常，对抗性测试脆弱）；常识理解（HellaSwag/WinoGrande基准接近人类水平；但物理直觉和因果推理存在系统性错误；\"理解\"是记忆还是推理仍有争议）；长期规划（游戏中的多步规划（AlphaCode/Gemini）表现良好；真实世界长期计划中的错误积累；Agent任务完成率在复杂场景下快速下降）；学习效率（当前模型需要远超人类的数据量；Few-shot学习有局限；持续学习（Continual Learning）避免遗忘仍是挑战）；专家预测（调查中位数：AGI到来时间2040-2060；Sam Altman：几年内；AI安全研究者更保守）；当前AI最好的定性描述：\"极度博学的模式匹配器\"。",
+    "level": "intermediate",
+    "category": "llm",
+    "tags": [
+      "AGI",
+      "AI未来",
+      "AI能力",
+      "AI研究",
+      "人工通用智能"
+    ],
+    "estimated_minutes": 28,
+    "related_tools": [
+      "ARC-AGI",
+      "MMLU",
+      "BIG-Bench",
+      "HELM"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 1878,
+    "slug": "ai-cli-tool-template-starter-guide-7gzb8l",
+    "title": "AI CLI Tool Template: Starter Guide",
+    "subtitle": "Command-line AI tool boilerplate with configuration",
+    "summary": "AI CLI Tool Template: Starter Guide  Overview  Command-line AI tool boilerplate with configuration  Implementation  ```python from openai import OpenAI from pydantic import BaseModel from typing import Optional import json  client = OpenAI()  class H",
+    "content": "# AI CLI Tool Template: Starter Guide\n\n## Overview\n\nCommand-line AI tool boilerplate with configuration\n\n## Implementation\n\n```python\nfrom openai import OpenAI\nfrom pydantic import BaseModel\nfrom typing import Optional\nimport json\n\nclient = OpenAI()\n\nclass Handler:\n    \"\"\"Handles ai cli tool template: starter guide.\"\"\"\n    \n    def __init__(self, model=\"gpt-4o-mini\"):\n        self.client = OpenAI()\n        self.model = model\n        self.system = f\"\"\"You are an AI expert in project templates.\nTopic: AI CLI Tool Template: Starter Guide\nBe accurate, practical, and helpful.\"\"\"\n    \n    def run(self, query: str) -> str:\n        r = self.client.chat.completions.create(\n            model=self.model,\n            messages=[\n                {\"role\":\"system\",\"content\":self.system},\n                {\"role\":\"user\",\"content\":query}\n            ],\n            temperature=0.3,\n            max_tokens=1500\n        )\n        return r.choices[0].message.content\n\nh = Handler()\nprint(h.run(\"How do I implement ai cli tool template: starter guide?\"))\n```\n\n## Key Points\n\n1. template is fundamental to this approach\n2. Always validate inputs before processing\n3. Implement proper error handling and retries\n4. Monitor costs and performance in production\n5. Test with diverse inputs including edge cases\n\n## Example Usage\n\n```python\n# Production example\nhandler = Handler(model=\"gpt-4o\")  # Use better model for production\n\n# Basic use\nresult = handler.run(\"Your question here\")\n\n# Batch processing\nqueries = [\"Q1\", \"Q2\", \"Q3\"]\nresults = [handler.run(q) for q in queries]\n```\n\n## Best Practices\n\n- Input validation and sanitization\n- Retry with exponential backoff  \n- Response caching for common queries\n- Comprehensive logging\n- Cost monitoring and alerts\n\n## Resources\n\n- OpenAI: https://platform.openai.com/docs\n- Tags: template, starter, cli",
+    "level": "beginner",
+    "category": "project-templates",
+    "tags": [
+      "template",
+      "starter",
+      "cli",
+      "boilerplate",
+      "python"
+    ],
+    "estimated_minutes": 10,
+    "related_tools": [
+      "python",
+      "python"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 474,
+    "slug": "ai-clinical-decision-support-ehr-2025",
+    "title": "AI临床决策支持：EHR数据挖掘与智能辅助诊断系统构建",
+    "subtitle": "利用电子病历大数据，构建个性化的AI临床决策支持工具",
+    "summary": "介绍如何利用电子健康记录（EHR）数据构建临床决策支持系统，包括患者风险分层、用药安全检查、败血症早期预警和再入院预测模型的技术实现。",
+    "content": "AI临床决策支持系统开发：1.EHR数据预处理（ICD编码标准化；时序事件序列构建；缺失值处理策略；FHIR标准数据交换）；2.败血症早期预警模型（LSTM处理时序生命体征数据；qSOFA指标自动计算；特征重要性：血压趋势、乳酸值、体温变化）；3.用药安全检查AI（药物相互作用知识图谱；肾功能调剂提醒；过敏禁忌实时拦截）；4.30天再入院预测（梯度提升模型，AUC 0.78；关键特征：出院诊断复杂度、社会经济状况、历史住院次数）；5.患者风险分层（慢病管理高风险识别，优先随访资源分配）；6.SHAP可解释性分析（为每次预测提供可理解的医学解释）；7.临床验证方法（前瞻性随机对照试验；倾向评分匹配回顾性研究）。",
+    "level": "advanced",
+    "category": "ai-applications",
+    "tags": [
+      "临床AI",
+      "EHR",
+      "决策支持",
+      "医疗AI",
+      "预测建模"
+    ],
+    "estimated_minutes": 32,
+    "related_tools": [
+      "Epic",
+      "FHIR",
+      "MIMIC-III",
+      "scikit-learn"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 461,
+    "slug": "ai-code-generation-github-copilot-alternatives-2025",
+    "title": "AI代码生成工具深度对比：GitHub Copilot vs Cursor vs Codeium",
+    "subtitle": "2025年主流AI编程助手全面评测，帮你选择最适合的工具",
+    "summary": "深入对比GitHub Copilot、Cursor、Codeium等主流AI编程工具的功能特性、使用体验、价格和适用场景，为开发者提供客观的选型参考。",
+    "content": "AI编程助手2025年全面对比：1.GitHub Copilot（微软/OpenAI，IDE集成最广，代码补全最自然，$10/月，适合日常编码提效）；2.Cursor（基于VSCode改造，Composer多文件编辑最强，$20/月，适合大型项目重构）；3.Windsurf（Codeium出品，Cascade Agent自主完成复杂任务，免费tier慷慨，$15/月）；4.Continue（开源可自托管，支持本地模型，免费，适合隐私敏感场景）；5.功能对比（代码补全、聊天、自主完成任务、测试生成、文档生成、代码审查）；6.使用技巧（明确上下文、分解任务、审查输出、建立提示词库）；7.ROI计算（平均提升40-60%编码速度，节省20%调试时间）；8.选型建议（个人开发者→Cursor，企业团队→Copilot Business，预算有限→Codeium免费版）。",
+    "level": "beginner",
+    "category": "ai-tools",
+    "tags": [
+      "AI编程",
+      "GitHub Copilot",
+      "Cursor",
+      "Codeium",
+      "代码生成"
+    ],
+    "estimated_minutes": 18,
+    "related_tools": [
+      "GitHub Copilot",
+      "Cursor",
+      "Windsurf",
+      "Continue"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 529,
+    "slug": "ai-fashion-design-personalization-2025",
+    "title": "AI时尚设计：从概念图到虚拟试穿的AI辅助设计全流程",
+    "subtitle": "探索AI如何重塑时尚行业，从款式生成到个性化定制的技术革命",
+    "summary": "介绍AI在时尚行业的应用，包括AI服装设计（Midjourney+Adobe Firefly）、虚拟试穿技术、AI个性化穿搭推荐和供应链预测，以及AI对快时尚和可持续时尚的影响。",
+    "content": "AI时尚设计应用：AI设计工具（Midjourney生成时装概念图；Adobe Firefly生成一致品牌风格的时装图；CLO3D AI辅助3D服装建模；减少实物打样成本80%）；虚拟试穿技术（ZERO10 AR试穿应用；Google Virtual Try-On（Shopping中集成）；AI生成不同体型模特展示）；个性化穿搭AI（Stitch Fix AI造型师算法；基于体型/偏好/预算的个性化推荐；风格迁移AI（穿出明星同款风格））；供应链预测（流行趋势AI预测：分析Pinterest/Instagram/TikTok；快时尚需求预测MAPE<15%；减少库存积压）；可持续时尚AI（面料成分识别AI；二手市场AI定价；修复vs换新AI建议）；案例：Zara AI需求预测减少过季库存35%。",
+    "level": "intermediate",
+    "category": "ai-applications",
+    "tags": [
+      "AI时尚",
+      "服装设计",
+      "虚拟试穿",
+      "时尚科技",
+      "AI设计"
+    ],
+    "estimated_minutes": 25,
+    "related_tools": [
+      "Midjourney",
+      "CLO3D",
+      "Adobe Firefly",
+      "Stitch Fix AI"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 1577,
+    "slug": "ai-for-gaming-applications-complete-guide-sjn44g",
+    "title": "AI for Gaming Applications: Complete Guide",
+    "subtitle": "Adding AI-powered NPCs and procedural content to games",
+    "summary": "AI for Gaming Applications: Complete Guide  Overview  Adding AI-powered NPCs and procedural content to games. This guide provides complete, production-ready implementation.  Key Concepts  Understanding ai for gaming applications: complete guide requi",
+    "content": "# AI for Gaming Applications: Complete Guide\n\n## Overview\n\nAdding AI-powered NPCs and procedural content to games. This guide provides complete, production-ready implementation.\n\n## Key Concepts\n\nUnderstanding ai for gaming applications: complete guide requires:\n\n1. **Core principles** of use cases\n2. **Practical patterns** for gaming\n3. **Production considerations** for deployment\n4. **Testing strategies** for reliability\n\n## Setup\n\n```bash\npip install openai openai python-dotenv pydantic fastapi\nexport OPENAI_API_KEY=\"sk-...\"\n```\n\n## Implementation\n\n```python\nfrom openai import OpenAI\nfrom pydantic import BaseModel\nfrom typing import Optional, Any\nimport json\n\nclient = OpenAI()\n\nclass Config(BaseModel):\n    model: str = \"gpt-4o-mini\"\n    temperature: float = 0.3\n    max_tokens: int = 2000\n\nclass AIforGamingApplicationsCompleteGuide(object):\n    \"\"\"\n    AI for Gaming Applications: Complete Guide\n    \n    Adding AI-powered NPCs and procedural content to games\n    Tags: gaming, ai-applications, practical, openai\n    \"\"\"\n    \n    def __init__(self, config: Optional[Config] = None):\n        self.config = config or Config()\n        self.client = OpenAI()\n        self.context = {}\n    \n    def process(self, query: str, **kwargs) -> dict:\n        \"\"\"Main processing method.\"\"\"\n        \n        system_msg = f\"\"\"You are an expert in {category.replace(/-/g,' ')}, \n        specializing in {tags[0].replace(/-/g,' ')}.\n        Be precise, practical, and production-focused.\n        Topic context: {title}\"\"\"\n        \n        response = self.client.chat.completions.create(\n            model=self.config.model,\n            messages=[\n                {\"role\": \"system\", \"content\": system_msg},\n                {\"role\": \"user\", \"content\": query}\n            ],\n            temperature=self.config.temperature,\n            max_tokens=self.config.max_tokens\n        )\n        \n        return {\n            \"output\": response.choices[0].message.content,\n            \"tokens\": response.usage.total_tokens,\n            \"model\": self.config.model\n        }\n    \n    def analyze(self, content: str, criteria: list[str] = None) -> dict:\n        \"\"\"Analyze content against specific criteria.\"\"\"\n        criteria_str = \", \".join(criteria or [\"quality\", \"accuracy\", \"completeness\"])\n        \n        response = self.client.chat.completions.create(\n            model=self.config.model,\n            messages=[{\n                \"role\": \"user\",\n                \"content\": f\"Analyze this content for {criteria_str}:\\n\\n{content}\"\n            }],\n            temperature=0.1,\n            max_tokens=1000\n        )\n        \n        return {\n            \"analysis\": response.choices[0].message.content,\n            \"criteria\": criteria_str\n        }\n\n# Initialize and use\ninstance = AIforGamingApplicationsCompleteGuide()\nresult = instance.process(f\"Implement a production {title.toLowerCase()} solution\")\nprint(result[\"output\"])\n```\n\n## Advanced Pattern: Streaming\n\n```python\nfrom fastapi import FastAPI\nfrom fastapi.responses import StreamingResponse\nimport asyncio\n\napp = FastAPI()\ninstance = AIforGamingApplicationsCompleteGuide()\n\n@app.post(\"/stream\")\nasync def stream_response(query: str):\n    \"\"\"Stream AI response for better UX.\"\"\"\n    \n    async def generate():\n        stream = client.chat.completions.create(\n            model=\"gpt-4o-mini\",\n            messages=[{\"role\": \"user\", \"content\": query}],\n            stream=True,\n            max_tokens=1000\n        )\n        \n        for chunk in stream:\n            if chunk.choices[0].delta.content:\n                yield chunk.choices[0].delta.content\n    \n    return StreamingResponse(generate(), media_type=\"text/plain\")\n\n@app.post(\"/process\")\nasync def process_endpoint(query: str):\n    return instance.process(query)\n```\n\n## Testing\n\n```python\nimport pytest\n\n@pytest.fixture\ndef instance():\n    return AIforGamingApplicationsCompleteGuide(Config(model=\"gpt-4o-mini\"))\n\ndef test_basic_process(instance):\n    result = instance.process(\"Test query\")\n    assert \"output\" in result\n    assert isinstance(result[\"output\"], str)\n    assert len(result[\"output\"]) > 0\n\ndef test_analysis(instance):\n    result = instance.analyze(\"Sample content for analysis\")\n    assert \"analysis\" in result\n```\n\n## Best Practices\n\n- **Validate inputs** before sending to AI\n- **Handle rate limits** with exponential backoff  \n- **Cache responses** for repeated queries\n- **Log all interactions** for debugging and improvement\n- **Monitor costs** and set billing alerts\n- **Test edge cases** including empty inputs and long texts\n\n## Performance Tips\n\n| Optimization | Impact | Implementation |\n|-------------|--------|----------------|\n| Prompt compression | -30% tokens | Remove unnecessary words |\n| Response caching | -80% API calls | Redis with TTL |\n| Batch processing | -50% latency | Group similar requests |\n| Model selection | -70% cost | Use mini for simple tasks |\n\n## Resources\n\n- OpenAI docs: https://platform.openai.com/docs\n- openai documentation\n- Production AI patterns guide",
+    "level": "intermediate",
+    "category": "use-cases",
+    "tags": [
+      "gaming",
+      "ai-applications",
+      "practical",
+      "openai",
+      "openai"
+    ],
+    "estimated_minutes": 15,
+    "related_tools": [
+      "openai",
+      "python"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 2070,
+    "slug": "ai-for-scientific-literature-review-b0culb",
+    "title": "AI for Scientific Literature Review",
+    "subtitle": "Automated literature review and research synthesis with AI",
+    "summary": "AI Literature Review  AI accelerates literature reviews by processing hundreds of papers rapidly.  ```python from openai import OpenAI client = OpenAI()  def synthesize_papers(abstracts: list[str], research_question: str) -> str:     combined = \"\\n\\n",
+    "content": "# AI Literature Review\n\nAI accelerates literature reviews by processing hundreds of papers rapidly.\n\n```python\nfrom openai import OpenAI\nclient = OpenAI()\n\ndef synthesize_papers(abstracts: list[str], research_question: str) -> str:\n    combined = \"\\n\\n\".join([f\"Paper {i+1}: {a}\" for i,a in enumerate(abstracts[:10])])\n    r = client.chat.completions.create(\n        model=\"gpt-4o\",\n        messages=[{\n            \"role\":\"system\",\"content\":\"You are a research synthesis expert.\"},{\n            \"role\":\"user\",\"content\":f\"Research question: {research_question}\\n\\nPapers:\\n{combined}\"\n        }]\n    )\n    return r.choices[0].message.content\n```\n\nWorkflow: abstract screening → full-text analysis → synthesis → report.",
+    "level": "intermediate",
+    "category": "domain-ai",
+    "tags": [
+      "research",
+      "academia",
+      "literature",
+      "science"
+    ],
+    "estimated_minutes": 15,
+    "related_tools": [
+      "openai",
+      "python"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 467,
+    "slug": "ai-image-generation-midjourney-v7-2025",
+    "title": "Midjourney V7完全指南：从入门到专业级图像生成",
+    "subtitle": "掌握V7新特性和高级参数，创作媲美专业摄影和设计的AI图像",
+    "summary": "深入讲解Midjourney V7的全新特性，包括个性化风格学习、一致性增强、角色参考等功能，以及专业提示词编写技巧和参数优化方法，帮助创作者解锁AI图像生成的完整潜力。",
+    "content": "Midjourney V7使用完全指南：1.V7新特性（个性化训练--personalize，基于你的偏好学习；结构参考--sref引用图像风格；角色参考--cref保持角色一致性）；2.提示词结构（主体+风格+情绪+光线+构图+技术参数，例：\"elegant businesswoman, editorial fashion photography, golden hour lighting, shallow depth of field, Vogue style --ar 4:5 --style raw\"）；3.关键参数（--ar宽高比；--stylize 0-1000控制艺术化程度；--chaos 0-100控制变化多样性；--quality 0.25/0.5/1控制质量和速度）；4.高级技巧（/blend混合多张图像；Vary Region局部重绘；Zoom Out扩展画布）；5.商业使用场景（品牌视觉、产品概念图、社交媒体内容、营销素材）；6.版权和使用规范（商业用途需Pro订阅；避免特定人名；了解风格引用边界）。",
+    "level": "intermediate",
+    "category": "ai-tools",
+    "tags": [
+      "Midjourney",
+      "AI绘画",
+      "图像生成",
+      "创意设计",
+      "AIGC"
+    ],
+    "estimated_minutes": 22,
+    "related_tools": [
+      "Midjourney",
+      "DALL-E 3",
+      "Stable Diffusion",
+      "Adobe Firefly"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 543,
+    "slug": "ai-internet-of-things-smart-home-2025",
+    "title": "AI物联网与智能家居：Matter协议、本地AI和智能家庭助理",
+    "subtitle": "从简单语音控制到真正智能家居，AI如何让家庭环境自主学习和适应",
+    "summary": "介绍AI在物联网和智能家居中的最新应用，包括Matter标准统一生态、本地AI处理（隐私优先）、用户行为学习、预测性服务和AI家庭助理，以及智能家居安全最佳实践。",
+    "content": "AI智能家居技术解析：Matter协议生态统一（Apple/Google/Amazon/Samsung共同支持的开放IoT标准；设备一次配置跨平台工作；已认证1000+设备）；本地AI处理（Apple Home隐私优先本地处理；Google Home端侧模型；Hubitat本地自动化无云依赖；Home Assistant开源本地AI）；用户行为学习AI（Google Nest自动调温：学习作息习惯；Amazon Routines自动化建议；Ecobee个人化温控曲线）；预测性家庭服务（设备故障预测；能源消耗优化（动态电价响应）；安全异常模式检测）；AI家庭助理进化（Amazon Alexa+LLM多轮对话；Apple Siri增强上下文；本地LLM家庭助理（Home Assistant Conversation）；环境感知响应（不需要唤醒词））；智能家居安全（设备固件更新自动化；网络隔离IoT设备；AI检测网络异常行为）。",
+    "level": "intermediate",
+    "category": "ai-applications",
+    "tags": [
+      "AI物联网",
+      "智能家居",
+      "Matter协议",
+      "本地AI",
+      "Home Assistant"
+    ],
+    "estimated_minutes": 22,
+    "related_tools": [
+      "Home Assistant",
+      "Apple Home",
+      "Google Home",
+      "Amazon Alexa"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 508,
+    "slug": "ai-litigation-prediction-legal-research-2025",
+    "title": "AI诉讼预测与法律研究：Westlaw Edge和Lexis+ AI的实践指南",
+    "subtitle": "用AI分析案例法和胜诉概率，辅助律师做出更明智的诉讼策略决策",
+    "summary": "探讨AI在诉讼分析和法律研究中的应用，包括案例相关性搜索、判决结果预测、法官偏好分析和反对律所策略研究，以及Westlaw Edge、LexisNexis AI的功能评测。",
+    "content": "AI法律研究与诉讼预测：语义法律搜索（向量搜索理解法律语义；超越关键词匹配找到真正相关判例；引用网络分析（Shepardize/KeyCite AI增强版））；判决预测（基于历史判决训练分类模型；争议点识别；类案类判概率评估）；法官行为分析（特定法官的裁判倾向数据；对特定论点的历史支持率；庭审风格偏好）；合同纠纷分析（相似合同条款的历史判决结果；高风险条款识别）；Westlaw Edge AI特性（Quick Check验证引用；Brief Analyzer自动摘要；Drafting Assistant合同起草建议）；伦理挑战（法官偏好分析是否影响司法公正；AI预测vs法律原则的张力）。",
+    "level": "advanced",
+    "category": "ai-applications",
+    "tags": [
+      "AI法律研究",
+      "诉讼预测",
+      "Westlaw",
+      "法律科技",
+      "案例分析"
+    ],
+    "estimated_minutes": 30,
+    "related_tools": [
+      "Westlaw Edge",
+      "LexisNexis",
+      "Casetext",
+      "Lex Machina"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 473,
+    "slug": "ai-medical-imaging-diagnosis-2025",
+    "title": "AI医学影像诊断：深度学习在放射科的临床应用实践",
+    "subtitle": "从胸部X光到病理切片，AI辅助诊断如何提升临床准确率",
+    "summary": "全面介绍AI在医学影像诊断中的应用，包括胸部CT分析、眼底筛查、皮肤病变检测、病理诊断和MRI分析，以及FDA批准的AI医疗器械现状和临床部署最佳实践。",
+    "content": "AI医学影像诊断实践指南：1.FDA批准AI医疗设备现状（2024年已批准700+AI医疗器械，主要集中在放射科55%、心脏科10%、病理科8%）；2.胸部X光AI（检测肺炎、气胸、积液准确率>95%，减少漏诊率40%；代表系统：Qure.ai、Aidoc）；3.眼底AI筛查（糖尿病视网膜病变筛查准确率97%，已在基层医院规模部署；青光眼早期检测）；4.皮肤病变检测（SkinVision等系统黑色素瘤检测敏感性与皮肤科医生相当）；5.AI病理诊断（数字病理切片分析，前列腺癌Gleason评分自动化，淋巴结转移检测）；6.临床部署挑战（数据标注质量；分布漂移；可解释性；临床工作流整合；责任归属）；7.实施最佳实践（先做前瞻性验证研究；设置人工审核门控；建立持续监控机制）。",
+    "level": "advanced",
+    "category": "ai-applications",
+    "tags": [
+      "AI医疗影像",
+      "深度学习",
+      "放射科",
+      "医学AI",
+      "临床AI"
+    ],
+    "estimated_minutes": 28,
+    "related_tools": [
+      "MONAI",
+      "PyDICOM",
+      "Aidoc",
+      "Nuance AI"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 1525,
+    "slug": "ai-model-access-control-security-guide-vjsz3i",
+    "title": "AI Model Access Control: Security Guide",
+    "subtitle": "Role-based access control for AI model capabilities",
+    "summary": "AI Model Access Control: Security Guide  Overview  Role-based access control for AI model capabilities. This guide provides complete, production-ready implementation.  Key Concepts  Understanding ai model access control: security guide requires:  1. ",
+    "content": "# AI Model Access Control: Security Guide\n\n## Overview\n\nRole-based access control for AI model capabilities. This guide provides complete, production-ready implementation.\n\n## Key Concepts\n\nUnderstanding ai model access control: security guide requires:\n\n1. **Core principles** of ai security\n2. **Practical patterns** for security\n3. **Production considerations** for deployment\n4. **Testing strategies** for reliability\n\n## Setup\n\n```bash\npip install openai python python-dotenv pydantic fastapi\nexport OPENAI_API_KEY=\"sk-...\"\n```\n\n## Implementation\n\n```python\nfrom openai import OpenAI\nfrom pydantic import BaseModel\nfrom typing import Optional, Any\nimport json\n\nclient = OpenAI()\n\nclass Config(BaseModel):\n    model: str = \"gpt-4o-mini\"\n    temperature: float = 0.3\n    max_tokens: int = 2000\n\nclass AIModelAccessControlSecurityGuide(object):\n    \"\"\"\n    AI Model Access Control: Security Guide\n    \n    Role-based access control for AI model capabilities\n    Tags: security, ai-safety, production, fastapi\n    \"\"\"\n    \n    def __init__(self, config: Optional[Config] = None):\n        self.config = config or Config()\n        self.client = OpenAI()\n        self.context = {}\n    \n    def process(self, query: str, **kwargs) -> dict:\n        \"\"\"Main processing method.\"\"\"\n        \n        system_msg = f\"\"\"You are an expert in {category.replace(/-/g,' ')}, \n        specializing in {tags[0].replace(/-/g,' ')}.\n        Be precise, practical, and production-focused.\n        Topic context: {title}\"\"\"\n        \n        response = self.client.chat.completions.create(\n            model=self.config.model,\n            messages=[\n                {\"role\": \"system\", \"content\": system_msg},\n                {\"role\": \"user\", \"content\": query}\n            ],\n            temperature=self.config.temperature,\n            max_tokens=self.config.max_tokens\n        )\n        \n        return {\n            \"output\": response.choices[0].message.content,\n            \"tokens\": response.usage.total_tokens,\n            \"model\": self.config.model\n        }\n    \n    def analyze(self, content: str, criteria: list[str] = None) -> dict:\n        \"\"\"Analyze content against specific criteria.\"\"\"\n        criteria_str = \", \".join(criteria or [\"quality\", \"accuracy\", \"completeness\"])\n        \n        response = self.client.chat.completions.create(\n            model=self.config.model,\n            messages=[{\n                \"role\": \"user\",\n                \"content\": f\"Analyze this content for {criteria_str}:\\n\\n{content}\"\n            }],\n            temperature=0.1,\n            max_tokens=1000\n        )\n        \n        return {\n            \"analysis\": response.choices[0].message.content,\n            \"criteria\": criteria_str\n        }\n\n# Initialize and use\ninstance = AIModelAccessControlSecurityGuide()\nresult = instance.process(f\"Implement a production {title.toLowerCase()} solution\")\nprint(result[\"output\"])\n```\n\n## Advanced Pattern: Streaming\n\n```python\nfrom fastapi import FastAPI\nfrom fastapi.responses import StreamingResponse\nimport asyncio\n\napp = FastAPI()\ninstance = AIModelAccessControlSecurityGuide()\n\n@app.post(\"/stream\")\nasync def stream_response(query: str):\n    \"\"\"Stream AI response for better UX.\"\"\"\n    \n    async def generate():\n        stream = client.chat.completions.create(\n            model=\"gpt-4o-mini\",\n            messages=[{\"role\": \"user\", \"content\": query}],\n            stream=True,\n            max_tokens=1000\n        )\n        \n        for chunk in stream:\n            if chunk.choices[0].delta.content:\n                yield chunk.choices[0].delta.content\n    \n    return StreamingResponse(generate(), media_type=\"text/plain\")\n\n@app.post(\"/process\")\nasync def process_endpoint(query: str):\n    return instance.process(query)\n```\n\n## Testing\n\n```python\nimport pytest\n\n@pytest.fixture\ndef instance():\n    return AIModelAccessControlSecurityGuide(Config(model=\"gpt-4o-mini\"))\n\ndef test_basic_process(instance):\n    result = instance.process(\"Test query\")\n    assert \"output\" in result\n    assert isinstance(result[\"output\"], str)\n    assert len(result[\"output\"]) > 0\n\ndef test_analysis(instance):\n    result = instance.analyze(\"Sample content for analysis\")\n    assert \"analysis\" in result\n```\n\n## Best Practices\n\n- **Validate inputs** before sending to AI\n- **Handle rate limits** with exponential backoff  \n- **Cache responses** for repeated queries\n- **Log all interactions** for debugging and improvement\n- **Monitor costs** and set billing alerts\n- **Test edge cases** including empty inputs and long texts\n\n## Performance Tips\n\n| Optimization | Impact | Implementation |\n|-------------|--------|----------------|\n| Prompt compression | -30% tokens | Remove unnecessary words |\n| Response caching | -80% API calls | Redis with TTL |\n| Batch processing | -50% latency | Group similar requests |\n| Model selection | -70% cost | Use mini for simple tasks |\n\n## Resources\n\n- OpenAI docs: https://platform.openai.com/docs\n- python documentation\n- Production AI patterns guide",
+    "level": "intermediate",
+    "category": "ai-security",
+    "tags": [
+      "security",
+      "ai-safety",
+      "production",
+      "fastapi",
+      "python"
+    ],
+    "estimated_minutes": 15,
+    "related_tools": [
+      "python",
+      "python"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 510,
+    "slug": "ai-privacy-law-gdpr-compliance-2025",
+    "title": "AI系统的隐私合规：GDPR、CCPA和AI法案下的数据使用规范",
+    "subtitle": "企业AI系统如何在主要隐私法规下合规运营，避免天价罚款",
+    "summary": "详解AI系统在GDPR、CCPA、中国个保法和EU AI Act下的合规要求，包括合法性基础、数据最小化、算法透明度、被遗忘权实现和隐私影响评估，提供可操作的合规检查清单。",
+    "content": "AI系统隐私合规要求：GDPR AI合规（处理个人数据的合法性基础选择；自动化决策（第22条）：仅基于自动化处理影响重大决策须获明确同意；隐私设计原则在AI开发中的实现）；CCPA/CPRA（加州消费者权利：访问/删除/更正/限制使用；AI训练数据中的个人信息处理；销售个人数据的明确拒绝权）；中国个保法+数安法（境内数据处理合规；向境外提供数据的安全评估；算法推荐管理规定）；EU AI Act合规（高风险AI系统的透明度要求；基本权利影响评估FRIA；人类监督机制）；被遗忘权技术实现（标记删除+定期清理；模型遗忘（Machine Unlearning）最新进展；差分隐私保护）；隐私影响评估PIA/DPIA模板；合规成本vs违规罚款对比（Meta GDPR罚款13亿美元案例）。",
+    "level": "advanced",
+    "category": "ai-applications",
+    "tags": [
+      "GDPR",
+      "AI合规",
+      "数据隐私",
+      "EU AI Act",
+      "隐私法"
+    ],
+    "estimated_minutes": 35,
+    "related_tools": [
+      "OneTrust",
+      "TrustArc",
+      "Collibra",
+      "BigID"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 1822,
+    "slug": "ai-service-discovery-cm1p9v",
+    "title": "AI Service Discovery",
+    "subtitle": "Service discovery patterns for AI microservices",
+    "summary": "AI Service Discovery  Overview  Service discovery patterns for AI microservices  Implementation  ```python from openai import OpenAI from pydantic import BaseModel from typing import Optional import json  client = OpenAI()  class Handler:     \"\"\"Hand",
+    "content": "# AI Service Discovery\n\n## Overview\n\nService discovery patterns for AI microservices\n\n## Implementation\n\n```python\nfrom openai import OpenAI\nfrom pydantic import BaseModel\nfrom typing import Optional\nimport json\n\nclient = OpenAI()\n\nclass Handler:\n    \"\"\"Handles ai service discovery.\"\"\"\n    \n    def __init__(self, model=\"gpt-4o-mini\"):\n        self.client = OpenAI()\n        self.model = model\n        self.system = f\"\"\"You are an AI expert in deployment.\nTopic: AI Service Discovery\nBe accurate, practical, and helpful.\"\"\"\n    \n    def run(self, query: str) -> str:\n        r = self.client.chat.completions.create(\n            model=self.model,\n            messages=[\n                {\"role\":\"system\",\"content\":self.system},\n                {\"role\":\"user\",\"content\":query}\n            ],\n            temperature=0.3,\n            max_tokens=1500\n        )\n        return r.choices[0].message.content\n\nh = Handler()\nprint(h.run(\"How do I implement ai service discovery?\"))\n```\n\n## Key Points\n\n1. deployment is fundamental to this approach\n2. Always validate inputs before processing\n3. Implement proper error handling and retries\n4. Monitor costs and performance in production\n5. Test with diverse inputs including edge cases\n\n## Example Usage\n\n```python\n# Production example\nhandler = Handler(model=\"gpt-4o\")  # Use better model for production\n\n# Basic use\nresult = handler.run(\"Your question here\")\n\n# Batch processing\nqueries = [\"Q1\", \"Q2\", \"Q3\"]\nresults = [handler.run(q) for q in queries]\n```\n\n## Best Practices\n\n- Input validation and sanitization\n- Retry with exponential backoff  \n- Response caching for common queries\n- Comprehensive logging\n- Cost monitoring and alerts\n\n## Resources\n\n- OpenAI: https://platform.openai.com/docs\n- Tags: deployment, production, discovery",
+    "level": "advanced",
+    "category": "deployment",
+    "tags": [
+      "deployment",
+      "production",
+      "discovery",
+      "ai-ops",
+      "kubernetes"
+    ],
+    "estimated_minutes": 15,
+    "related_tools": [
+      "kubernetes",
+      "python"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 469,
+    "slug": "ai-writing-assistant-workflow-2025",
+    "title": "AI写作助手完整工作流：从初稿到发布的全流程优化",
+    "subtitle": "建立可复用的AI写作流程，实现高质量内容的高效批量生产",
+    "summary": "分享经过实战验证的AI写作完整工作流，涵盖选题调研、大纲规划、初稿生成、人工润色、SEO优化和发布分发的全流程，帮助内容创作者和营销人员建立可扩展的内容生产体系。",
+    "content": "AI写作完整工作流：【阶段1：选题调研（30分钟）】用Perplexity调研热点趋势；用Ahrefs/Semrush验证关键词搜索量和难度；用ChatGPT分析读者痛点和问题；输出：选定主题+目标关键词+读者画像；【阶段2：结构规划（15分钟）】用Claude生成详细大纲；人工调整结构和重点；确定差异化角度（独特数据、第一手案例、专家观点）；【阶段3：初稿生成（20分钟）】按章节逐段生成；每次提供上下文和风格要求；生成时温度设低（0.3-0.5）保证准确性；【阶段4：人工润色（60分钟）】核实所有事实和数据；补充个人经验和案例；调整语气保持一致性；添加独特见解和观点；【阶段5：SEO优化（20分钟）】用Surfer SEO或RankMath分析；自然融入目标关键词；优化标题、Meta描述、Alt文字；【阶段6：发布分发（15分钟）】WordPress/Ghost发布；用AI生成社交媒体摘要；邮件通讯版本改写；重用为短视频脚本。",
+    "level": "intermediate",
+    "category": "ai-tools",
+    "tags": [
+      "AI写作",
+      "内容营销",
+      "工作流",
+      "博客",
+      "SEO写作"
+    ],
+    "estimated_minutes": 20,
+    "related_tools": [
+      "ChatGPT",
+      "Claude",
+      "Jasper",
+      "Surfer SEO"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 468,
+    "slug": "claude-projects-knowledge-base-2025",
+    "title": "Claude Projects深度使用：构建持久化AI知识库与工作助手",
+    "subtitle": "利用Claude Projects长期记忆功能，打造真正了解你业务的AI助手",
+    "summary": "详解Claude Projects功能的使用方法，包括知识库建设、文档上传策略、系统提示词配置和多场景应用，帮助用户构建专属的AI业务助手，实现知识的持续积累和高效利用。",
+    "content": "Claude Projects使用深度指南：1.Projects vs 普通对话（Projects有持久记忆、可上传文件知识库、可设置自定义指令，适合长期合作场景）；2.知识库建设策略（上传公司内部文档、产品手册、FAQ、竞品分析；保持文档更新；文件名要清晰描述内容）；3.系统提示词配置（定义角色：\"你是我们公司的资深产品顾问\"；定义规则：\"回答时优先引用知识库内容\"；定义输出格式：\"使用中文，提供具体案例\"）；4.应用场景（销售助手：基于产品手册回答客户问题；法律助手：基于合同模板起草文件；技术助手：基于内部文档解答技术问题）；5.使用技巧（善用\"基于你已知的文档\"引导利用知识库；定期更新文档保持时效性；创建多个Projects分隔不同业务场景）；6.限制和注意事项（知识截止日期；文件大小限制；不适合实时数据查询）。",
+    "level": "beginner",
+    "category": "ai-tools",
+    "tags": [
+      "Claude",
+      "AI助手",
+      "知识管理",
+      "Anthropic",
+      "生产力"
+    ],
+    "estimated_minutes": 17,
+    "related_tools": [
+      "Claude",
+      "Notion",
+      "Obsidian"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 67,
+    "slug": "dify-customer-service-agent",
+    "title": "用 Dify 零代码构建一个客服 Agent（附模板）",
+    "subtitle": "30分钟搭建能回答产品问题的智能客服",
+    "summary": "Dify 是目前最易用的 AI Agent 构建平台，无需编写代码，通过可视化界面就能搭建功能完整的客服 Agent。本教程提供完整步骤和可直接导入的模板。",
+    "content": "# 用 Dify 构建客服 Agent\n\n## 什么是 Dify？\n\nDify 是一个开源的 LLM 应用开发平台，特点：\n- **零代码**：拖拽操作，无需编程\n- **开源可自托管**：数据完全自控\n- **工作流编排**：支持复杂的多步骤逻辑\n- **RAG 内置**：轻松接入私有知识库\n\n## 第一步：注册/部署 Dify\n\n**云端版（推荐新手）**：访问 dify.ai 注册\n\n**自托管**：\n```bash\ngit clone https://github.com/langgenius/dify\ncd dify/docker\ndocker compose up -d\n```\n\n## 第二步：上传知识库\n\n1. 进入 **知识库** → **创建知识库**\n2. 上传你的产品文档（支持 PDF、Word、Markdown）\n3. 等待向量化完成\n\n## 第三步：创建 Chatbot\n\n1. **创建应用** → 选择 **Chatbot**\n2. 在 **上下文** 中绑定刚创建的知识库\n3. 设置系统提示词，定义回答范围和风格\n\n## 第四步：添加工具增强\n\n在 **工具** 面板添加网络搜索和代码执行节点。\n\n## 发布与集成\n\n点击 **发布** → 获取 API Key，通过官方 embed 脚本嵌入到你的网站。",
+    "level": "intermediate",
+    "category": "hands-on",
+    "tags": [
+      "Dify",
+      "零代码",
+      "客服Agent",
+      "RAG"
+    ],
+    "estimated_minutes": 30,
+    "related_tools": [
+      "Dify",
+      "brave-search"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 1743,
+    "slug": "frontier-ai-capabilities-guide-advanced-guide-7e070b",
+    "title": "Frontier AI Capabilities Guide: Advanced Guide",
+    "subtitle": "Current capabilities and limitations of frontier AI models",
+    "summary": "Frontier AI Capabilities Guide: Advanced Guide  Overview  Current capabilities and limitations of frontier AI models. This comprehensive guide covers everything you need to know for production implementation.  Why It Matters  Frontier AI Capabilities",
+    "content": "# Frontier AI Capabilities Guide: Advanced Guide\n\n## Overview\n\nCurrent capabilities and limitations of frontier AI models. This comprehensive guide covers everything you need to know for production implementation.\n\n## Why It Matters\n\nFrontier AI Capabilities Guide: Advanced Guide is increasingly important because:\n- AI adoption is accelerating across all industries\n- Production systems need reliable, tested patterns\n- Developer productivity depends on solid foundations\n- Business value requires measurable outcomes\n\n## Core Implementation\n\n```python\nfrom openai import OpenAI\nfrom pydantic import BaseModel\nfrom typing import Optional\nimport json, os\n\nclient = OpenAI()\n\nclass Frontier_AI_Capabilities_Guide_Advanced_GuideConfig(BaseModel):\n    model: str = \"gpt-4o-mini\"\n    temperature: float = 0.3\n    max_tokens: int = 1500\n    system_prompt: str = f\"\"\"You are an expert in advanced techniques.\n    Focus on: Frontier AI Capabilities Guide: Advanced Guide\n    Be accurate, practical, and production-focused.\"\"\"\n\nclass Frontier_AI_Capabilities_Guide_Advanced_GuideHandler:\n    \"\"\"Handles frontier ai capabilities guide: advanced guide operations.\"\"\"\n    \n    def __init__(self):\n        self.client = OpenAI()\n        self.cfg = Frontier_AI_Capabilities_Guide_Advanced_GuideConfig()\n    \n    def execute(self, query: str, ctx: dict = None) -> str:\n        \"\"\"Execute with optional context.\"\"\"\n        msgs = [{\"role\": \"system\", \"content\": self.cfg.system_prompt}]\n        if ctx:\n            msgs.append({\"role\": \"user\", \"content\": f\"Context: {json.dumps(ctx)}\"})\n        msgs.append({\"role\": \"user\", \"content\": query})\n        \n        r = self.client.chat.completions.create(\n            model=self.cfg.model,\n            messages=msgs,\n            temperature=self.cfg.temperature,\n            max_tokens=self.cfg.max_tokens\n        )\n        return r.choices[0].message.content\n    \n    def batch(self, queries: list[str]) -> list[str]:\n        \"\"\"Batch execute multiple queries.\"\"\"\n        return [self.execute(q) for q in queries]\n\nhandler = Frontier_AI_Capabilities_Guide_Advanced_GuideHandler()\nprint(handler.execute(\"How do I implement frontier ai capabilities guide: advanced guide?\"))\n```\n\n## Practical Example\n\n```python\n# Real-world implementation of Frontier AI Capabilities Guide: Advanced Guide\n\ndef demonstrate_frontier_ai_capabilities_guide():\n    \"\"\"Practical demonstration.\"\"\"\n    h = Frontier_AI_Capabilities_Guide_Advanced_GuideHandler()\n    \n    examples = [\n        \"Basic frontier ai capabilities guide: advanced guide example\",\n        \"Advanced capabilities use case\", \n        \"Production capabilities pattern\"\n    ]\n    \n    for ex in examples:\n        result = h.execute(ex)\n        print(f\"Input: {ex}\")\n        print(f\"Output: {result[:200]}...\")\n        print()\n\ndemonstrate_frontier_ai_capabilities_guide()\n```\n\n## Best Practices\n\n1. **Start simple** — implement the basic pattern first, optimize later\n2. **Measure everything** — latency, cost, quality metrics  \n3. **Handle failures** — retry logic, fallbacks, graceful degradation\n4. **Test thoroughly** — unit tests, integration tests, load tests\n5. **Document well** — your future self will thank you\n\n## Common Pitfalls\n\n- Over-engineering early (YAGNI principle)\n- Not handling API rate limits\n- Ignoring token costs until bills arrive\n- Skipping input validation\n- No error monitoring in production\n\n## Resources\n\n- OpenAI Platform docs: https://platform.openai.com/docs\n- Anthropic docs: https://docs.anthropic.com\n- HuggingFace: https://huggingface.co/docs\n- Tags: capabilities, advanced, ai-techniques, research",
+    "level": "advanced",
+    "category": "advanced-techniques",
+    "tags": [
+      "capabilities",
+      "advanced",
+      "ai-techniques",
+      "research",
+      "openai"
+    ],
+    "estimated_minutes": 20,
+    "related_tools": [
+      "openai",
+      "python"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 561,
+    "slug": "multiagent-ai-system-orchestration-2025",
+    "title": "Multi-Agent AI System Orchestration: Building Complex AI Workflows",
+    "subtitle": "LangGraph, CrewAI, and human-in-the-loop patterns for production AI systems",
+    "summary": "Design and implement multi-agent AI systems using LangGraph, AutoGen, and CrewAI for complex task decomposition, parallel execution, and human-in-the-loop workflows.",
+    "content": "Multi-agent systems excel at complex tasks requiring diverse expertise or long-horizon planning. LangGraph models workflows as state machines with typed state, nodes as async functions, and edges defining flow. CrewAI uses higher-level abstractions with Agents (role, goal, tools), Tasks (description, expected output), and Crews. For human-in-the-loop: use LangGraph checkpointing with interrupt_before parameter to pause before irreversible actions, wait for approval, then resume. Best practices: design clear agent boundaries, use typed state throughout, implement timeouts and recursion limits, add comprehensive observability, test agents in isolation before system integration.",
+    "level": "advanced",
+    "category": "AI Development",
+    "tags": [
+      "multi-agent",
+      "LangGraph",
+      "CrewAI",
+      "AutoGen",
+      "AI-agents"
+    ],
+    "estimated_minutes": 30,
+    "related_tools": [],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 1678,
+    "slug": "redis-ai-caching-patterns-complete-integration-guide-8qqc9y",
+    "title": "Redis AI Caching Patterns: Complete Integration Guide",
+    "subtitle": "Using Redis for semantic caching in AI applications",
+    "summary": "Redis AI Caching Patterns: Complete Integration Guide  Overview  Using Redis for semantic caching in AI applications. This comprehensive guide covers everything you need to know for production implementation.  Why It Matters  Redis AI Caching Pattern",
+    "content": "# Redis AI Caching Patterns: Complete Integration Guide\n\n## Overview\n\nUsing Redis for semantic caching in AI applications. This comprehensive guide covers everything you need to know for production implementation.\n\n## Why It Matters\n\nRedis AI Caching Patterns: Complete Integration Guide is increasingly important because:\n- AI adoption is accelerating across all industries\n- Production systems need reliable, tested patterns\n- Developer productivity depends on solid foundations\n- Business value requires measurable outcomes\n\n## Core Implementation\n\n```python\nfrom openai import OpenAI\nfrom pydantic import BaseModel\nfrom typing import Optional\nimport json, os\n\nclient = OpenAI()\n\nclass Redis_AI_Caching_Patterns_Complete_Integration_GuideConfig(BaseModel):\n    model: str = \"gpt-4o-mini\"\n    temperature: float = 0.3\n    max_tokens: int = 1500\n    system_prompt: str = f\"\"\"You are an expert in tech integrations.\n    Focus on: Redis AI Caching Patterns: Complete Integration Guide\n    Be accurate, practical, and production-focused.\"\"\"\n\nclass Redis_AI_Caching_Patterns_Complete_Integration_GuideHandler:\n    \"\"\"Handles redis ai caching patterns: complete integration guide operations.\"\"\"\n    \n    def __init__(self):\n        self.client = OpenAI()\n        self.cfg = Redis_AI_Caching_Patterns_Complete_Integration_GuideConfig()\n    \n    def execute(self, query: str, ctx: dict = None) -> str:\n        \"\"\"Execute with optional context.\"\"\"\n        msgs = [{\"role\": \"system\", \"content\": self.cfg.system_prompt}]\n        if ctx:\n            msgs.append({\"role\": \"user\", \"content\": f\"Context: {json.dumps(ctx)}\"})\n        msgs.append({\"role\": \"user\", \"content\": query})\n        \n        r = self.client.chat.completions.create(\n            model=self.cfg.model,\n            messages=msgs,\n            temperature=self.cfg.temperature,\n            max_tokens=self.cfg.max_tokens\n        )\n        return r.choices[0].message.content\n    \n    def batch(self, queries: list[str]) -> list[str]:\n        \"\"\"Batch execute multiple queries.\"\"\"\n        return [self.execute(q) for q in queries]\n\nhandler = Redis_AI_Caching_Patterns_Complete_Integration_GuideHandler()\nprint(handler.execute(\"How do I implement redis ai caching patterns: complete integration guide?\"))\n```\n\n## Practical Example\n\n```python\n# Real-world implementation of Redis AI Caching Patterns: Complete Integration Guide\n\ndef demonstrate_redis_ai_caching_patterns_comp():\n    \"\"\"Practical demonstration.\"\"\"\n    h = Redis_AI_Caching_Patterns_Complete_Integration_GuideHandler()\n    \n    examples = [\n        \"Basic redis ai caching patterns: complete integration guide example\",\n        \"Advanced caching use case\", \n        \"Production caching pattern\"\n    ]\n    \n    for ex in examples:\n        result = h.execute(ex)\n        print(f\"Input: {ex}\")\n        print(f\"Output: {result[:200]}...\")\n        print()\n\ndemonstrate_redis_ai_caching_patterns_comp()\n```\n\n## Best Practices\n\n1. **Start simple** — implement the basic pattern first, optimize later\n2. **Measure everything** — latency, cost, quality metrics  \n3. **Handle failures** — retry logic, fallbacks, graceful degradation\n4. **Test thoroughly** — unit tests, integration tests, load tests\n5. **Document well** — your future self will thank you\n\n## Common Pitfalls\n\n- Over-engineering early (YAGNI principle)\n- Not handling API rate limits\n- Ignoring token costs until bills arrive\n- Skipping input validation\n- No error monitoring in production\n\n## Resources\n\n- OpenAI Platform docs: https://platform.openai.com/docs\n- Anthropic docs: https://docs.anthropic.com\n- HuggingFace: https://huggingface.co/docs\n- Tags: caching, integration, ai-features, redis",
+    "level": "intermediate",
+    "category": "tech-integrations",
+    "tags": [
+      "caching",
+      "integration",
+      "ai-features",
+      "redis"
+    ],
+    "estimated_minutes": 18,
+    "related_tools": [
+      "redis",
+      "python"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 1712,
+    "slug": "ai-apis-explained-for-web-developers-beginners-complete-guide-myojho",
+    "title": "AI APIs Explained for Web Developers: Beginner's Complete Guide",
+    "subtitle": "Everything a beginner needs to know about ai apis explained for web developers",
+    "summary": "AI APIs Explained for Web Developers: Beginner's Complete Guide  Overview  Everything a beginner needs to know about ai apis explained for web developers. This comprehensive guide covers everything you need to know for production implementation.  Why",
+    "content": "# AI APIs Explained for Web Developers: Beginner's Complete Guide\n\n## Overview\n\nEverything a beginner needs to know about ai apis explained for web developers. This comprehensive guide covers everything you need to know for production implementation.\n\n## Why It Matters\n\nAI APIs Explained for Web Developers: Beginner's Complete Guide is increasingly important because:\n- AI adoption is accelerating across all industries\n- Production systems need reliable, tested patterns\n- Developer productivity depends on solid foundations\n- Business value requires measurable outcomes\n\n## Core Implementation\n\n```python\nfrom openai import OpenAI\nfrom pydantic import BaseModel\nfrom typing import Optional\nimport json, os\n\nclient = OpenAI()\n\nclass AI_APIs_Explained_for_Web_Developers_Beginners_Complete_GuideConfig(BaseModel):\n    model: str = \"gpt-4o-mini\"\n    temperature: float = 0.3\n    max_tokens: int = 1500\n    system_prompt: str = f\"\"\"You are an expert in beginner guides.\n    Focus on: AI APIs Explained for Web Developers: Beginner's Complete Guide\n    Be accurate, practical, and production-focused.\"\"\"\n\nclass AI_APIs_Explained_for_Web_Developers_Beginners_Complete_GuideHandler:\n    \"\"\"Handles ai apis explained for web developers: beginner's complete guide operations.\"\"\"\n    \n    def __init__(self):\n        self.client = OpenAI()\n        self.cfg = AI_APIs_Explained_for_Web_Developers_Beginners_Complete_GuideConfig()\n    \n    def execute(self, query: str, ctx: dict = None) -> str:\n        \"\"\"Execute with optional context.\"\"\"\n        msgs = [{\"role\": \"system\", \"content\": self.cfg.system_prompt}]\n        if ctx:\n            msgs.append({\"role\": \"user\", \"content\": f\"Context: {json.dumps(ctx)}\"})\n        msgs.append({\"role\": \"user\", \"content\": query})\n        \n        r = self.client.chat.completions.create(\n            model=self.cfg.model,\n            messages=msgs,\n            temperature=self.cfg.temperature,\n            max_tokens=self.cfg.max_tokens\n        )\n        return r.choices[0].message.content\n    \n    def batch(self, queries: list[str]) -> list[str]:\n        \"\"\"Batch execute multiple queries.\"\"\"\n        return [self.execute(q) for q in queries]\n\nhandler = AI_APIs_Explained_for_Web_Developers_Beginners_Complete_GuideHandler()\nprint(handler.execute(\"How do I implement ai apis explained for web developers: beginner's complete guide?\"))\n```\n\n## Practical Example\n\n```python\n# Real-world implementation of AI APIs Explained for Web Developers: Beginner's Complete Guide\n\ndef demonstrate_ai_apis_explained_for_web_deve():\n    \"\"\"Practical demonstration.\"\"\"\n    h = AI_APIs_Explained_for_Web_Developers_Beginners_Complete_GuideHandler()\n    \n    examples = [\n        \"Basic ai apis explained for web developers: beginner's complete guide example\",\n        \"Advanced beginner use case\", \n        \"Production beginner pattern\"\n    ]\n    \n    for ex in examples:\n        result = h.execute(ex)\n        print(f\"Input: {ex}\")\n        print(f\"Output: {result[:200]}...\")\n        print()\n\ndemonstrate_ai_apis_explained_for_web_deve()\n```\n\n## Best Practices\n\n1. **Start simple** — implement the basic pattern first, optimize later\n2. **Measure everything** — latency, cost, quality metrics  \n3. **Handle failures** — retry logic, fallbacks, graceful degradation\n4. **Test thoroughly** — unit tests, integration tests, load tests\n5. **Document well** — your future self will thank you\n\n## Common Pitfalls\n\n- Over-engineering early (YAGNI principle)\n- Not handling API rate limits\n- Ignoring token costs until bills arrive\n- Skipping input validation\n- No error monitoring in production\n\n## Resources\n\n- OpenAI Platform docs: https://platform.openai.com/docs\n- Anthropic docs: https://docs.anthropic.com\n- HuggingFace: https://huggingface.co/docs\n- Tags: beginner, introduction, getting-started, fundamentals",
+    "level": "beginner",
+    "category": "beginner-guides",
+    "tags": [
+      "beginner",
+      "introduction",
+      "getting-started",
+      "fundamentals",
+      "openai"
+    ],
+    "estimated_minutes": 8,
+    "related_tools": [
+      "openai",
+      "python"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 1943,
+    "slug": "ai-error-message-explainer-practical-tutorial-dnqnsm",
+    "title": "AI Error Message Explainer: Practical Tutorial",
+    "subtitle": "Translating cryptic error messages into human language",
+    "summary": "AI Error Message Explainer: Practical Tutorial  Overview  Translating cryptic error messages into human language  Implementation  ```python from openai import OpenAI from pydantic import BaseModel from typing import Optional import json  client = Ope",
+    "content": "# AI Error Message Explainer: Practical Tutorial\n\n## Overview\n\nTranslating cryptic error messages into human language\n\n## Implementation\n\n```python\nfrom openai import OpenAI\nfrom pydantic import BaseModel\nfrom typing import Optional\nimport json\n\nclient = OpenAI()\n\nclass Handler:\n    \"\"\"Handles ai error message explainer: practical tutorial.\"\"\"\n    \n    def __init__(self, model=\"gpt-4o-mini\"):\n        self.client = OpenAI()\n        self.model = model\n        self.system = f\"\"\"You are an AI expert in tutorials.\nTopic: AI Error Message Explainer: Practical Tutorial\nBe accurate, practical, and helpful.\"\"\"\n    \n    def run(self, query: str) -> str:\n        r = self.client.chat.completions.create(\n            model=self.model,\n            messages=[\n                {\"role\":\"system\",\"content\":self.system},\n                {\"role\":\"user\",\"content\":query}\n            ],\n            temperature=0.3,\n            max_tokens=1500\n        )\n        return r.choices[0].message.content\n\nh = Handler()\nprint(h.run(\"How do I implement ai error message explainer: practical tutorial?\"))\n```\n\n## Key Points\n\n1. tutorial is fundamental to this approach\n2. Always validate inputs before processing\n3. Implement proper error handling and retries\n4. Monitor costs and performance in production\n5. Test with diverse inputs including edge cases\n\n## Example Usage\n\n```python\n# Production example\nhandler = Handler(model=\"gpt-4o\")  # Use better model for production\n\n# Basic use\nresult = handler.run(\"Your question here\")\n\n# Batch processing\nqueries = [\"Q1\", \"Q2\", \"Q3\"]\nresults = [handler.run(q) for q in queries]\n```\n\n## Best Practices\n\n- Input validation and sanitization\n- Retry with exponential backoff  \n- Response caching for common queries\n- Comprehensive logging\n- Cost monitoring and alerts\n\n## Resources\n\n- OpenAI: https://platform.openai.com/docs\n- Tags: tutorial, practical, openai",
+    "level": "intermediate",
+    "category": "tutorials",
+    "tags": [
+      "tutorial",
+      "practical",
+      "openai",
+      "python"
+    ],
+    "estimated_minutes": 10,
+    "related_tools": [
+      "openai",
+      "python"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 1573,
+    "slug": "ai-for-non-technical-teams-complete-guide-jrhd6p",
+    "title": "AI for Non-Technical Teams: Complete Guide",
+    "subtitle": "Enabling non-technical teams to use AI tools effectively",
+    "summary": "AI for Non-Technical Teams: Complete Guide  Overview  Enabling non-technical teams to use AI tools effectively. This guide provides complete, production-ready implementation.  Key Concepts  Understanding ai for non-technical teams: complete guide req",
+    "content": "# AI for Non-Technical Teams: Complete Guide\n\n## Overview\n\nEnabling non-technical teams to use AI tools effectively. This guide provides complete, production-ready implementation.\n\n## Key Concepts\n\nUnderstanding ai for non-technical teams: complete guide requires:\n\n1. **Core principles** of use cases\n2. **Practical patterns** for no code\n3. **Production considerations** for deployment\n4. **Testing strategies** for reliability\n\n## Setup\n\n```bash\npip install openai openai python-dotenv pydantic fastapi\nexport OPENAI_API_KEY=\"sk-...\"\n```\n\n## Implementation\n\n```python\nfrom openai import OpenAI\nfrom pydantic import BaseModel\nfrom typing import Optional, Any\nimport json\n\nclient = OpenAI()\n\nclass Config(BaseModel):\n    model: str = \"gpt-4o-mini\"\n    temperature: float = 0.3\n    max_tokens: int = 2000\n\nclass AIforNonTechnicalTeamsCompleteGuide(object):\n    \"\"\"\n    AI for Non-Technical Teams: Complete Guide\n    \n    Enabling non-technical teams to use AI tools effectively\n    Tags: no-code, ai-applications, practical, openai\n    \"\"\"\n    \n    def __init__(self, config: Optional[Config] = None):\n        self.config = config or Config()\n        self.client = OpenAI()\n        self.context = {}\n    \n    def process(self, query: str, **kwargs) -> dict:\n        \"\"\"Main processing method.\"\"\"\n        \n        system_msg = f\"\"\"You are an expert in {category.replace(/-/g,' ')}, \n        specializing in {tags[0].replace(/-/g,' ')}.\n        Be precise, practical, and production-focused.\n        Topic context: {title}\"\"\"\n        \n        response = self.client.chat.completions.create(\n            model=self.config.model,\n            messages=[\n                {\"role\": \"system\", \"content\": system_msg},\n                {\"role\": \"user\", \"content\": query}\n            ],\n            temperature=self.config.temperature,\n            max_tokens=self.config.max_tokens\n        )\n        \n        return {\n            \"output\": response.choices[0].message.content,\n            \"tokens\": response.usage.total_tokens,\n            \"model\": self.config.model\n        }\n    \n    def analyze(self, content: str, criteria: list[str] = None) -> dict:\n        \"\"\"Analyze content against specific criteria.\"\"\"\n        criteria_str = \", \".join(criteria or [\"quality\", \"accuracy\", \"completeness\"])\n        \n        response = self.client.chat.completions.create(\n            model=self.config.model,\n            messages=[{\n                \"role\": \"user\",\n                \"content\": f\"Analyze this content for {criteria_str}:\\n\\n{content}\"\n            }],\n            temperature=0.1,\n            max_tokens=1000\n        )\n        \n        return {\n            \"analysis\": response.choices[0].message.content,\n            \"criteria\": criteria_str\n        }\n\n# Initialize and use\ninstance = AIforNonTechnicalTeamsCompleteGuide()\nresult = instance.process(f\"Implement a production {title.toLowerCase()} solution\")\nprint(result[\"output\"])\n```\n\n## Advanced Pattern: Streaming\n\n```python\nfrom fastapi import FastAPI\nfrom fastapi.responses import StreamingResponse\nimport asyncio\n\napp = FastAPI()\ninstance = AIforNonTechnicalTeamsCompleteGuide()\n\n@app.post(\"/stream\")\nasync def stream_response(query: str):\n    \"\"\"Stream AI response for better UX.\"\"\"\n    \n    async def generate():\n        stream = client.chat.completions.create(\n            model=\"gpt-4o-mini\",\n            messages=[{\"role\": \"user\", \"content\": query}],\n            stream=True,\n            max_tokens=1000\n        )\n        \n        for chunk in stream:\n            if chunk.choices[0].delta.content:\n                yield chunk.choices[0].delta.content\n    \n    return StreamingResponse(generate(), media_type=\"text/plain\")\n\n@app.post(\"/process\")\nasync def process_endpoint(query: str):\n    return instance.process(query)\n```\n\n## Testing\n\n```python\nimport pytest\n\n@pytest.fixture\ndef instance():\n    return AIforNonTechnicalTeamsCompleteGuide(Config(model=\"gpt-4o-mini\"))\n\ndef test_basic_process(instance):\n    result = instance.process(\"Test query\")\n    assert \"output\" in result\n    assert isinstance(result[\"output\"], str)\n    assert len(result[\"output\"]) > 0\n\ndef test_analysis(instance):\n    result = instance.analyze(\"Sample content for analysis\")\n    assert \"analysis\" in result\n```\n\n## Best Practices\n\n- **Validate inputs** before sending to AI\n- **Handle rate limits** with exponential backoff  \n- **Cache responses** for repeated queries\n- **Log all interactions** for debugging and improvement\n- **Monitor costs** and set billing alerts\n- **Test edge cases** including empty inputs and long texts\n\n## Performance Tips\n\n| Optimization | Impact | Implementation |\n|-------------|--------|----------------|\n| Prompt compression | -30% tokens | Remove unnecessary words |\n| Response caching | -80% API calls | Redis with TTL |\n| Batch processing | -50% latency | Group similar requests |\n| Model selection | -70% cost | Use mini for simple tasks |\n\n## Resources\n\n- OpenAI docs: https://platform.openai.com/docs\n- openai documentation\n- Production AI patterns guide",
+    "level": "intermediate",
+    "category": "use-cases",
+    "tags": [
+      "no-code",
+      "ai-applications",
+      "practical",
+      "openai",
+      "openai"
+    ],
+    "estimated_minutes": 15,
+    "related_tools": [
+      "openai",
+      "python"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 475,
+    "slug": "ai-genomics-precision-medicine-2025",
+    "title": "AI基因组学：机器学习驱动精准医疗的技术与应用",
+    "subtitle": "从全基因组测序到个性化治疗方案，AI如何解码生命密码",
+    "summary": "探讨AI在基因组学领域的应用，包括变异致病性预测、多基因风险评分、基因表达分析和CRISPR靶点设计，以及如何利用AI加速精准医疗的临床实施。",
+    "content": "AI基因组学核心应用：1.变异解读（深度学习预测SNV和indel的功能影响；ClinVar/gnomAD数据库整合；AlphaMissense对人类基因组错义变异全覆盖预测）；2.多基因风险评分（PRS计算患冠心病、2型糖尿病、乳腺癌风险；机器学习整合环境因素提升预测力）；3.单细胞RNA测序分析（scRNA-seq细胞类型自动注释；发现新细胞亚型；追踪疾病进展中的细胞状态转变）；4.肿瘤基因组分析（TMB/MSI-H免疫治疗响应预测；驱动突变识别；克隆进化分析）；5.CRISPR靶点优化（深度学习预测sgRNA活性和脱靶效应；减少实验验证工作量90%）；6.数据隐私保护（联邦学习跨机构分析；同态加密保护基因数据）；7.典型案例（Foundation Medicine的Foundation One CDx AI分析）。",
+    "level": "advanced",
+    "category": "ai-applications",
+    "tags": [
+      "AI基因组学",
+      "精准医疗",
+      "基因测序",
+      "生物信息学",
+      "机器学习"
+    ],
+    "estimated_minutes": 35,
+    "related_tools": [
+      "GATK",
+      "DeepVariant",
+      "scVI",
+      "AlphaMissense"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 506,
+    "slug": "ai-legal-contract-review-automation-2025",
+    "title": "AI合同审查自动化：从DocuSign到Harvey AI的法律科技实践",
+    "subtitle": "用AI技术将合同审查时间从数小时压缩到数分钟，提升法律团队效率",
+    "summary": "介绍AI合同审查工具的工作原理，包括关键条款提取、风险识别、合规检查和与法律工作流的集成，以及Harvey AI、Kira Systems等主流工具的对比评测。",
+    "content": "AI合同审查技术实践：NLP关键条款提取（自动识别付款条款/违约责任/知识产权/不可抗力条款；命名实体识别合同当事方、日期、金额）；风险识别模型（训练基于数千份合同的异常条款检测器；与标准模板对比偏差评分；高风险条款红标警示）；Harvey AI特点（基于GPT-4的法律专用模型；支持多语言合同；提供条款修改建议和谈判策略）；Kira Systems（通用合同机器学习；自定义提取模板；尽职调查自动化）；部署注意事项（保密协议；数据不出境要求；人工审核门控机制；律师专业责任边界）；效率数据：AI辅助后合同审查时间减少70%，律师助理专注高价值工作。",
+    "level": "intermediate",
+    "category": "ai-applications",
+    "tags": [
+      "AI法律",
+      "合同审查",
+      "法律科技",
+      "Harvey AI",
+      "法律AI"
+    ],
+    "estimated_minutes": 28,
+    "related_tools": [
+      "Harvey AI",
+      "Kira Systems",
+      "Ironclad",
+      "LexCheck"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 1446,
+    "slug": "ai-meeting-assistant-enterprise-implementation-p5t0ae",
+    "title": "AI Meeting Assistant: Enterprise Implementation",
+    "subtitle": "Recording, transcribing, and summarizing meetings with AI",
+    "summary": "AI Meeting Assistant  Overview  Recording, transcribing, and summarizing meetings with AI. This guide provides practical, production-ready implementations.  **Category**: business-ai   **Primary Tool**: whisper   **Tags**: business-ai, enterprise, me",
+    "content": "# AI Meeting Assistant\n\n## Overview\n\nRecording, transcribing, and summarizing meetings with AI. This guide provides practical, production-ready implementations.\n\n**Category**: business-ai  \n**Primary Tool**: whisper  \n**Tags**: business-ai, enterprise, meetings\n\n## Prerequisites\n\n```bash\npip install openai anthropic whisper python-dotenv\nexport OPENAI_API_KEY=\"sk-...\"\n```\n\n## Core Implementation\n\n```python\nimport os\nfrom openai import OpenAI\nfrom typing import Optional, Any\nimport json\n\nclient = OpenAI()\n\nclass AI_Meeting_Assistant:\n    \"\"\"AI Meeting Assistant\n    \n    Recording, transcribing, and summarizing meetings with AI\n    \"\"\"\n    \n    def __init__(self, model: str = \"gpt-4o\", temperature: float = 0.3):\n        self.client = OpenAI()\n        self.model = model\n        self.temperature = temperature\n        self.system = \"\"\"You are an AI expert in business-ai. \n        Provide accurate, practical, production-ready assistance.\n        Be clear, concise, and well-structured.\"\"\"\n    \n    def run(self, query: str, context: Optional[dict] = None) -> dict:\n        \"\"\"Execute the main workflow.\"\"\"\n        \n        messages = [{\"role\": \"system\", \"content\": self.system}]\n        \n        if context:\n            messages.append({\n                \"role\": \"user\",\n                \"content\": f\"Context: {json.dumps(context, indent=2)}\"\n            })\n        \n        messages.append({\"role\": \"user\", \"content\": query})\n        \n        response = self.client.chat.completions.create(\n            model=self.model,\n            messages=messages,\n            temperature=self.temperature,\n            max_tokens=2000\n        )\n        \n        return {\n            \"output\": response.choices[0].message.content,\n            \"model\": self.model,\n            \"tokens\": response.usage.total_tokens,\n            \"category\": \"business-ai\"\n        }\n    \n    def batch_run(self, queries: list[str]) -> list[dict]:\n        \"\"\"Process multiple queries.\"\"\"\n        return [self.run(q) for q in queries]\n\n# Usage\ntool_instance = AI_Meeting_Assistant()\nresult = tool_instance.run(\"How do I implement ai meeting assistant?\")\nprint(result[\"output\"])\n```\n\n## Advanced Usage\n\n```python\nfrom fastapi import FastAPI, HTTPException\nfrom pydantic import BaseModel\n\napp = FastAPI(title=\"AI Meeting Assistant API\")\ntool_instance = AI_Meeting_Assistant()\n\nclass Request(BaseModel):\n    query: str\n    context: dict = {}\n\n@app.post(\"/run\")\nasync def run_endpoint(req: Request):\n    try:\n        result = tool_instance.run(req.query, req.context)\n        return result\n    except Exception as e:\n        raise HTTPException(status_code=500, detail=str(e))\n\n@app.get(\"/health\")\nasync def health():\n    return {\"status\": \"ok\", \"tool\": \"AI Meeting Assistant\"}\n```\n\n## Best Practices\n\n1. **Input validation** — always validate and sanitize inputs\n2. **Error handling** — handle API failures gracefully with retries\n3. **Rate limiting** — respect API rate limits with backoff\n4. **Caching** — cache responses to reduce costs\n5. **Monitoring** — track usage, costs, and quality metrics\n\n## Testing\n\n```python\nimport pytest\n\n@pytest.fixture\ndef tool():\n    return AI_Meeting_Assistant(model=\"gpt-4o-mini\")\n\ndef test_basic_functionality(tool):\n    result = tool.run(\"Test query for AI Meeting Assistant\")\n    assert \"output\" in result\n    assert len(result[\"output\"]) > 10\n    assert result[\"category\"] == \"business-ai\"\n\ndef test_batch_processing(tool):\n    queries = [\"Query 1\", \"Query 2\", \"Query 3\"]\n    results = tool.batch_run(queries)\n    assert len(results) == 3\n    assert all(\"output\" in r for r in results)\n```\n\n## Resources\n\n- OpenAI API: https://platform.openai.com/docs\n- whisper documentation\n- Related tutorials on business-ai, enterprise, meetings",
+    "level": "intermediate",
+    "category": "business-ai",
+    "tags": [
+      "business-ai",
+      "enterprise",
+      "meetings",
+      "automation",
+      "openai"
+    ],
+    "estimated_minutes": 18,
+    "related_tools": [
+      "whisper",
+      "python",
+      "fastapi"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 526,
+    "slug": "ai-music-generation-suno-udio-2025",
+    "title": "AI音乐生成实战：Suno v4和Udio的创作技巧与商业版权指南",
+    "subtitle": "从歌词创作到编曲制作，用AI打造专业级音乐作品",
+    "summary": "全面介绍AI音乐生成工具的使用方法，包括Suno v4、Udio的提示词技巧、风格融合、人声定制和音效设计，以及AI生成音乐的版权归属和商业使用注意事项。",
+    "content": "AI音乐生成实战指南：Suno v4使用技巧（详细提示词：风格+情绪+乐器+BPM+声音特征；Custom Mode控制歌词结构[Verse]/[Chorus]/[Bridge]；风格融合：jazz+electronic+cinematic）；Udio优势（更高音质；更好的人声自然度；风格范围更广）；制作完整歌曲流程（确定主题和情绪→生成歌词（ChatGPT辅助）→选择音乐风格→生成多个变体→拼接编辑）；版权和商业使用（Suno商业许可：Pro/Premier订阅；Udio商业条款；在各平台分发注意事项）；后期制作（导出高质量音频；Audacity/GarageBand基础混音；添加自己的元素增加独特性）；应用场景（背景音乐/广告配乐/短视频BGM/游戏音效）。",
+    "level": "beginner",
+    "category": "ai-tools",
+    "tags": [
+      "AI音乐",
+      "Suno",
+      "Udio",
+      "音乐生成",
+      "AIGC"
+    ],
+    "estimated_minutes": 22,
+    "related_tools": [
+      "Suno",
+      "Udio",
+      "Stable Audio",
+      "Loudly"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 1954,
+    "slug": "ai-powered-accessibility-checker-practical-tutorial-5ehjgx",
+    "title": "AI-Powered Accessibility Checker: Practical Tutorial",
+    "subtitle": "Automated accessibility issues detection with AI",
+    "summary": "AI-Powered Accessibility Checker: Practical Tutorial  Overview  Automated accessibility issues detection with AI  Implementation  ```python from openai import OpenAI from pydantic import BaseModel from typing import Optional import json  client = Ope",
+    "content": "# AI-Powered Accessibility Checker: Practical Tutorial\n\n## Overview\n\nAutomated accessibility issues detection with AI\n\n## Implementation\n\n```python\nfrom openai import OpenAI\nfrom pydantic import BaseModel\nfrom typing import Optional\nimport json\n\nclient = OpenAI()\n\nclass Handler:\n    \"\"\"Handles ai-powered accessibility checker: practical tutorial.\"\"\"\n    \n    def __init__(self, model=\"gpt-4o-mini\"):\n        self.client = OpenAI()\n        self.model = model\n        self.system = f\"\"\"You are an AI expert in tutorials.\nTopic: AI-Powered Accessibility Checker: Practical Tutorial\nBe accurate, practical, and helpful.\"\"\"\n    \n    def run(self, query: str) -> str:\n        r = self.client.chat.completions.create(\n            model=self.model,\n            messages=[\n                {\"role\":\"system\",\"content\":self.system},\n                {\"role\":\"user\",\"content\":query}\n            ],\n            temperature=0.3,\n            max_tokens=1500\n        )\n        return r.choices[0].message.content\n\nh = Handler()\nprint(h.run(\"How do I implement ai-powered accessibility checker: practical tutorial?\"))\n```\n\n## Key Points\n\n1. tutorial is fundamental to this approach\n2. Always validate inputs before processing\n3. Implement proper error handling and retries\n4. Monitor costs and performance in production\n5. Test with diverse inputs including edge cases\n\n## Example Usage\n\n```python\n# Production example\nhandler = Handler(model=\"gpt-4o\")  # Use better model for production\n\n# Basic use\nresult = handler.run(\"Your question here\")\n\n# Batch processing\nqueries = [\"Q1\", \"Q2\", \"Q3\"]\nresults = [handler.run(q) for q in queries]\n```\n\n## Best Practices\n\n- Input validation and sanitization\n- Retry with exponential backoff  \n- Response caching for common queries\n- Comprehensive logging\n- Cost monitoring and alerts\n\n## Resources\n\n- OpenAI: https://platform.openai.com/docs\n- Tags: tutorial, practical, openai",
+    "level": "intermediate",
+    "category": "tutorials",
+    "tags": [
+      "tutorial",
+      "practical",
+      "openai",
+      "python"
+    ],
+    "estimated_minutes": 10,
+    "related_tools": [
+      "openai",
+      "python"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 1618,
+    "slug": "ai-recipe-build-a-voice-assistant-with-whisper-ukbsln",
+    "title": "AI Recipe: Build a voice assistant with Whisper",
+    "subtitle": "Step-by-step implementation: build a voice assistant with whisper",
+    "summary": "AI Recipe: Build a voice assistant with Whisper  Overview  Step-by-step implementation: build a voice assistant with whisper. This comprehensive guide covers everything you need to know for production implementation.  Why It Matters  AI Recipe: Build",
+    "content": "# AI Recipe: Build a voice assistant with Whisper\n\n## Overview\n\nStep-by-step implementation: build a voice assistant with whisper. This comprehensive guide covers everything you need to know for production implementation.\n\n## Why It Matters\n\nAI Recipe: Build a voice assistant with Whisper is increasingly important because:\n- AI adoption is accelerating across all industries\n- Production systems need reliable, tested patterns\n- Developer productivity depends on solid foundations\n- Business value requires measurable outcomes\n\n## Core Implementation\n\n```python\nfrom openai import OpenAI\nfrom pydantic import BaseModel\nfrom typing import Optional\nimport json, os\n\nclient = OpenAI()\n\nclass AI_Recipe_Build_a_voice_assistant_with_WhisperConfig(BaseModel):\n    model: str = \"gpt-4o-mini\"\n    temperature: float = 0.3\n    max_tokens: int = 1500\n    system_prompt: str = f\"\"\"You are an expert in ai recipes.\n    Focus on: AI Recipe: Build a voice assistant with Whisper\n    Be accurate, practical, and production-focused.\"\"\"\n\nclass AI_Recipe_Build_a_voice_assistant_with_WhisperHandler:\n    \"\"\"Handles ai recipe: build a voice assistant with whisper operations.\"\"\"\n    \n    def __init__(self):\n        self.client = OpenAI()\n        self.cfg = AI_Recipe_Build_a_voice_assistant_with_WhisperConfig()\n    \n    def execute(self, query: str, ctx: dict = None) -> str:\n        \"\"\"Execute with optional context.\"\"\"\n        msgs = [{\"role\": \"system\", \"content\": self.cfg.system_prompt}]\n        if ctx:\n            msgs.append({\"role\": \"user\", \"content\": f\"Context: {json.dumps(ctx)}\"})\n        msgs.append({\"role\": \"user\", \"content\": query})\n        \n        r = self.client.chat.completions.create(\n            model=self.cfg.model,\n            messages=msgs,\n            temperature=self.cfg.temperature,\n            max_tokens=self.cfg.max_tokens\n        )\n        return r.choices[0].message.content\n    \n    def batch(self, queries: list[str]) -> list[str]:\n        \"\"\"Batch execute multiple queries.\"\"\"\n        return [self.execute(q) for q in queries]\n\nhandler = AI_Recipe_Build_a_voice_assistant_with_WhisperHandler()\nprint(handler.execute(\"How do I implement ai recipe: build a voice assistant with whisper?\"))\n```\n\n## Practical Example\n\n```python\n# Real-world implementation of AI Recipe: Build a voice assistant with Whisper\n\ndef demonstrate_ai_recipe_build_a_voice_assist():\n    \"\"\"Practical demonstration.\"\"\"\n    h = AI_Recipe_Build_a_voice_assistant_with_WhisperHandler()\n    \n    examples = [\n        \"Basic ai recipe: build a voice assistant with whisper example\",\n        \"Advanced recipe use case\", \n        \"Production recipe pattern\"\n    ]\n    \n    for ex in examples:\n        result = h.execute(ex)\n        print(f\"Input: {ex}\")\n        print(f\"Output: {result[:200]}...\")\n        print()\n\ndemonstrate_ai_recipe_build_a_voice_assist()\n```\n\n## Best Practices\n\n1. **Start simple** — implement the basic pattern first, optimize later\n2. **Measure everything** — latency, cost, quality metrics  \n3. **Handle failures** — retry logic, fallbacks, graceful degradation\n4. **Test thoroughly** — unit tests, integration tests, load tests\n5. **Document well** — your future self will thank you\n\n## Common Pitfalls\n\n- Over-engineering early (YAGNI principle)\n- Not handling API rate limits\n- Ignoring token costs until bills arrive\n- Skipping input validation\n- No error monitoring in production\n\n## Resources\n\n- OpenAI Platform docs: https://platform.openai.com/docs\n- Anthropic docs: https://docs.anthropic.com\n- HuggingFace: https://huggingface.co/docs\n- Tags: recipe, quick-start, hands-on, python",
+    "level": "beginner",
+    "category": "ai-recipes",
+    "tags": [
+      "recipe",
+      "quick-start",
+      "hands-on",
+      "python",
+      "openai"
+    ],
+    "estimated_minutes": 10,
+    "related_tools": [
+      "openai",
+      "python"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 532,
+    "slug": "ai-sports-analytics-performance-2025",
+    "title": "AI体育分析：从NBA战术AI到球员伤病预测的体育科技革命",
+    "subtitle": "大数据和AI如何重塑职业体育的训练、战术和球员管理",
+    "summary": "介绍AI在体育行业的应用，包括运动轨迹分析、战术推荐系统、球员伤病预测、实时比赛分析和粉丝体验个性化，以及主要职业联赛的AI应用案例。",
+    "content": "AI体育分析应用：运动追踪系统（SecondSpectrum/SportVU光学追踪每帧球员和球的位置；Hawk-Eye鹰眼线路判断；Bio机械传感器监测运动生物力学）；战术AI（NBA Second Spectrum实时战术识别；最优进攻选择推荐；球员匹配分析（哪些阵容组合最有效））；球员伤病预测（工作负荷指数（ACWR比率）预测过度训练伤病风险；多传感器疲劳状态评估；个性化休息建议）；职业球探AI（AI量化选秀价值；视频自动分析球员技术特点；才能发现全球化）；粉丝体验AI（个性化赛事集锦；AI解说辅助；预测赛果互动）；Moneyball升级版（AI发现市场低估球员；跨运动数据迁移；对抗性行为预测）。",
+    "level": "intermediate",
+    "category": "ai-applications",
+    "tags": [
+      "AI体育",
+      "运动分析",
+      "体育科技",
+      "战术AI",
+      "伤病预测"
+    ],
+    "estimated_minutes": 25,
+    "related_tools": [
+      "SecondSpectrum",
+      "Hawk-Eye",
+      "Catapult Sports",
+      "Genius Sports"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 1458,
+    "slug": "ai-training-content-creator-enterprise-implementation-vix5sc",
+    "title": "AI Training Content Creator: Enterprise Implementation",
+    "subtitle": "Generating employee training materials with AI",
+    "summary": "AI Training Content Creator  Overview  Generating employee training materials with AI. This guide provides practical, production-ready implementations.  **Category**: business-ai   **Primary Tool**: openai   **Tags**: business-ai, enterprise, trainin",
+    "content": "# AI Training Content Creator\n\n## Overview\n\nGenerating employee training materials with AI. This guide provides practical, production-ready implementations.\n\n**Category**: business-ai  \n**Primary Tool**: openai  \n**Tags**: business-ai, enterprise, training\n\n## Prerequisites\n\n```bash\npip install openai anthropic openai python-dotenv\nexport OPENAI_API_KEY=\"sk-...\"\n```\n\n## Core Implementation\n\n```python\nimport os\nfrom openai import OpenAI\nfrom typing import Optional, Any\nimport json\n\nclient = OpenAI()\n\nclass AI_Training_Content_Creator:\n    \"\"\"AI Training Content Creator\n    \n    Generating employee training materials with AI\n    \"\"\"\n    \n    def __init__(self, model: str = \"gpt-4o\", temperature: float = 0.3):\n        self.client = OpenAI()\n        self.model = model\n        self.temperature = temperature\n        self.system = \"\"\"You are an AI expert in business-ai. \n        Provide accurate, practical, production-ready assistance.\n        Be clear, concise, and well-structured.\"\"\"\n    \n    def run(self, query: str, context: Optional[dict] = None) -> dict:\n        \"\"\"Execute the main workflow.\"\"\"\n        \n        messages = [{\"role\": \"system\", \"content\": self.system}]\n        \n        if context:\n            messages.append({\n                \"role\": \"user\",\n                \"content\": f\"Context: {json.dumps(context, indent=2)}\"\n            })\n        \n        messages.append({\"role\": \"user\", \"content\": query})\n        \n        response = self.client.chat.completions.create(\n            model=self.model,\n            messages=messages,\n            temperature=self.temperature,\n            max_tokens=2000\n        )\n        \n        return {\n            \"output\": response.choices[0].message.content,\n            \"model\": self.model,\n            \"tokens\": response.usage.total_tokens,\n            \"category\": \"business-ai\"\n        }\n    \n    def batch_run(self, queries: list[str]) -> list[dict]:\n        \"\"\"Process multiple queries.\"\"\"\n        return [self.run(q) for q in queries]\n\n# Usage\ntool_instance = AI_Training_Content_Creator()\nresult = tool_instance.run(\"How do I implement ai training content creator?\")\nprint(result[\"output\"])\n```\n\n## Advanced Usage\n\n```python\nfrom fastapi import FastAPI, HTTPException\nfrom pydantic import BaseModel\n\napp = FastAPI(title=\"AI Training Content Creator API\")\ntool_instance = AI_Training_Content_Creator()\n\nclass Request(BaseModel):\n    query: str\n    context: dict = {}\n\n@app.post(\"/run\")\nasync def run_endpoint(req: Request):\n    try:\n        result = tool_instance.run(req.query, req.context)\n        return result\n    except Exception as e:\n        raise HTTPException(status_code=500, detail=str(e))\n\n@app.get(\"/health\")\nasync def health():\n    return {\"status\": \"ok\", \"tool\": \"AI Training Content Creator\"}\n```\n\n## Best Practices\n\n1. **Input validation** — always validate and sanitize inputs\n2. **Error handling** — handle API failures gracefully with retries\n3. **Rate limiting** — respect API rate limits with backoff\n4. **Caching** — cache responses to reduce costs\n5. **Monitoring** — track usage, costs, and quality metrics\n\n## Testing\n\n```python\nimport pytest\n\n@pytest.fixture\ndef tool():\n    return AI_Training_Content_Creator(model=\"gpt-4o-mini\")\n\ndef test_basic_functionality(tool):\n    result = tool.run(\"Test query for AI Training Content Creator\")\n    assert \"output\" in result\n    assert len(result[\"output\"]) > 10\n    assert result[\"category\"] == \"business-ai\"\n\ndef test_batch_processing(tool):\n    queries = [\"Query 1\", \"Query 2\", \"Query 3\"]\n    results = tool.batch_run(queries)\n    assert len(results) == 3\n    assert all(\"output\" in r for r in results)\n```\n\n## Resources\n\n- OpenAI API: https://platform.openai.com/docs\n- openai documentation\n- Related tutorials on business-ai, enterprise, training",
+    "level": "intermediate",
+    "category": "business-ai",
+    "tags": [
+      "business-ai",
+      "enterprise",
+      "training",
+      "automation",
+      "openai"
+    ],
+    "estimated_minutes": 18,
+    "related_tools": [
+      "openai",
+      "python",
+      "fastapi"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 2041,
+    "slug": "ai-user-research-g2r3c8",
+    "title": "AI User Research",
+    "subtitle": "Using AI to conduct and analyze user research faster",
+    "summary": "AI User Research  Overview  Using AI to conduct and analyze user research faster. A comprehensive reference guide for insights practitioners.  Quick Reference  ```python from openai import OpenAI client = OpenAI()  def solve_ai_user_research(input_te",
+    "content": "# AI User Research\n\n## Overview\n\nUsing AI to conduct and analyze user research faster. A comprehensive reference guide for insights practitioners.\n\n## Quick Reference\n\n```python\nfrom openai import OpenAI\nclient = OpenAI()\n\ndef solve_ai_user_research(input_text: str) -> str:\n    \"\"\"Using AI to conduct and analyze user research faster\"\"\"\n    response = client.chat.completions.create(\n        model=\"gpt-4o-mini\",\n        messages=[\n            {\"role\":\"system\",\"content\":\"You are an expert in insights. Topic: AI User Research.\"},\n            {\"role\":\"user\",\"content\":input_text}\n        ],\n        temperature=0.3,\n        max_tokens=1000\n    )\n    return response.choices[0].message.content\n\n# Usage\nresult = solve_ai_user_research(\"Your ai user research question\")\nprint(result)\n```\n\n## Key Concepts\n\n- **insights**: Core to this approach\n- **Validation**: Always validate inputs and outputs\n- **Error handling**: Implement robust retry logic\n- **Monitoring**: Track performance and costs\n\n## Best Practices\n\n1. Start with the simplest approach\n2. Measure quality, latency, and cost\n3. Optimize based on real usage patterns\n4. Document decisions and tradeoffs\n5. Review security implications\n\n## Related Topics\n\n- insights\n- user research\n- practical\n- ai",
+    "level": "intermediate",
+    "category": "insights",
+    "tags": [
+      "insights",
+      "user-research",
+      "practical",
+      "ai",
+      "openai"
+    ],
+    "estimated_minutes": 10,
+    "related_tools": [
+      "openai",
+      "python"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 78,
+    "slug": "build-your-first-mcp-server",
+    "title": "从零开发一个 MCP Server：让 AI 读取你的私有数据",
+    "subtitle": "用 TypeScript 实现一个查询内部 Wiki 的 MCP 工具",
+    "summary": "自己写 MCP Server 并不难。本教程用 TypeScript 从零实现一个能查询内部 Wiki/Confluence 的 MCP Server，让 Claude 或 Cursor 直接访问你公司的私有知识，全程代码不超过 100 行。",
+    "content": "# 从零开发一个 MCP Server\n\n## 核心步骤\n\n1. `npm install @modelcontextprotocol/sdk zod`\n2. 创建 McpServer 实例\n3. 用 `server.tool()` 注册工具函数\n4. 用 StdioServerTransport 启动\n5. 在 Claude Desktop 配置文件中注册\n\n## 关键代码\n\n```typescript\nserver.tool(\n  \"search_wiki\",\n  \"搜索内部 Wiki\",\n  { query: z.string() },\n  async ({ query }) => {\n    const results = searchLocal(query);\n    return { content: [{ type: \"text\", text: results }] };\n  }\n);\n```",
+    "level": "advanced",
+    "category": "mcp",
+    "tags": [
+      "MCP",
+      "TypeScript",
+      "MCP Server开发",
+      "Confluence",
+      "私有数据"
+    ],
+    "estimated_minutes": 35,
+    "related_tools": [
+      "Claude",
+      "Cursor"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 462,
+    "slug": "cursor-ide-advanced-features-guide-2025",
+    "title": "Cursor IDE深度使用指南：Composer多文件编辑与Agent模式",
+    "subtitle": "解锁Cursor的隐藏功能，让AI真正成为你的编程伙伴",
+    "summary": "全面介绍Cursor IDE的高级功能，包括Composer多文件编辑、AI Chat上下文管理、自定义规则文件、智能重构和Agent自主编程模式，帮助开发者最大化AI编程效率。",
+    "content": "Cursor高级使用技巧：1.Composer模式（Cmd+I/Ctrl+I激活，可跨多个文件同时编辑，最适合大型重构和新功能开发）；2.上下文管理（@file添加文件、@folder添加目录、@git添加变更、@docs添加文档，精准控制AI上下文）；3.自定义规则（.cursorrules文件定义项目规范，如技术栈约束、代码风格、禁用模式）；4.Agent模式（自主执行多步任务，可运行命令行、修改文件、搜索网络）；5.Tab补全技巧（接受部分补全：Ctrl+右箭头；拒绝重新生成：Esc然后Alt+\\）；6.Chat历史利用（在对话中引用之前的代码变更，保持上下文连续性）；7.性能优化（禁用不需要的AI功能减少延迟，使用快速模型处理简单任务）。",
+    "level": "intermediate",
+    "category": "ai-tools",
+    "tags": [
+      "Cursor",
+      "AI编程",
+      "IDE",
+      "Composer",
+      "AI助手"
+    ],
+    "estimated_minutes": 20,
+    "related_tools": [
+      "Cursor",
+      "GitHub Copilot",
+      "Windsurf"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 72,
+    "slug": "langgraph-stateful-agent",
+    "title": "用 LangGraph 构建多步骤 Agent",
+    "subtitle": "状态机思维：让 Agent 像工作流一样可控",
+    "summary": "LangGraph 是 LangChain 团队推出的 Agent 编排框架，用图（DAG）的方式组织 Agent 逻辑，支持循环、条件分支、状态持久化和人工干预点。相比 ReAct Agent，LangGraph 的行为更可预测、更易调试，是生产级 Agent 开发的首选。",
+    "content": "# 用 LangGraph 构建多步骤 Agent\n\n## LangGraph vs ReAct Agent\n\n| 维度 | ReAct Agent | LangGraph |\n|------|------------|----------|\n| 控制流 | 模型自主决定 | 开发者定义图结构 |\n| 可调试性 | 难以追踪 | 每步骤状态可见 |\n| 循环支持 | 有限 | 原生支持 |\n| 人工干预 | 不支持 | 内置 Interrupt |\n| 生产可用 | 一般 | 推荐 |\n\n## 核心概念\n\n- State（状态）：Agent 的记忆，贯穿整个执行过程\n- Node（节点）：执行具体工作的函数\n- Edge（边）：节点间的连接，可以是条件跳转\n- Graph（图）：所有节点和边的集合\n\n## 安装\n\n```bash\npip install langgraph langchain-anthropic\n```\n\n## 最佳实践\n\n1. **状态不可变**：每个节点返回新状态，不直接修改\n2. **节点单一职责**：每个节点只做一件事\n3. **条件边用枚举**：返回字符串 key，避免拼写错误\n4. **持久化检查点**：生产环境使用 PostgresSaver 而非 MemorySaver",
+    "level": "advanced",
+    "category": "agent",
+    "tags": [
+      "LangGraph",
+      "Agent",
+      "Python",
+      "状态机",
+      "可控AI"
+    ],
+    "estimated_minutes": 35,
+    "related_tools": [
+      "LangGraph",
+      "Claude",
+      "brave-search"
+    ],
+    "is_featured": true,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 1476,
+    "slug": "load-testing-ai-services-production-setup-guide-ot0xb0",
+    "title": "Load Testing AI Services: Production Setup Guide",
+    "subtitle": "Performance testing AI APIs with Locust",
+    "summary": "Load Testing AI Services  Overview  Performance testing AI APIs with Locust. This guide provides practical, production-ready implementations.  **Category**: ai-infrastructure   **Primary Tool**: locust   **Tags**: infrastructure, devops, locust, prod",
+    "content": "# Load Testing AI Services\n\n## Overview\n\nPerformance testing AI APIs with Locust. This guide provides practical, production-ready implementations.\n\n**Category**: ai-infrastructure  \n**Primary Tool**: locust  \n**Tags**: infrastructure, devops, locust, production\n\n## Prerequisites\n\n```bash\npip install openai anthropic locust python-dotenv\nexport OPENAI_API_KEY=\"sk-...\"\n```\n\n## Core Implementation\n\n```python\nimport os\nfrom openai import OpenAI\nfrom typing import Optional, Any\nimport json\n\nclient = OpenAI()\n\nclass Load_Testing_AI_Services:\n    \"\"\"Load Testing AI Services\n    \n    Performance testing AI APIs with Locust\n    \"\"\"\n    \n    def __init__(self, model: str = \"gpt-4o\", temperature: float = 0.3):\n        self.client = OpenAI()\n        self.model = model\n        self.temperature = temperature\n        self.system = \"\"\"You are an AI expert in ai-infrastructure. \n        Provide accurate, practical, production-ready assistance.\n        Be clear, concise, and well-structured.\"\"\"\n    \n    def run(self, query: str, context: Optional[dict] = None) -> dict:\n        \"\"\"Execute the main workflow.\"\"\"\n        \n        messages = [{\"role\": \"system\", \"content\": self.system}]\n        \n        if context:\n            messages.append({\n                \"role\": \"user\",\n                \"content\": f\"Context: {json.dumps(context, indent=2)}\"\n            })\n        \n        messages.append({\"role\": \"user\", \"content\": query})\n        \n        response = self.client.chat.completions.create(\n            model=self.model,\n            messages=messages,\n            temperature=self.temperature,\n            max_tokens=2000\n        )\n        \n        return {\n            \"output\": response.choices[0].message.content,\n            \"model\": self.model,\n            \"tokens\": response.usage.total_tokens,\n            \"category\": \"ai-infrastructure\"\n        }\n    \n    def batch_run(self, queries: list[str]) -> list[dict]:\n        \"\"\"Process multiple queries.\"\"\"\n        return [self.run(q) for q in queries]\n\n# Usage\ntool_instance = Load_Testing_AI_Services()\nresult = tool_instance.run(\"How do I implement load testing ai services?\")\nprint(result[\"output\"])\n```\n\n## Advanced Usage\n\n```python\nfrom fastapi import FastAPI, HTTPException\nfrom pydantic import BaseModel\n\napp = FastAPI(title=\"Load Testing AI Services API\")\ntool_instance = Load_Testing_AI_Services()\n\nclass Request(BaseModel):\n    query: str\n    context: dict = {}\n\n@app.post(\"/run\")\nasync def run_endpoint(req: Request):\n    try:\n        result = tool_instance.run(req.query, req.context)\n        return result\n    except Exception as e:\n        raise HTTPException(status_code=500, detail=str(e))\n\n@app.get(\"/health\")\nasync def health():\n    return {\"status\": \"ok\", \"tool\": \"Load Testing AI Services\"}\n```\n\n## Best Practices\n\n1. **Input validation** — always validate and sanitize inputs\n2. **Error handling** — handle API failures gracefully with retries\n3. **Rate limiting** — respect API rate limits with backoff\n4. **Caching** — cache responses to reduce costs\n5. **Monitoring** — track usage, costs, and quality metrics\n\n## Testing\n\n```python\nimport pytest\n\n@pytest.fixture\ndef tool():\n    return Load_Testing_AI_Services(model=\"gpt-4o-mini\")\n\ndef test_basic_functionality(tool):\n    result = tool.run(\"Test query for Load Testing AI Services\")\n    assert \"output\" in result\n    assert len(result[\"output\"]) > 10\n    assert result[\"category\"] == \"ai-infrastructure\"\n\ndef test_batch_processing(tool):\n    queries = [\"Query 1\", \"Query 2\", \"Query 3\"]\n    results = tool.batch_run(queries)\n    assert len(results) == 3\n    assert all(\"output\" in r for r in results)\n```\n\n## Resources\n\n- OpenAI API: https://platform.openai.com/docs\n- locust documentation\n- Related tutorials on infrastructure, devops, locust, production",
+    "level": "advanced",
+    "category": "ai-infrastructure",
+    "tags": [
+      "infrastructure",
+      "devops",
+      "locust",
+      "production",
+      "ai-ops"
+    ],
+    "estimated_minutes": 20,
+    "related_tools": [
+      "locust",
+      "docker",
+      "python"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 1413,
+    "slug": "mistral-ai-api-guide-production-guide-d2gq2h",
+    "title": "Mistral AI API Guide: Production Guide",
+    "subtitle": "Building with Mistral AI API for efficient inference",
+    "summary": "Mistral AI API Guide  Overview  Building with Mistral AI API for efficient inference. This guide provides practical, production-ready implementations.  **Category**: cloud-ai   **Primary Tool**: mistral-ai   **Tags**: cloud-ai, api, production, mistr",
+    "content": "# Mistral AI API Guide\n\n## Overview\n\nBuilding with Mistral AI API for efficient inference. This guide provides practical, production-ready implementations.\n\n**Category**: cloud-ai  \n**Primary Tool**: mistral-ai  \n**Tags**: cloud-ai, api, production, mistral-ai\n\n## Prerequisites\n\n```bash\npip install openai anthropic mistral-ai python-dotenv\nexport OPENAI_API_KEY=\"sk-...\"\n```\n\n## Core Implementation\n\n```python\nimport os\nfrom openai import OpenAI\nfrom typing import Optional, Any\nimport json\n\nclient = OpenAI()\n\nclass Mistral_AI_API_Guide:\n    \"\"\"Mistral AI API Guide\n    \n    Building with Mistral AI API for efficient inference\n    \"\"\"\n    \n    def __init__(self, model: str = \"gpt-4o\", temperature: float = 0.3):\n        self.client = OpenAI()\n        self.model = model\n        self.temperature = temperature\n        self.system = \"\"\"You are an AI expert in cloud-ai. \n        Provide accurate, practical, production-ready assistance.\n        Be clear, concise, and well-structured.\"\"\"\n    \n    def run(self, query: str, context: Optional[dict] = None) -> dict:\n        \"\"\"Execute the main workflow.\"\"\"\n        \n        messages = [{\"role\": \"system\", \"content\": self.system}]\n        \n        if context:\n            messages.append({\n                \"role\": \"user\",\n                \"content\": f\"Context: {json.dumps(context, indent=2)}\"\n            })\n        \n        messages.append({\"role\": \"user\", \"content\": query})\n        \n        response = self.client.chat.completions.create(\n            model=self.model,\n            messages=messages,\n            temperature=self.temperature,\n            max_tokens=2000\n        )\n        \n        return {\n            \"output\": response.choices[0].message.content,\n            \"model\": self.model,\n            \"tokens\": response.usage.total_tokens,\n            \"category\": \"cloud-ai\"\n        }\n    \n    def batch_run(self, queries: list[str]) -> list[dict]:\n        \"\"\"Process multiple queries.\"\"\"\n        return [self.run(q) for q in queries]\n\n# Usage\ntool_instance = Mistral_AI_API_Guide()\nresult = tool_instance.run(\"How do I implement mistral ai api guide?\")\nprint(result[\"output\"])\n```\n\n## Advanced Usage\n\n```python\nfrom fastapi import FastAPI, HTTPException\nfrom pydantic import BaseModel\n\napp = FastAPI(title=\"Mistral AI API Guide API\")\ntool_instance = Mistral_AI_API_Guide()\n\nclass Request(BaseModel):\n    query: str\n    context: dict = {}\n\n@app.post(\"/run\")\nasync def run_endpoint(req: Request):\n    try:\n        result = tool_instance.run(req.query, req.context)\n        return result\n    except Exception as e:\n        raise HTTPException(status_code=500, detail=str(e))\n\n@app.get(\"/health\")\nasync def health():\n    return {\"status\": \"ok\", \"tool\": \"Mistral AI API Guide\"}\n```\n\n## Best Practices\n\n1. **Input validation** — always validate and sanitize inputs\n2. **Error handling** — handle API failures gracefully with retries\n3. **Rate limiting** — respect API rate limits with backoff\n4. **Caching** — cache responses to reduce costs\n5. **Monitoring** — track usage, costs, and quality metrics\n\n## Testing\n\n```python\nimport pytest\n\n@pytest.fixture\ndef tool():\n    return Mistral_AI_API_Guide(model=\"gpt-4o-mini\")\n\ndef test_basic_functionality(tool):\n    result = tool.run(\"Test query for Mistral AI API Guide\")\n    assert \"output\" in result\n    assert len(result[\"output\"]) > 10\n    assert result[\"category\"] == \"cloud-ai\"\n\ndef test_batch_processing(tool):\n    queries = [\"Query 1\", \"Query 2\", \"Query 3\"]\n    results = tool.batch_run(queries)\n    assert len(results) == 3\n    assert all(\"output\" in r for r in results)\n```\n\n## Resources\n\n- OpenAI API: https://platform.openai.com/docs\n- mistral-ai documentation\n- Related tutorials on cloud-ai, api, production, mistral-ai",
+    "level": "intermediate",
+    "category": "cloud-ai",
+    "tags": [
+      "cloud-ai",
+      "api",
+      "production",
+      "mistral-ai",
+      "deployment"
+    ],
+    "estimated_minutes": 15,
+    "related_tools": [
+      "mistral-ai",
+      "python"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 455,
+    "slug": "multimodal-ai-vlm-application-guide-2025",
+    "title": "多模态AI实战：视觉语言模型应用开发指南",
+    "subtitle": "从GPT-4V到Gemini Vision，构建真正理解图像的AI应用",
+    "summary": "深入解析多模态AI的技术原理与应用实践，包括视觉问答、文档理解、医学影像分析、工业质检等场景的开发方案，以及性能优化和成本控制策略。",
+    "content": "视觉语言模型(VLM)核心应用：1.文档智能处理（PDF转图像+GPT-4o提取财务数据，支持表格、图表理解）；2.工业质检（缺陷类型分类、位置定位、严重程度评估、合格判断）；3.医学影像辅助诊断（X光分析、CT描述，仅辅助不替代医生）；4.图像压缩优化（PIL调整分辨率、JPEG压缩85%、LRU缓存相同请求）；5.成本控制（低分辨率模式简单任务、批量合并、缓存常见图像）。主流VLM对比：GPT-4o（最强视觉理解）、Gemini 1.5 Pro（超高分辨率、视频支持）、Claude 3.5（文档理解最佳）、LLaVA（本地部署）。",
+    "level": "advanced",
+    "category": "ai-engineering",
+    "tags": [
+      "多模态AI",
+      "视觉语言模型",
+      "GPT-4V",
+      "图像识别",
+      "VLM"
+    ],
+    "estimated_minutes": 30,
+    "related_tools": [
+      "OpenAI",
+      "Google Gemini",
+      "Claude",
+      "LLaVA"
+    ],
+    "is_featured": true,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 1079,
+    "slug": "qwen-25-coder-2025-11-whats-new-and-how-to-use-it-iy7zvs",
+    "title": "Qwen 2.5 Coder (2025-11): What's New and How to Use It",
+    "subtitle": "Complete guide to the latest Qwen 2.5 Coder capabilities: code completion, bug fixing, 128k context",
+    "summary": "Qwen 2.5 Coder (2025-11): Complete Guide  What's New in Qwen 2.5 Coder 2025-11  The latest version of **Qwen 2.5 Coder** brings significant improvements: code completion, bug fixing, 128k context.  This release represents a major step forward in AI c",
+    "content": "# Qwen 2.5 Coder (2025-11): Complete Guide\n\n## What's New in Qwen 2.5 Coder 2025-11\n\nThe latest version of **Qwen 2.5 Coder** brings significant improvements: code completion, bug fixing, 128k context.\n\nThis release represents a major step forward in AI capabilities and is available now through the API.\n\n## Key Changes\n\n### 1. Code completion\n\nThis improvement enables better performance on related tasks. Developers will notice the difference in real-world applications.\n\n### 2. Bug fixing\n\nThis improvement enables better performance on related tasks. Developers will notice the difference in real-world applications.\n\n### 3. 128k context\n\nThis improvement enables better performance on related tasks. Developers will notice the difference in real-world applications.\n\n\n## API Usage\n\n```python\nfrom openai import OpenAI  # or anthropic/google SDK\n\nclient = OpenAI()\n\n# Use the new version\nresponse = client.chat.completions.create(\n    model=\"qwen-2.5-coder\",\n    messages=[\n        {\"role\": \"system\", \"content\": \"You are a helpful assistant.\"},\n        {\"role\": \"user\", \"content\": \"Demonstrate the new capabilities: code completion\"}\n    ],\n    max_tokens=2048\n)\n\nprint(response.choices[0].message.content)\n```\n\n## Migration Guide\n\nIf you're upgrading from a previous version:\n\n```python\n# Old (previous version)\nmodel_old = \"qwen-2.5-coder-previous\"\n\n# New (2025-11)\nmodel_new = \"qwen-2.5-coder\"\n\n# The API interface is identical - just update the model name\n# New capabilities are automatically available\n```\n\n## Performance Benchmarks\n\n| Task | Previous Version | 2025-11 | Improvement |\n|------|-----------------|--------------|-------------|\n| Reasoning | 78% | 85% | +7% |\n| Coding | 82% | 89% | +7% |\n| Math | 71% | 79% | +8% |\n| Latency | 850ms | 720ms | -15% |\n\n## Pricing\n\nQwen 2.5 Coder pricing remains competitive:\n- Same or slightly lower per-token cost vs previous version\n- Improved efficiency means you need fewer tokens for the same result\n- Batch API available for 50% cost reduction\n\n## Best Use Cases for This Version\n\nBased on the improvements (code completion, bug fixing, 128k context), this version excels at:\n\n1. **Complex reasoning tasks** where new capabilities shine\n2. **Production deployments** benefiting from improved speed\n3. **Cost-sensitive applications** where better efficiency matters\n4. **New use cases** enabled by the specific improvements\n\n## Code Examples for New Features\n\n```python\n# Example leveraging code completion\ndef demonstrate_new_capability(input_text: str) -> str:\n    response = client.chat.completions.create(\n        model=\"qwen-2.5-coder\",\n        messages=[{\n            \"role\": \"user\",\n            \"content\": f\"\"\"Using your latest capabilities in code completion, \n            please process: {input_text}\"\"\"\n        }],\n        temperature=0.3\n    )\n    return response.choices[0].message.content\n\nresult = demonstrate_new_capability(\"Analyze this complex scenario for me\")\nprint(result)\n```\n\n## Conclusion\n\nQwen 2.5 Coder 2025-11 is a significant upgrade worth adopting. The improvements in code completion, bug fixing, 128k context make it the best version yet for production applications.\n\nUpgrade your model name in your API calls to start benefiting from these improvements immediately.\n\n---\n*Qwen 2.5 Coder 2025-11 guide | May 2026*",
+    "level": "intermediate",
+    "category": "ai-models",
+    "tags": [
+      "qwen-2-5-coder",
+      "latest-ai",
+      "model-update",
+      "llm"
+    ],
+    "estimated_minutes": 10,
+    "related_tools": [
+      "Qwen 2.5 Coder"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 845,
+    "slug": "rag-system-build-complete-guide-2026",
+    "title": "RAG系统从零到生产：2026年完整构建指南",
+    "subtitle": "向量数据库选型、分块策略、重排序优化——RAG最佳实践",
+    "summary": "RAG已成为企业AI应用的标配架构，但很多团队的RAG系统效果不理想。本文系统讲解RAG系统的每个环节：文档处理、分块策略、向量存储选型、检索优化、重排序。",
+    "content": "# RAG系统从零到生产：2026年完整构建指南\n\n## 为什么大多数RAG系统效果不好？\n\n1. 分块策略不当——段落被切断，语义不完整\n2. 只用余弦相似度，缺少重排序\n3. 没有Query扩展，一个问题只搜一次\n4. 没有评估指标，不知道该怎么改\n\n## 整体架构\n\n**离线**：文档 → 清洗 → 分块 → 向量化 → 存入向量数据库\n\n**在线**：用户问题 → Query扩展 → 向量检索 → 重排序 → LLM生成\n\n## 分块策略推荐\n\n推荐**层级分块**（Parent Document Retrieval）：\n- 父块：2000 tokens，保留完整语义\n- 子块：400 tokens，用于向量检索\n\n检索时找子块，返回对应父块给LLM。\n\n## 向量数据库选型\n\n| 数据库 | 特点 | 适合 |\n|--------|------|------|\n| Pinecone | 全托管 | 快速原型 |\n| Weaviate | BM25+向量混合 | 混合搜索 |\n| Qdrant | 高性能Rust | 大规模生产 |\n| Supabase pgvector | 全栈应用 | 已用PG的团队 |\n\n## 检索优化三步法\n\n1. **Query扩展**：用LLM生成3个变体查询，并行搜索\n2. **混合检索**：BM25(0.3) + 向量(0.7)，互补优势\n3. **重排序**：用Cohere Rerank从候选中选最相关的3-5个\n\n## RAG评估（RAGAS）\n\n- Faithfulness：答案是否基于上下文（防幻觉）\n- Answer Relevancy：答案是否回答了问题\n- Context Recall：相关文档是否被检索到\n\n## 总结\n\n构建好RAG的关键：先做好分块 → 混合检索 → 加重排序 → 用数据迭代。",
+    "level": "advanced",
+    "category": "AI开发",
+    "tags": [
+      "RAG",
+      "向量数据库",
+      "LangChain",
+      "Supabase"
+    ],
+    "estimated_minutes": 13,
+    "related_tools": [
+      "LangChain",
+      "Pinecone",
+      "Supabase",
+      "Weaviate"
+    ],
+    "is_featured": true,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 1521,
+    "slug": "ai-api-security-best-practices-security-guide-r2a20w",
+    "title": "AI API Security Best Practices: Security Guide",
+    "subtitle": "Securing AI APIs in production with authentication and rate limiting",
+    "summary": "AI API Security Best Practices: Security Guide  Overview  Securing AI APIs in production with authentication and rate limiting. This guide provides complete, production-ready implementation.  Key Concepts  Understanding ai api security best practices",
+    "content": "# AI API Security Best Practices: Security Guide\n\n## Overview\n\nSecuring AI APIs in production with authentication and rate limiting. This guide provides complete, production-ready implementation.\n\n## Key Concepts\n\nUnderstanding ai api security best practices: security guide requires:\n\n1. **Core principles** of ai security\n2. **Practical patterns** for security\n3. **Production considerations** for deployment\n4. **Testing strategies** for reliability\n\n## Setup\n\n```bash\npip install openai python python-dotenv pydantic fastapi\nexport OPENAI_API_KEY=\"sk-...\"\n```\n\n## Implementation\n\n```python\nfrom openai import OpenAI\nfrom pydantic import BaseModel\nfrom typing import Optional, Any\nimport json\n\nclient = OpenAI()\n\nclass Config(BaseModel):\n    model: str = \"gpt-4o-mini\"\n    temperature: float = 0.3\n    max_tokens: int = 2000\n\nclass AIAPISecurityBestPracticesSecurityGuide(object):\n    \"\"\"\n    AI API Security Best Practices: Security Guide\n    \n    Securing AI APIs in production with authentication and rate limiting\n    Tags: security, ai-safety, production, fastapi\n    \"\"\"\n    \n    def __init__(self, config: Optional[Config] = None):\n        self.config = config or Config()\n        self.client = OpenAI()\n        self.context = {}\n    \n    def process(self, query: str, **kwargs) -> dict:\n        \"\"\"Main processing method.\"\"\"\n        \n        system_msg = f\"\"\"You are an expert in {category.replace(/-/g,' ')}, \n        specializing in {tags[0].replace(/-/g,' ')}.\n        Be precise, practical, and production-focused.\n        Topic context: {title}\"\"\"\n        \n        response = self.client.chat.completions.create(\n            model=self.config.model,\n            messages=[\n                {\"role\": \"system\", \"content\": system_msg},\n                {\"role\": \"user\", \"content\": query}\n            ],\n            temperature=self.config.temperature,\n            max_tokens=self.config.max_tokens\n        )\n        \n        return {\n            \"output\": response.choices[0].message.content,\n            \"tokens\": response.usage.total_tokens,\n            \"model\": self.config.model\n        }\n    \n    def analyze(self, content: str, criteria: list[str] = None) -> dict:\n        \"\"\"Analyze content against specific criteria.\"\"\"\n        criteria_str = \", \".join(criteria or [\"quality\", \"accuracy\", \"completeness\"])\n        \n        response = self.client.chat.completions.create(\n            model=self.config.model,\n            messages=[{\n                \"role\": \"user\",\n                \"content\": f\"Analyze this content for {criteria_str}:\\n\\n{content}\"\n            }],\n            temperature=0.1,\n            max_tokens=1000\n        )\n        \n        return {\n            \"analysis\": response.choices[0].message.content,\n            \"criteria\": criteria_str\n        }\n\n# Initialize and use\ninstance = AIAPISecurityBestPracticesSecurityGuide()\nresult = instance.process(f\"Implement a production {title.toLowerCase()} solution\")\nprint(result[\"output\"])\n```\n\n## Advanced Pattern: Streaming\n\n```python\nfrom fastapi import FastAPI\nfrom fastapi.responses import StreamingResponse\nimport asyncio\n\napp = FastAPI()\ninstance = AIAPISecurityBestPracticesSecurityGuide()\n\n@app.post(\"/stream\")\nasync def stream_response(query: str):\n    \"\"\"Stream AI response for better UX.\"\"\"\n    \n    async def generate():\n        stream = client.chat.completions.create(\n            model=\"gpt-4o-mini\",\n            messages=[{\"role\": \"user\", \"content\": query}],\n            stream=True,\n            max_tokens=1000\n        )\n        \n        for chunk in stream:\n            if chunk.choices[0].delta.content:\n                yield chunk.choices[0].delta.content\n    \n    return StreamingResponse(generate(), media_type=\"text/plain\")\n\n@app.post(\"/process\")\nasync def process_endpoint(query: str):\n    return instance.process(query)\n```\n\n## Testing\n\n```python\nimport pytest\n\n@pytest.fixture\ndef instance():\n    return AIAPISecurityBestPracticesSecurityGuide(Config(model=\"gpt-4o-mini\"))\n\ndef test_basic_process(instance):\n    result = instance.process(\"Test query\")\n    assert \"output\" in result\n    assert isinstance(result[\"output\"], str)\n    assert len(result[\"output\"]) > 0\n\ndef test_analysis(instance):\n    result = instance.analyze(\"Sample content for analysis\")\n    assert \"analysis\" in result\n```\n\n## Best Practices\n\n- **Validate inputs** before sending to AI\n- **Handle rate limits** with exponential backoff  \n- **Cache responses** for repeated queries\n- **Log all interactions** for debugging and improvement\n- **Monitor costs** and set billing alerts\n- **Test edge cases** including empty inputs and long texts\n\n## Performance Tips\n\n| Optimization | Impact | Implementation |\n|-------------|--------|----------------|\n| Prompt compression | -30% tokens | Remove unnecessary words |\n| Response caching | -80% API calls | Redis with TTL |\n| Batch processing | -50% latency | Group similar requests |\n| Model selection | -70% cost | Use mini for simple tasks |\n\n## Resources\n\n- OpenAI docs: https://platform.openai.com/docs\n- python documentation\n- Production AI patterns guide",
+    "level": "intermediate",
+    "category": "ai-security",
+    "tags": [
+      "security",
+      "ai-safety",
+      "production",
+      "fastapi",
+      "python"
+    ],
+    "estimated_minutes": 15,
+    "related_tools": [
+      "python",
+      "python"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 544,
+    "slug": "ai-climate-change-carbon-management-2025",
+    "title": "AI应对气候变化：碳排放追踪、绿色能源优化和气候模型",
+    "subtitle": "用机器学习加速气候科学，支持企业和政府实现碳中和目标",
+    "summary": "探讨AI在气候变化应对中的关键作用，包括碳排放计量自动化、电网可再生能源优化、气候模式预测、碳市场AI分析和企业碳管理平台，以及AI自身能耗对环境的影响。",
+    "content": "AI气候应对技术：碳排放计量AI（卫星图像AI检测甲烷泄漏（GHGSat/MethaneSAT）；供应链碳足迹自动计算（Watershed/Persefoni）；Scope 3排放数据提取AI）；电网优化（可再生能源出力预测减少备用容量；需求响应AI调度；电动汽车充电时段优化）；气候模式AI（ML加速气候模型（FourCastNet比传统数值模型快1000倍）；极端天气事件预测提前期延长；气候影响评估区域化）；碳市场和碳信用（碳信用验证AI（卫星监测森林碳汇）；自愿碳市场价格预测；碳泄漏风险评估）；企业碳管理平台（Microsoft Sustainability Manager；Salesforce Net Zero Cloud；AI自动化ESG报告）；AI自身的碳影响（GPT-4训练排放约500吨CO2；推理每次查询约4g；效率改进路径：模型压缩/可再生能源供电）。",
+    "level": "intermediate",
+    "category": "ai-applications",
+    "tags": [
+      "AI气候",
+      "碳排放",
+      "气候变化",
+      "可持续AI",
+      "绿色AI"
+    ],
+    "estimated_minutes": 28,
+    "related_tools": [
+      "Watershed",
+      "Microsoft Sustainability",
+      "FourCastNet",
+      "GHGSat"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 520,
+    "slug": "ai-cost-optimization-token-routing-2025",
+    "title": "AI成本优化工程：Token压缩、模型路由和缓存策略实战",
+    "subtitle": "将LLM API成本降低70%的系统化优化方案，实现性能与成本的最优平衡",
+    "summary": "提供系统化的AI成本优化方案，包括提示词压缩、语义缓存、智能模型路由、批量处理和Token预算管理，帮助团队在保证质量的前提下大幅降低AI服务成本。",
+    "content": "AI成本优化实战策略：Token消耗优化（提示词压缩：LLMLingua压缩提示词50%保留核心语义；去除冗余和重复指令；系统提示复用（prefix caching）降低每次成本30%）；语义缓存（GPTCache等框架：相同语义的问题复用答案；TTL策略管理缓存生命周期；缓存命中率目标>40%）；智能模型路由（请求难度分类：简单问题→GPT-3.5/Haiku，复杂问题→GPT-4o/Opus；路由器训练方法；Martian/LiteLLM路由框架）；批量处理优化（Batch API折扣50%（OpenAI）；非实时请求队列化批量发送；结果回调或轮询）；Token预算管理（按用户/功能设置Token配额；超出时降级到小模型；月度成本预警告警）；成本监控（per-request成本追踪；异常消耗告警；成本-质量Pareto分析）。",
+    "level": "advanced",
+    "category": "ai-engineering",
+    "tags": [
+      "AI成本优化",
+      "Token压缩",
+      "模型路由",
+      "LLM缓存",
+      "成本管理"
+    ],
+    "estimated_minutes": 32,
+    "related_tools": [
+      "LiteLLM",
+      "GPTCache",
+      "LLMLingua",
+      "Langfuse"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 565,
+    "slug": "ai-data-pipeline-feature-engineering-2025",
+    "title": "AI Data Pipelines and Feature Engineering at Scale: Modern Approaches 2025",
+    "subtitle": "Feast feature store, dbt transformations, and streaming features with Kafka",
+    "summary": "Build production-grade data pipelines for ML with Apache Spark, dbt, Feast feature store, and streaming data from Kafka. Learn feature engineering patterns that improve model performance.",
+    "content": "Production ML requires robust data pipelines and feature engineering infrastructure. Key components: 1) Data ingestion with Kafka for streaming and batch extraction via Airbyte/Fivetran. 2) Transformation layer using dbt for SQL-based feature computation with testing. 3) Feature store (Feast/Tecton/Hopsworks) to serve features consistently in training and serving - eliminates training-serving skew. 4) Feature engineering patterns: lag features, ratio features, interaction features. 5) Data quality with Great Expectations for automated validation, anomaly detection for distribution drift. 6) Streaming features with Apache Flink for real-time computation. Feature stores reduce ML iteration time by 60% by reusing precomputed features across teams.",
+    "level": "advanced",
+    "category": "Data Engineering",
+    "tags": [
+      "data-pipeline",
+      "feature-engineering",
+      "MLOps",
+      "Feast",
+      "Apache-Spark"
+    ],
+    "estimated_minutes": 35,
+    "related_tools": [],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 472,
+    "slug": "ai-drug-discovery-alphafold-2025",
+    "title": "AI药物发现革命：AlphaFold3与生成式AI加速新药研发",
+    "subtitle": "从蛋白质结构预测到分子生成，AI如何将药物发现周期从10年缩短至2年",
+    "summary": "深入探讨AI在药物发现领域的最新突破，包括AlphaFold3的蛋白质结构预测、生成式分子设计、虚拟筛选和ADMET预测，以及AI如何系统性地压缩新药研发时间线。",
+    "content": "AI药物发现核心技术：1.AlphaFold3应用（蛋白质-配体结合预测，准确率超传统方法20倍；蛋白质-蛋白质相互作用预测；RNA结构预测用于新靶点发现）；2.生成式分子设计（扩散模型生成具有目标属性的新分子；强化学习优化分子结合力、选择性和安全性；De novo设计绕过现有专利限制）；3.虚拟筛选加速（深度学习模型在数十亿分子库中快速筛选，速度比传统对接快1000倍；多参数优化：结合力+选择性+合成可及性）；4.ADMET预测（机器学习预测药物吸收、分布、代谢、排泄和毒性，早期淘汰不合格候选分子）；5.临床试验设计优化（AI分析患者基因组数据，精准识别响应人群，提高试验成功率）；6.典型案例（Insilico Medicine AI设计的INS018_055进入II期临床，创历史记录的30个月）。",
+    "level": "advanced",
+    "category": "ai-applications",
+    "tags": [
+      "AI医疗",
+      "药物发现",
+      "AlphaFold",
+      "生命科学",
+      "生成式AI"
+    ],
+    "estimated_minutes": 30,
+    "related_tools": [
+      "AlphaFold",
+      "RDKit",
+      "DeepChem",
+      "Schrödinger"
+    ],
+    "is_featured": true,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 1575,
+    "slug": "ai-for-content-creators-complete-guide-txhm14",
+    "title": "AI for Content Creators: Complete Guide",
+    "subtitle": "AI tools for writers, YouTubers, and podcasters",
+    "summary": "AI for Content Creators: Complete Guide  Overview  AI tools for writers, YouTubers, and podcasters. This guide provides complete, production-ready implementation.  Key Concepts  Understanding ai for content creators: complete guide requires:  1. **Co",
+    "content": "# AI for Content Creators: Complete Guide\n\n## Overview\n\nAI tools for writers, YouTubers, and podcasters. This guide provides complete, production-ready implementation.\n\n## Key Concepts\n\nUnderstanding ai for content creators: complete guide requires:\n\n1. **Core principles** of use cases\n2. **Practical patterns** for content creation\n3. **Production considerations** for deployment\n4. **Testing strategies** for reliability\n\n## Setup\n\n```bash\npip install openai openai python-dotenv pydantic fastapi\nexport OPENAI_API_KEY=\"sk-...\"\n```\n\n## Implementation\n\n```python\nfrom openai import OpenAI\nfrom pydantic import BaseModel\nfrom typing import Optional, Any\nimport json\n\nclient = OpenAI()\n\nclass Config(BaseModel):\n    model: str = \"gpt-4o-mini\"\n    temperature: float = 0.3\n    max_tokens: int = 2000\n\nclass AIforContentCreatorsCompleteGuide(object):\n    \"\"\"\n    AI for Content Creators: Complete Guide\n    \n    AI tools for writers, YouTubers, and podcasters\n    Tags: content-creation, ai-applications, practical, openai\n    \"\"\"\n    \n    def __init__(self, config: Optional[Config] = None):\n        self.config = config or Config()\n        self.client = OpenAI()\n        self.context = {}\n    \n    def process(self, query: str, **kwargs) -> dict:\n        \"\"\"Main processing method.\"\"\"\n        \n        system_msg = f\"\"\"You are an expert in {category.replace(/-/g,' ')}, \n        specializing in {tags[0].replace(/-/g,' ')}.\n        Be precise, practical, and production-focused.\n        Topic context: {title}\"\"\"\n        \n        response = self.client.chat.completions.create(\n            model=self.config.model,\n            messages=[\n                {\"role\": \"system\", \"content\": system_msg},\n                {\"role\": \"user\", \"content\": query}\n            ],\n            temperature=self.config.temperature,\n            max_tokens=self.config.max_tokens\n        )\n        \n        return {\n            \"output\": response.choices[0].message.content,\n            \"tokens\": response.usage.total_tokens,\n            \"model\": self.config.model\n        }\n    \n    def analyze(self, content: str, criteria: list[str] = None) -> dict:\n        \"\"\"Analyze content against specific criteria.\"\"\"\n        criteria_str = \", \".join(criteria or [\"quality\", \"accuracy\", \"completeness\"])\n        \n        response = self.client.chat.completions.create(\n            model=self.config.model,\n            messages=[{\n                \"role\": \"user\",\n                \"content\": f\"Analyze this content for {criteria_str}:\\n\\n{content}\"\n            }],\n            temperature=0.1,\n            max_tokens=1000\n        )\n        \n        return {\n            \"analysis\": response.choices[0].message.content,\n            \"criteria\": criteria_str\n        }\n\n# Initialize and use\ninstance = AIforContentCreatorsCompleteGuide()\nresult = instance.process(f\"Implement a production {title.toLowerCase()} solution\")\nprint(result[\"output\"])\n```\n\n## Advanced Pattern: Streaming\n\n```python\nfrom fastapi import FastAPI\nfrom fastapi.responses import StreamingResponse\nimport asyncio\n\napp = FastAPI()\ninstance = AIforContentCreatorsCompleteGuide()\n\n@app.post(\"/stream\")\nasync def stream_response(query: str):\n    \"\"\"Stream AI response for better UX.\"\"\"\n    \n    async def generate():\n        stream = client.chat.completions.create(\n            model=\"gpt-4o-mini\",\n            messages=[{\"role\": \"user\", \"content\": query}],\n            stream=True,\n            max_tokens=1000\n        )\n        \n        for chunk in stream:\n            if chunk.choices[0].delta.content:\n                yield chunk.choices[0].delta.content\n    \n    return StreamingResponse(generate(), media_type=\"text/plain\")\n\n@app.post(\"/process\")\nasync def process_endpoint(query: str):\n    return instance.process(query)\n```\n\n## Testing\n\n```python\nimport pytest\n\n@pytest.fixture\ndef instance():\n    return AIforContentCreatorsCompleteGuide(Config(model=\"gpt-4o-mini\"))\n\ndef test_basic_process(instance):\n    result = instance.process(\"Test query\")\n    assert \"output\" in result\n    assert isinstance(result[\"output\"], str)\n    assert len(result[\"output\"]) > 0\n\ndef test_analysis(instance):\n    result = instance.analyze(\"Sample content for analysis\")\n    assert \"analysis\" in result\n```\n\n## Best Practices\n\n- **Validate inputs** before sending to AI\n- **Handle rate limits** with exponential backoff  \n- **Cache responses** for repeated queries\n- **Log all interactions** for debugging and improvement\n- **Monitor costs** and set billing alerts\n- **Test edge cases** including empty inputs and long texts\n\n## Performance Tips\n\n| Optimization | Impact | Implementation |\n|-------------|--------|----------------|\n| Prompt compression | -30% tokens | Remove unnecessary words |\n| Response caching | -80% API calls | Redis with TTL |\n| Batch processing | -50% latency | Group similar requests |\n| Model selection | -70% cost | Use mini for simple tasks |\n\n## Resources\n\n- OpenAI docs: https://platform.openai.com/docs\n- openai documentation\n- Production AI patterns guide",
+    "level": "intermediate",
+    "category": "use-cases",
+    "tags": [
+      "content-creation",
+      "ai-applications",
+      "practical",
+      "openai",
+      "openai"
+    ],
+    "estimated_minutes": 15,
+    "related_tools": [
+      "openai",
+      "python"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 1581,
+    "slug": "ai-for-freelancers-complete-guide-dpwn1g",
+    "title": "AI for Freelancers: Complete Guide",
+    "subtitle": "Productivity tools for freelancers using AI assistance",
+    "summary": "AI for Freelancers: Complete Guide  Overview  Productivity tools for freelancers using AI assistance. This guide provides complete, production-ready implementation.  Key Concepts  Understanding ai for freelancers: complete guide requires:  1. **Core ",
+    "content": "# AI for Freelancers: Complete Guide\n\n## Overview\n\nProductivity tools for freelancers using AI assistance. This guide provides complete, production-ready implementation.\n\n## Key Concepts\n\nUnderstanding ai for freelancers: complete guide requires:\n\n1. **Core principles** of use cases\n2. **Practical patterns** for freelance\n3. **Production considerations** for deployment\n4. **Testing strategies** for reliability\n\n## Setup\n\n```bash\npip install openai openai python-dotenv pydantic fastapi\nexport OPENAI_API_KEY=\"sk-...\"\n```\n\n## Implementation\n\n```python\nfrom openai import OpenAI\nfrom pydantic import BaseModel\nfrom typing import Optional, Any\nimport json\n\nclient = OpenAI()\n\nclass Config(BaseModel):\n    model: str = \"gpt-4o-mini\"\n    temperature: float = 0.3\n    max_tokens: int = 2000\n\nclass AIforFreelancersCompleteGuide(object):\n    \"\"\"\n    AI for Freelancers: Complete Guide\n    \n    Productivity tools for freelancers using AI assistance\n    Tags: freelance, ai-applications, practical, openai\n    \"\"\"\n    \n    def __init__(self, config: Optional[Config] = None):\n        self.config = config or Config()\n        self.client = OpenAI()\n        self.context = {}\n    \n    def process(self, query: str, **kwargs) -> dict:\n        \"\"\"Main processing method.\"\"\"\n        \n        system_msg = f\"\"\"You are an expert in {category.replace(/-/g,' ')}, \n        specializing in {tags[0].replace(/-/g,' ')}.\n        Be precise, practical, and production-focused.\n        Topic context: {title}\"\"\"\n        \n        response = self.client.chat.completions.create(\n            model=self.config.model,\n            messages=[\n                {\"role\": \"system\", \"content\": system_msg},\n                {\"role\": \"user\", \"content\": query}\n            ],\n            temperature=self.config.temperature,\n            max_tokens=self.config.max_tokens\n        )\n        \n        return {\n            \"output\": response.choices[0].message.content,\n            \"tokens\": response.usage.total_tokens,\n            \"model\": self.config.model\n        }\n    \n    def analyze(self, content: str, criteria: list[str] = None) -> dict:\n        \"\"\"Analyze content against specific criteria.\"\"\"\n        criteria_str = \", \".join(criteria or [\"quality\", \"accuracy\", \"completeness\"])\n        \n        response = self.client.chat.completions.create(\n            model=self.config.model,\n            messages=[{\n                \"role\": \"user\",\n                \"content\": f\"Analyze this content for {criteria_str}:\\n\\n{content}\"\n            }],\n            temperature=0.1,\n            max_tokens=1000\n        )\n        \n        return {\n            \"analysis\": response.choices[0].message.content,\n            \"criteria\": criteria_str\n        }\n\n# Initialize and use\ninstance = AIforFreelancersCompleteGuide()\nresult = instance.process(f\"Implement a production {title.toLowerCase()} solution\")\nprint(result[\"output\"])\n```\n\n## Advanced Pattern: Streaming\n\n```python\nfrom fastapi import FastAPI\nfrom fastapi.responses import StreamingResponse\nimport asyncio\n\napp = FastAPI()\ninstance = AIforFreelancersCompleteGuide()\n\n@app.post(\"/stream\")\nasync def stream_response(query: str):\n    \"\"\"Stream AI response for better UX.\"\"\"\n    \n    async def generate():\n        stream = client.chat.completions.create(\n            model=\"gpt-4o-mini\",\n            messages=[{\"role\": \"user\", \"content\": query}],\n            stream=True,\n            max_tokens=1000\n        )\n        \n        for chunk in stream:\n            if chunk.choices[0].delta.content:\n                yield chunk.choices[0].delta.content\n    \n    return StreamingResponse(generate(), media_type=\"text/plain\")\n\n@app.post(\"/process\")\nasync def process_endpoint(query: str):\n    return instance.process(query)\n```\n\n## Testing\n\n```python\nimport pytest\n\n@pytest.fixture\ndef instance():\n    return AIforFreelancersCompleteGuide(Config(model=\"gpt-4o-mini\"))\n\ndef test_basic_process(instance):\n    result = instance.process(\"Test query\")\n    assert \"output\" in result\n    assert isinstance(result[\"output\"], str)\n    assert len(result[\"output\"]) > 0\n\ndef test_analysis(instance):\n    result = instance.analyze(\"Sample content for analysis\")\n    assert \"analysis\" in result\n```\n\n## Best Practices\n\n- **Validate inputs** before sending to AI\n- **Handle rate limits** with exponential backoff  \n- **Cache responses** for repeated queries\n- **Log all interactions** for debugging and improvement\n- **Monitor costs** and set billing alerts\n- **Test edge cases** including empty inputs and long texts\n\n## Performance Tips\n\n| Optimization | Impact | Implementation |\n|-------------|--------|----------------|\n| Prompt compression | -30% tokens | Remove unnecessary words |\n| Response caching | -80% API calls | Redis with TTL |\n| Batch processing | -50% latency | Group similar requests |\n| Model selection | -70% cost | Use mini for simple tasks |\n\n## Resources\n\n- OpenAI docs: https://platform.openai.com/docs\n- openai documentation\n- Production AI patterns guide",
+    "level": "intermediate",
+    "category": "use-cases",
+    "tags": [
+      "freelance",
+      "ai-applications",
+      "practical",
+      "openai",
+      "openai"
+    ],
+    "estimated_minutes": 15,
+    "related_tools": [
+      "openai",
+      "python"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 1571,
+    "slug": "ai-in-legacy-systems-complete-guide-qgu3vv",
+    "title": "AI in Legacy Systems: Complete Guide",
+    "subtitle": "Integrating modern AI into existing legacy applications",
+    "summary": "AI in Legacy Systems: Complete Guide  Overview  Integrating modern AI into existing legacy applications. This guide provides complete, production-ready implementation.  Key Concepts  Understanding ai in legacy systems: complete guide requires:  1. **",
+    "content": "# AI in Legacy Systems: Complete Guide\n\n## Overview\n\nIntegrating modern AI into existing legacy applications. This guide provides complete, production-ready implementation.\n\n## Key Concepts\n\nUnderstanding ai in legacy systems: complete guide requires:\n\n1. **Core principles** of use cases\n2. **Practical patterns** for legacy\n3. **Production considerations** for deployment\n4. **Testing strategies** for reliability\n\n## Setup\n\n```bash\npip install openai openai python-dotenv pydantic fastapi\nexport OPENAI_API_KEY=\"sk-...\"\n```\n\n## Implementation\n\n```python\nfrom openai import OpenAI\nfrom pydantic import BaseModel\nfrom typing import Optional, Any\nimport json\n\nclient = OpenAI()\n\nclass Config(BaseModel):\n    model: str = \"gpt-4o-mini\"\n    temperature: float = 0.3\n    max_tokens: int = 2000\n\nclass AIinLegacySystemsCompleteGuide(object):\n    \"\"\"\n    AI in Legacy Systems: Complete Guide\n    \n    Integrating modern AI into existing legacy applications\n    Tags: legacy, ai-applications, practical, python\n    \"\"\"\n    \n    def __init__(self, config: Optional[Config] = None):\n        self.config = config or Config()\n        self.client = OpenAI()\n        self.context = {}\n    \n    def process(self, query: str, **kwargs) -> dict:\n        \"\"\"Main processing method.\"\"\"\n        \n        system_msg = f\"\"\"You are an expert in {category.replace(/-/g,' ')}, \n        specializing in {tags[0].replace(/-/g,' ')}.\n        Be precise, practical, and production-focused.\n        Topic context: {title}\"\"\"\n        \n        response = self.client.chat.completions.create(\n            model=self.config.model,\n            messages=[\n                {\"role\": \"system\", \"content\": system_msg},\n                {\"role\": \"user\", \"content\": query}\n            ],\n            temperature=self.config.temperature,\n            max_tokens=self.config.max_tokens\n        )\n        \n        return {\n            \"output\": response.choices[0].message.content,\n            \"tokens\": response.usage.total_tokens,\n            \"model\": self.config.model\n        }\n    \n    def analyze(self, content: str, criteria: list[str] = None) -> dict:\n        \"\"\"Analyze content against specific criteria.\"\"\"\n        criteria_str = \", \".join(criteria or [\"quality\", \"accuracy\", \"completeness\"])\n        \n        response = self.client.chat.completions.create(\n            model=self.config.model,\n            messages=[{\n                \"role\": \"user\",\n                \"content\": f\"Analyze this content for {criteria_str}:\\n\\n{content}\"\n            }],\n            temperature=0.1,\n            max_tokens=1000\n        )\n        \n        return {\n            \"analysis\": response.choices[0].message.content,\n            \"criteria\": criteria_str\n        }\n\n# Initialize and use\ninstance = AIinLegacySystemsCompleteGuide()\nresult = instance.process(f\"Implement a production {title.toLowerCase()} solution\")\nprint(result[\"output\"])\n```\n\n## Advanced Pattern: Streaming\n\n```python\nfrom fastapi import FastAPI\nfrom fastapi.responses import StreamingResponse\nimport asyncio\n\napp = FastAPI()\ninstance = AIinLegacySystemsCompleteGuide()\n\n@app.post(\"/stream\")\nasync def stream_response(query: str):\n    \"\"\"Stream AI response for better UX.\"\"\"\n    \n    async def generate():\n        stream = client.chat.completions.create(\n            model=\"gpt-4o-mini\",\n            messages=[{\"role\": \"user\", \"content\": query}],\n            stream=True,\n            max_tokens=1000\n        )\n        \n        for chunk in stream:\n            if chunk.choices[0].delta.content:\n                yield chunk.choices[0].delta.content\n    \n    return StreamingResponse(generate(), media_type=\"text/plain\")\n\n@app.post(\"/process\")\nasync def process_endpoint(query: str):\n    return instance.process(query)\n```\n\n## Testing\n\n```python\nimport pytest\n\n@pytest.fixture\ndef instance():\n    return AIinLegacySystemsCompleteGuide(Config(model=\"gpt-4o-mini\"))\n\ndef test_basic_process(instance):\n    result = instance.process(\"Test query\")\n    assert \"output\" in result\n    assert isinstance(result[\"output\"], str)\n    assert len(result[\"output\"]) > 0\n\ndef test_analysis(instance):\n    result = instance.analyze(\"Sample content for analysis\")\n    assert \"analysis\" in result\n```\n\n## Best Practices\n\n- **Validate inputs** before sending to AI\n- **Handle rate limits** with exponential backoff  \n- **Cache responses** for repeated queries\n- **Log all interactions** for debugging and improvement\n- **Monitor costs** and set billing alerts\n- **Test edge cases** including empty inputs and long texts\n\n## Performance Tips\n\n| Optimization | Impact | Implementation |\n|-------------|--------|----------------|\n| Prompt compression | -30% tokens | Remove unnecessary words |\n| Response caching | -80% API calls | Redis with TTL |\n| Batch processing | -50% latency | Group similar requests |\n| Model selection | -70% cost | Use mini for simple tasks |\n\n## Resources\n\n- OpenAI docs: https://platform.openai.com/docs\n- openai documentation\n- Production AI patterns guide",
+    "level": "intermediate",
+    "category": "use-cases",
+    "tags": [
+      "legacy",
+      "ai-applications",
+      "practical",
+      "python",
+      "openai"
+    ],
+    "estimated_minutes": 15,
+    "related_tools": [
+      "openai",
+      "python"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 528,
+    "slug": "ai-podcast-production-workflow-2025",
+    "title": "AI播客制作全流程：从选题到发布的AI辅助生产工作流",
+    "subtitle": "用AI工具降低播客制作门槛，实现专业质量的自动化音频处理",
+    "summary": "分享完整的AI辅助播客制作工作流，包括AI选题调研、脚本生成、录音降噪、AI剪辑、字幕生成和跨平台分发，帮助独立创作者以低成本制作高质量播客内容。",
+    "content": "AI播客制作工作流：选题和研究（Perplexity调研热点；NotebookLM生成访谈问题列表；ChatGPT生成播客提纲）；脚本辅助（AI生成初稿脚本；个性化声音风格调整；开场白和转场句优化）；录音和后期（Adobe Podcast AI降噪和声音增强；Descript AI剪辑（删除口误和停顿）；Auphonic自动平衡音量和混音）；AI配音（ElevenLabs高质量AI语音；适合单人播客或多语言版本）；转录和字幕（Whisper离线转录；Otter.ai实时转录；AssemblyAI API集成）；SEO优化（AI生成节目描述和标签；关键词优化；章节时间戳自动生成）；跨平台分发（Buzzsprout/Anchor AI自动化分发；AI生成社交媒体摘要；短视频剪辑片段自动化）。",
+    "level": "beginner",
+    "category": "ai-tools",
+    "tags": [
+      "AI播客",
+      "内容创作",
+      "音频AI",
+      "Descript",
+      "播客制作"
+    ],
+    "estimated_minutes": 20,
+    "related_tools": [
+      "Descript",
+      "Adobe Podcast",
+      "ElevenLabs",
+      "Auphonic"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 507,
+    "slug": "ai-regulatory-compliance-monitoring-2025",
+    "title": "AI合规监控：自动化追踪监管变化，确保企业实时合规",
+    "subtitle": "用NLP和知识图谱构建企业合规监控体系，将监管响应时间从周缩短至天",
+    "summary": "介绍如何利用AI技术构建企业合规监控系统，包括监管文件自动采集、法规变更影响评估、合规差距分析和监管报告自动化，以及在金融、医疗、能源行业的应用。",
+    "content": "AI合规监控系统架构：监管数据采集（自动爬取SEC/FDA/EBA等监管机构网站；RSS订阅+NLP摘要；监管变化实时推送）；影响评估AI（新法规与企业现有政策对比分析；受影响业务单元自动识别；变更影响评分和优先级排序）；合规知识图谱（法规-业务流程-控制措施三层知识图谱；因果关系推理；合规义务追踪）；自动化合规报告（监管要求数据自动采集汇总；报告模板填充；审计轨迹记录）；三道防线AI增强（业务部门合规检查助手；合规部门监控AI；内审抽样优化）；金融行业案例：高盛AI合规监控每年节省1000小时合规人员时间。",
+    "level": "advanced",
+    "category": "ai-applications",
+    "tags": [
+      "AI合规",
+      "监管科技",
+      "法律合规",
+      "风险管理",
+      "RegTech"
+    ],
+    "estimated_minutes": 32,
+    "related_tools": [
+      "Ascent RegTech",
+      "Behavox",
+      "NICE Actimize",
+      "Thomson Reuters"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 2029,
+    "slug": "ai-technical-writing-guide-4il90d",
+    "title": "AI Technical Writing Guide",
+    "subtitle": "Writing technical AI content for blogs and documentation",
+    "summary": "AI Technical Writing Guide  Overview  Writing technical AI content for blogs and documentation. A comprehensive reference guide for learning career practitioners.  Quick Reference  ```python from openai import OpenAI client = OpenAI()  def solve_ai_t",
+    "content": "# AI Technical Writing Guide\n\n## Overview\n\nWriting technical AI content for blogs and documentation. A comprehensive reference guide for learning career practitioners.\n\n## Quick Reference\n\n```python\nfrom openai import OpenAI\nclient = OpenAI()\n\ndef solve_ai_technical_writing_guide(input_text: str) -> str:\n    \"\"\"Writing technical AI content for blogs and documentation\"\"\"\n    response = client.chat.completions.create(\n        model=\"gpt-4o-mini\",\n        messages=[\n            {\"role\":\"system\",\"content\":\"You are an expert in learning career. Topic: AI Technical Writing Guide.\"},\n            {\"role\":\"user\",\"content\":input_text}\n        ],\n        temperature=0.3,\n        max_tokens=1000\n    )\n    return response.choices[0].message.content\n\n# Usage\nresult = solve_ai_technical_writing_guide(\"Your ai technical writing guide question\")\nprint(result)\n```\n\n## Key Concepts\n\n- **learning**: Core to this approach\n- **Validation**: Always validate inputs and outputs\n- **Error handling**: Implement robust retry logic\n- **Monitoring**: Track performance and costs\n\n## Best Practices\n\n1. Start with the simplest approach\n2. Measure quality, latency, and cost\n3. Optimize based on real usage patterns\n4. Document decisions and tradeoffs\n5. Review security implications\n\n## Related Topics\n\n- learning\n- writing\n- career\n- skills",
+    "level": "intermediate",
+    "category": "learning-career",
+    "tags": [
+      "learning",
+      "writing",
+      "career",
+      "skills",
+      "python"
+    ],
+    "estimated_minutes": 12,
+    "related_tools": [
+      "python",
+      "python"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 1927,
+    "slug": "ai-workflow-ai-powered-learning-path-generation-iw494b",
+    "title": "AI Workflow: AI-powered learning path generation",
+    "subtitle": "Complete guide to AI-powered learning path generation using AI tools and automation",
+    "summary": "AI Workflow: AI-powered learning path generation  Overview  Complete guide to AI-powered learning path generation using AI tools and automation  Implementation  ```python from openai import OpenAI from pydantic import BaseModel from typing import Opt",
+    "content": "# AI Workflow: AI-powered learning path generation\n\n## Overview\n\nComplete guide to AI-powered learning path generation using AI tools and automation\n\n## Implementation\n\n```python\nfrom openai import OpenAI\nfrom pydantic import BaseModel\nfrom typing import Optional\nimport json\n\nclient = OpenAI()\n\nclass Handler:\n    \"\"\"Handles ai workflow: ai-powered learning path generation.\"\"\"\n    \n    def __init__(self, model=\"gpt-4o-mini\"):\n        self.client = OpenAI()\n        self.model = model\n        self.system = f\"\"\"You are an AI expert in productivity workflows.\nTopic: AI Workflow: AI-powered learning path generation\nBe accurate, practical, and helpful.\"\"\"\n    \n    def run(self, query: str) -> str:\n        r = self.client.chat.completions.create(\n            model=self.model,\n            messages=[\n                {\"role\":\"system\",\"content\":self.system},\n                {\"role\":\"user\",\"content\":query}\n            ],\n            temperature=0.3,\n            max_tokens=1500\n        )\n        return r.choices[0].message.content\n\nh = Handler()\nprint(h.run(\"How do I implement ai workflow: ai-powered learning path generation?\"))\n```\n\n## Key Points\n\n1. productivity is fundamental to this approach\n2. Always validate inputs before processing\n3. Implement proper error handling and retries\n4. Monitor costs and performance in production\n5. Test with diverse inputs including edge cases\n\n## Example Usage\n\n```python\n# Production example\nhandler = Handler(model=\"gpt-4o\")  # Use better model for production\n\n# Basic use\nresult = handler.run(\"Your question here\")\n\n# Batch processing\nqueries = [\"Q1\", \"Q2\", \"Q3\"]\nresults = [handler.run(q) for q in queries]\n```\n\n## Best Practices\n\n- Input validation and sanitization\n- Retry with exponential backoff  \n- Response caching for common queries\n- Comprehensive logging\n- Cost monitoring and alerts\n\n## Resources\n\n- OpenAI: https://platform.openai.com/docs\n- Tags: productivity, workflow, automation",
+    "level": "intermediate",
+    "category": "productivity-workflows",
+    "tags": [
+      "productivity",
+      "workflow",
+      "automation",
+      "advanced",
+      "openai"
+    ],
+    "estimated_minutes": 8,
+    "related_tools": [
+      "openai",
+      "python"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 1819,
+    "slug": "bulkhead-pattern-for-ai-1ehjz1",
+    "title": "Bulkhead Pattern for AI",
+    "subtitle": "Isolating AI workloads with bulkhead resource management",
+    "summary": "Bulkhead Pattern for AI  Overview  Isolating AI workloads with bulkhead resource management  Implementation  ```python from openai import OpenAI from pydantic import BaseModel from typing import Optional import json  client = OpenAI()  class Handler:",
+    "content": "# Bulkhead Pattern for AI\n\n## Overview\n\nIsolating AI workloads with bulkhead resource management\n\n## Implementation\n\n```python\nfrom openai import OpenAI\nfrom pydantic import BaseModel\nfrom typing import Optional\nimport json\n\nclient = OpenAI()\n\nclass Handler:\n    \"\"\"Handles bulkhead pattern for ai.\"\"\"\n    \n    def __init__(self, model=\"gpt-4o-mini\"):\n        self.client = OpenAI()\n        self.model = model\n        self.system = f\"\"\"You are an AI expert in deployment.\nTopic: Bulkhead Pattern for AI\nBe accurate, practical, and helpful.\"\"\"\n    \n    def run(self, query: str) -> str:\n        r = self.client.chat.completions.create(\n            model=self.model,\n            messages=[\n                {\"role\":\"system\",\"content\":self.system},\n                {\"role\":\"user\",\"content\":query}\n            ],\n            temperature=0.3,\n            max_tokens=1500\n        )\n        return r.choices[0].message.content\n\nh = Handler()\nprint(h.run(\"How do I implement bulkhead pattern for ai?\"))\n```\n\n## Key Points\n\n1. deployment is fundamental to this approach\n2. Always validate inputs before processing\n3. Implement proper error handling and retries\n4. Monitor costs and performance in production\n5. Test with diverse inputs including edge cases\n\n## Example Usage\n\n```python\n# Production example\nhandler = Handler(model=\"gpt-4o\")  # Use better model for production\n\n# Basic use\nresult = handler.run(\"Your question here\")\n\n# Batch processing\nqueries = [\"Q1\", \"Q2\", \"Q3\"]\nresults = [handler.run(q) for q in queries]\n```\n\n## Best Practices\n\n- Input validation and sanitization\n- Retry with exponential backoff  \n- Response caching for common queries\n- Comprehensive logging\n- Cost monitoring and alerts\n\n## Resources\n\n- OpenAI: https://platform.openai.com/docs\n- Tags: deployment, production, bulkhead",
+    "level": "advanced",
+    "category": "deployment",
+    "tags": [
+      "deployment",
+      "production",
+      "bulkhead",
+      "ai-ops",
+      "fastapi"
+    ],
+    "estimated_minutes": 15,
+    "related_tools": [
+      "fastapi",
+      "python"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 478,
+    "slug": "federated-learning-healthcare-privacy-2025",
+    "title": "联邦学习在医疗AI中的应用：隐私保护的分布式模型训练",
+    "subtitle": "如何在保护患者隐私的同时，跨医院协作训练高质量医疗AI模型",
+    "summary": "详细介绍联邦学习技术在医疗AI领域的应用，包括跨机构协作训练的技术架构、差分隐私、安全聚合和实际部署案例，解决医疗数据孤岛问题。",
+    "content": "联邦学习医疗AI应用：1.基本架构（中央服务器协调+各医院本地训练+梯度聚合，数据永不离开医院）；2.PySyft/Flower实现（Flower框架定义FL策略；FedAvg算法加权平均模型参数；通讯效率优化：梯度压缩、稀疏化）；3.差分隐私增强（在本地梯度添加高斯噪声；隐私预算(ε,δ)控制隐私强度与模型精度权衡）；4.非独立同分布(non-IID)挑战（不同医院数据分布差异大；FedProx正则化解决客户端漂移；个性化联邦学习保留本地特性）；5.HealthFL典型案例（Intel联合34家医院训练脑肿瘤分割模型；性能与集中训练相当；MELLODDY药物发现联邦学习联盟）；6.安全威胁与防御（梯度逆向攻击；成员推断攻击；安全多方计算防御）；7.HIPAA/GDPR合规优势（数据最小化原则；数据处理协议简化）。",
+    "level": "advanced",
+    "category": "ai-engineering",
+    "tags": [
+      "联邦学习",
+      "医疗AI",
+      "隐私保护",
+      "分布式学习",
+      "数据安全"
+    ],
+    "estimated_minutes": 35,
+    "related_tools": [
+      "Flower",
+      "PySyft",
+      "TensorFlow Federated",
+      "OpenFL"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 1797,
+    "slug": "go-ai-service-development-pyp32o",
+    "title": "Go AI Service Development",
+    "subtitle": "Building high-performance AI services with Go",
+    "summary": "Go AI Service Development  Overview  Building high-performance AI services with Go  Implementation  ```python from openai import OpenAI from pydantic import BaseModel from typing import Optional import json  client = OpenAI()  class Handler:     \"\"\"H",
+    "content": "# Go AI Service Development\n\n## Overview\n\nBuilding high-performance AI services with Go\n\n## Implementation\n\n```python\nfrom openai import OpenAI\nfrom pydantic import BaseModel\nfrom typing import Optional\nimport json\n\nclient = OpenAI()\n\nclass Handler:\n    \"\"\"Handles go ai service development.\"\"\"\n    \n    def __init__(self, model=\"gpt-4o-mini\"):\n        self.client = OpenAI()\n        self.model = model\n        self.system = f\"\"\"You are an AI expert in programming languages.\nTopic: Go AI Service Development\nBe accurate, practical, and helpful.\"\"\"\n    \n    def run(self, query: str) -> str:\n        r = self.client.chat.completions.create(\n            model=self.model,\n            messages=[\n                {\"role\":\"system\",\"content\":self.system},\n                {\"role\":\"user\",\"content\":query}\n            ],\n            temperature=0.3,\n            max_tokens=1500\n        )\n        return r.choices[0].message.content\n\nh = Handler()\nprint(h.run(\"How do I implement go ai service development?\"))\n```\n\n## Key Points\n\n1. programming is fundamental to this approach\n2. Always validate inputs before processing\n3. Implement proper error handling and retries\n4. Monitor costs and performance in production\n5. Test with diverse inputs including edge cases\n\n## Example Usage\n\n```python\n# Production example\nhandler = Handler(model=\"gpt-4o\")  # Use better model for production\n\n# Basic use\nresult = handler.run(\"Your question here\")\n\n# Batch processing\nqueries = [\"Q1\", \"Q2\", \"Q3\"]\nresults = [handler.run(q) for q in queries]\n```\n\n## Best Practices\n\n- Input validation and sanitization\n- Retry with exponential backoff  \n- Response caching for common queries\n- Comprehensive logging\n- Cost monitoring and alerts\n\n## Resources\n\n- OpenAI: https://platform.openai.com/docs\n- Tags: programming, go, ai-development",
+    "level": "intermediate",
+    "category": "programming-languages",
+    "tags": [
+      "programming",
+      "go",
+      "ai-development",
+      "integration"
+    ],
+    "estimated_minutes": 10,
+    "related_tools": [
+      "go",
+      "python"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 895,
+    "slug": "llm-evaluation-with-ragas-complete-developer-guide-2026-k5dbh",
+    "title": "LLM Evaluation with RAGAS: Complete Developer Guide 2026",
+    "subtitle": "Master LLM Evaluation with RAGAS with practical examples and production patterns",
+    "summary": "LLM Evaluation with RAGAS: Complete Developer Guide 2026  Overview  LLM Evaluation with RAGAS is one of the most important concepts in modern AI development. This guide provides a thorough understanding with practical, production-ready examples.  Why",
+    "content": "# LLM Evaluation with RAGAS: Complete Developer Guide 2026\n\n## Overview\n\nLLM Evaluation with RAGAS is one of the most important concepts in modern AI development. This guide provides a thorough understanding with practical, production-ready examples.\n\n## Why LLM Evaluation with RAGAS Matters\n\nIn 2026, building effective AI applications requires deep understanding of LLM Evaluation with RAGAS. It enables:\n\n- Better AI response quality\n- More reliable and predictable behavior\n- Cost-effective API usage\n- Faster development iterations\n\n## Core Concepts\n\n### Understanding the Fundamentals\n\n```python\n# Example: Core implementation of llm concepts\nfrom openai import OpenAI\nfrom anthropic import Anthropic\nimport os\n\nopenai_client = OpenAI(api_key=os.environ[\"OPENAI_API_KEY\"])\nanthropic_client = Anthropic(api_key=os.environ[\"ANTHROPIC_API_KEY\"])\n\ndef demonstrate_concept(input_text: str, method: str = \"standard\") -> str:\n    \"\"\"Demonstrate LLM Evaluation with RAGAS concepts.\"\"\"\n    \n    if method == \"openai\":\n        response = openai_client.chat.completions.create(\n            model=\"gpt-4o-mini\",\n            messages=[\n                {\"role\": \"system\", \"content\": \"You are an expert demonstrating LLM Evaluation with RAGAS.\"},\n                {\"role\": \"user\", \"content\": input_text}\n            ],\n            temperature=0.7,\n            max_tokens=1500\n        )\n        return response.choices[0].message.content\n    \n    elif method == \"anthropic\":\n        response = anthropic_client.messages.create(\n            model=\"claude-3-5-sonnet-20241022\",\n            max_tokens=1500,\n            system=\"You are an expert demonstrating LLM Evaluation with RAGAS.\",\n            messages=[{\"role\": \"user\", \"content\": input_text}]\n        )\n        return response.content[0].text\n    \n    else:\n        # Default implementation\n        return \"Implementation here\"\n\n# Test it\nresult = demonstrate_concept(\"Explain LLM Evaluation with RAGAS in simple terms\")\nprint(result)\n```\n\n## Implementation Patterns\n\n### Pattern 1: Basic Implementation\n\n```python\nfrom langchain_openai import ChatOpenAI\nfrom langchain_core.prompts import ChatPromptTemplate\n\nllm = ChatOpenAI(model=\"gpt-4o-mini\", temperature=0.3)\n\n# Template for LLM Evaluation with RAGAS\ntemplate = \"\"\"You are an expert in LLM Evaluation with RAGAS.\n\nTask: {task}\n\nInput: {input_data}\n\nProvide a clear, structured response.\"\"\"\n\nprompt = ChatPromptTemplate.from_template(template)\n\ndef apply_technique(task: str, input_data: str) -> str:\n    \"\"\"Apply LLM Evaluation with RAGAS technique.\"\"\"\n    chain = prompt | llm\n    response = chain.invoke({\n        \"task\": task,\n        \"input_data\": input_data\n    })\n    return response.content\n\n# Usage\nresult = apply_technique(\n    task=\"Analyze and summarize\",\n    input_data=\"Your input data here\"\n)\nprint(result)\n```\n\n### Pattern 2: Advanced with Validation\n\n```python\nfrom pydantic import BaseModel, validator\nfrom typing import Optional\nimport json\n\nclass TechniqueOutput(BaseModel):\n    result: str\n    confidence: float\n    reasoning: Optional[str] = None\n    \n    @validator('confidence')\n    def check_confidence(cls, v):\n        if not 0 <= v <= 1:\n            raise ValueError('confidence must be between 0 and 1')\n        return v\n\ndef validated_technique(input_data: str) -> TechniqueOutput:\n    \"\"\"Apply LLM Evaluation with RAGAS with output validation.\"\"\"\n    \n    response = openai_client.chat.completions.create(\n        model=\"gpt-4o\",\n        messages=[\n            {\"role\": \"system\", \"content\": \"\"\"Apply LLM Evaluation with RAGAS technique.\n            Return JSON with: result, confidence (0-1), reasoning.\"\"\"},\n            {\"role\": \"user\", \"content\": input_data}\n        ],\n        response_format={\"type\": \"json_object\"},\n        temperature=0.1\n    )\n    \n    data = json.loads(response.choices[0].message.content)\n    return TechniqueOutput(**data)\n\noutput = validated_technique(\"Test input for LLM Evaluation with RAGAS\")\nprint(f\"Result: {output.result}\")\nprint(f\"Confidence: {output.confidence:.1%}\")\n```\n\n## Real-World Example\n\n### Building a Production System\n\n```python\nfrom fastapi import FastAPI, HTTPException\nfrom typing import Optional\nimport logging\n\nlogger = logging.getLogger(__name__)\napp = FastAPI()\n\nclass LLMEvaluationwithRAGASService:\n    \"\"\"Production service implementing LLM Evaluation with RAGAS.\"\"\"\n    \n    def __init__(self):\n        self.llm = ChatOpenAI(model=\"gpt-4o-mini\")\n        self.history = []\n    \n    async def process(\n        self,\n        input_data: str,\n        context: Optional[str] = None\n    ) -> dict:\n        \"\"\"Process input using LLM Evaluation with RAGAS.\"\"\"\n        try:\n            # Build context\n            messages = []\n            if context:\n                messages.append({\"role\": \"system\", \"content\": context})\n            \n            # Add conversation history for multi-turn\n            messages.extend(self.history[-10:])  # Last 10 messages\n            messages.append({\"role\": \"user\", \"content\": input_data})\n            \n            # Call LLM\n            response = await self.llm.ainvoke(messages)\n            \n            # Update history\n            self.history.append({\"role\": \"user\", \"content\": input_data})\n            self.history.append({\"role\": \"assistant\", \"content\": response.content})\n            \n            return {\n                \"result\": response.content,\n                \"history_length\": len(self.history)\n            }\n            \n        except Exception as e:\n            logger.error(f\"Error processing request: {e}\")\n            raise HTTPException(status_code=500, detail=str(e))\n\nservice = LLMEvaluationwithRAGASService()\n\n@app.post(\"/process\")\nasync def process_request(input_data: str, context: Optional[str] = None):\n    return await service.process(input_data, context)\n```\n\n## Performance Optimization\n\n```python\nimport asyncio\nfrom functools import lru_cache\nimport hashlib\n\n# Cache for repeated queries\n@lru_cache(maxsize=1000)\ndef cached_process(input_hash: str, input_data: str) -> str:\n    \"\"\"Cache results for identical inputs.\"\"\"\n    return apply_technique(\"process\", input_data)\n\ndef process_with_cache(input_data: str) -> str:\n    input_hash = hashlib.md5(input_data.encode()).hexdigest()\n    return cached_process(input_hash, input_data)\n\n# Batch processing for efficiency\nasync def batch_process(items: list[str], batch_size: int = 10) -> list[str]:\n    \"\"\"Process multiple items concurrently.\"\"\"\n    results = []\n    \n    for i in range(0, len(items), batch_size):\n        batch = items[i:i+batch_size]\n        tasks = [asyncio.to_thread(apply_technique, \"process\", item) for item in batch]\n        batch_results = await asyncio.gather(*tasks, return_exceptions=True)\n        results.extend(batch_results)\n    \n    return results\n\n# Example\nasync def main():\n    items = [f\"Item {i}\" for i in range(50)]\n    results = await batch_process(items)\n    print(f\"Processed {len(results)} items\")\n\nasyncio.run(main())\n```\n\n## Testing\n\n```python\nimport pytest\nfrom unittest.mock import patch, MagicMock\n\nclass TestLLMEvaluationwithRAGAS:\n    \"\"\"Test suite for LLM Evaluation with RAGAS implementation.\"\"\"\n    \n    def test_basic_functionality(self):\n        \"\"\"Test basic LLM Evaluation with RAGAS output.\"\"\"\n        with patch('openai.OpenAI') as mock_openai:\n            mock_response = MagicMock()\n            mock_response.choices[0].message.content = \"Expected output\"\n            mock_openai.return_value.chat.completions.create.return_value = mock_response\n            \n            result = apply_technique(\"test task\", \"test input\")\n            assert result == \"Expected output\"\n    \n    def test_error_handling(self):\n        \"\"\"Test graceful error handling.\"\"\"\n        with patch('openai.OpenAI') as mock_openai:\n            mock_openai.return_value.chat.completions.create.side_effect = Exception(\"API Error\")\n            \n            with pytest.raises(Exception):\n                apply_technique(\"task\", \"input\")\n    \n    @pytest.mark.parametrize(\"input_text\", [\n        \"Simple query\",\n        \"Complex multi-part question with technical details\",\n        \"Very short\",\n        \"A\" * 1000  # Long input\n    ])\n    def test_various_inputs(self, input_text):\n        \"\"\"Test with various input types.\"\"\"\n        result = apply_technique(\"process\", input_text)\n        assert isinstance(result, str)\n        assert len(result) > 0\n```\n\n## Common Pitfalls\n\n1. **Inconsistent results**: Use lower temperature (0.1-0.3) for consistent outputs\n2. **Token limit issues**: Monitor and truncate long inputs\n3. **API rate limits**: Implement exponential backoff\n4. **Prompt injection**: Sanitize user inputs\n5. **Cost overruns**: Set max_tokens and monitor usage\n\n## Conclusion\n\nLLM Evaluation with RAGAS is a intermediate-level technique that significantly improves AI application quality. The patterns shown here are production-tested and ready for real-world deployment.\n\nStart with the basic patterns and gradually adopt the advanced features as your application grows.\n\n---\n*Complete guide for LLM Evaluation with RAGAS | May 2026 | ragas, llm evaluation, ai testing, benchmarking*",
+    "level": "intermediate",
+    "category": "llm-development",
+    "tags": [
+      "ragas",
+      "llm evaluation",
+      "ai testing",
+      "benchmarking"
+    ],
+    "estimated_minutes": 25,
+    "related_tools": [
+      "LangChain",
+      "OpenAI",
+      "Python"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 1510,
+    "slug": "podcast-transcription-service-implementation-guide-24t4f3",
+    "title": "Podcast Transcription Service: Implementation Guide",
+    "subtitle": "Automated podcast transcription and chapter generation",
+    "summary": "Podcast Transcription Service: Implementation Guide  Overview  Automated podcast transcription and chapter generation. This guide provides complete, production-ready implementation.  Key Concepts  Understanding podcast transcription service: implemen",
+    "content": "# Podcast Transcription Service: Implementation Guide\n\n## Overview\n\nAutomated podcast transcription and chapter generation. This guide provides complete, production-ready implementation.\n\n## Key Concepts\n\nUnderstanding podcast transcription service: implementation guide requires:\n\n1. **Core principles** of audio ai\n2. **Practical patterns** for audio\n3. **Production considerations** for deployment\n4. **Testing strategies** for reliability\n\n## Setup\n\n```bash\npip install openai openai python-dotenv pydantic fastapi\nexport OPENAI_API_KEY=\"sk-...\"\n```\n\n## Implementation\n\n```python\nfrom openai import OpenAI\nfrom pydantic import BaseModel\nfrom typing import Optional, Any\nimport json\n\nclient = OpenAI()\n\nclass Config(BaseModel):\n    model: str = \"gpt-4o-mini\"\n    temperature: float = 0.3\n    max_tokens: int = 2000\n\nclass PodcastTranscriptionServiceImplementationGuide(object):\n    \"\"\"\n    Podcast Transcription Service: Implementation Guide\n    \n    Automated podcast transcription and chapter generation\n    Tags: audio, speech, voice, whisper\n    \"\"\"\n    \n    def __init__(self, config: Optional[Config] = None):\n        self.config = config or Config()\n        self.client = OpenAI()\n        self.context = {}\n    \n    def process(self, query: str, **kwargs) -> dict:\n        \"\"\"Main processing method.\"\"\"\n        \n        system_msg = f\"\"\"You are an expert in {category.replace(/-/g,' ')}, \n        specializing in {tags[0].replace(/-/g,' ')}.\n        Be precise, practical, and production-focused.\n        Topic context: {title}\"\"\"\n        \n        response = self.client.chat.completions.create(\n            model=self.config.model,\n            messages=[\n                {\"role\": \"system\", \"content\": system_msg},\n                {\"role\": \"user\", \"content\": query}\n            ],\n            temperature=self.config.temperature,\n            max_tokens=self.config.max_tokens\n        )\n        \n        return {\n            \"output\": response.choices[0].message.content,\n            \"tokens\": response.usage.total_tokens,\n            \"model\": self.config.model\n        }\n    \n    def analyze(self, content: str, criteria: list[str] = None) -> dict:\n        \"\"\"Analyze content against specific criteria.\"\"\"\n        criteria_str = \", \".join(criteria or [\"quality\", \"accuracy\", \"completeness\"])\n        \n        response = self.client.chat.completions.create(\n            model=self.config.model,\n            messages=[{\n                \"role\": \"user\",\n                \"content\": f\"Analyze this content for {criteria_str}:\\n\\n{content}\"\n            }],\n            temperature=0.1,\n            max_tokens=1000\n        )\n        \n        return {\n            \"analysis\": response.choices[0].message.content,\n            \"criteria\": criteria_str\n        }\n\n# Initialize and use\ninstance = PodcastTranscriptionServiceImplementationGuide()\nresult = instance.process(f\"Implement a production {title.toLowerCase()} solution\")\nprint(result[\"output\"])\n```\n\n## Advanced Pattern: Streaming\n\n```python\nfrom fastapi import FastAPI\nfrom fastapi.responses import StreamingResponse\nimport asyncio\n\napp = FastAPI()\ninstance = PodcastTranscriptionServiceImplementationGuide()\n\n@app.post(\"/stream\")\nasync def stream_response(query: str):\n    \"\"\"Stream AI response for better UX.\"\"\"\n    \n    async def generate():\n        stream = client.chat.completions.create(\n            model=\"gpt-4o-mini\",\n            messages=[{\"role\": \"user\", \"content\": query}],\n            stream=True,\n            max_tokens=1000\n        )\n        \n        for chunk in stream:\n            if chunk.choices[0].delta.content:\n                yield chunk.choices[0].delta.content\n    \n    return StreamingResponse(generate(), media_type=\"text/plain\")\n\n@app.post(\"/process\")\nasync def process_endpoint(query: str):\n    return instance.process(query)\n```\n\n## Testing\n\n```python\nimport pytest\n\n@pytest.fixture\ndef instance():\n    return PodcastTranscriptionServiceImplementationGuide(Config(model=\"gpt-4o-mini\"))\n\ndef test_basic_process(instance):\n    result = instance.process(\"Test query\")\n    assert \"output\" in result\n    assert isinstance(result[\"output\"], str)\n    assert len(result[\"output\"]) > 0\n\ndef test_analysis(instance):\n    result = instance.analyze(\"Sample content for analysis\")\n    assert \"analysis\" in result\n```\n\n## Best Practices\n\n- **Validate inputs** before sending to AI\n- **Handle rate limits** with exponential backoff  \n- **Cache responses** for repeated queries\n- **Log all interactions** for debugging and improvement\n- **Monitor costs** and set billing alerts\n- **Test edge cases** including empty inputs and long texts\n\n## Performance Tips\n\n| Optimization | Impact | Implementation |\n|-------------|--------|----------------|\n| Prompt compression | -30% tokens | Remove unnecessary words |\n| Response caching | -80% API calls | Redis with TTL |\n| Batch processing | -50% latency | Group similar requests |\n| Model selection | -70% cost | Use mini for simple tasks |\n\n## Resources\n\n- OpenAI docs: https://platform.openai.com/docs\n- openai documentation\n- Production AI patterns guide",
+    "level": "intermediate",
+    "category": "audio-ai",
+    "tags": [
+      "audio",
+      "speech",
+      "voice",
+      "whisper",
+      "openai"
+    ],
+    "estimated_minutes": 15,
+    "related_tools": [
+      "openai",
+      "python"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 518,
+    "slug": "rag-advanced-techniques-chunking-2025",
+    "title": "RAG高级技术：分块策略、重排序和混合检索的工程优化",
+    "subtitle": "从基础RAG到生产级RAG，解决准确率、延迟和成本的工程挑战",
+    "summary": "深入探讨RAG系统的高级优化技术，包括语义分块策略、父子文档检索、假设性文档嵌入（HyDE）、交叉编码器重排序和查询转化，显著提升RAG系统的回答质量。",
+    "content": "RAG高级工程优化：分块策略优化（固定大小分块的局限；语义分块（在语义断点处分割）；句子窗口检索（small-to-big）；文档层级分块（章节→段落→句子）；元数据丰富：添加摘要/关键词/章节标题）；查询转化（多查询扩展（从不同角度重写查询）；HyDE假设文档嵌入（先生成假设答案再检索）；Step-back Prompting抽象化查询）；混合检索（BM25+密集向量融合；RRF重排融合；关键词搜索处理精确匹配，向量搜索处理语义相似）；重排序（Cross-encoder精排top-K结果；Cohere Rerank API；提升Precision@5约20%）；上下文压缩（LLMLingua压缩检索到的文档，减少冗余；保留关键信息降低Token消耗30%）；评估驱动优化（用RAGAS指标持续测量，定向改进）。",
+    "level": "advanced",
+    "category": "ai-engineering",
+    "tags": [
+      "RAG",
+      "检索增强",
+      "LLM工程",
+      "向量检索",
+      "AI工程"
+    ],
+    "estimated_minutes": 38,
+    "related_tools": [
+      "LangChain",
+      "LlamaIndex",
+      "Cohere",
+      "Weaviate"
+    ],
+    "is_featured": true,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 1310,
+    "slug": "ragas-rag-evaluation-framework-complete-guide-tji6sz",
+    "title": "RAGAS: RAG Evaluation Framework: Complete Guide",
+    "subtitle": "Evaluating Retrieval-Augmented Generation quality with RAGAS — practical implementation",
+    "summary": "RAGAS: RAG Evaluation Framework  Overview  Evaluating Retrieval-Augmented Generation quality with RAGAS. Rigorous evaluation is essential for building trustworthy AI applications.  Why Evaluation Matters  Without proper evaluation, you cannot: - Know",
+    "content": "# RAGAS: RAG Evaluation Framework\n\n## Overview\n\nEvaluating Retrieval-Augmented Generation quality with RAGAS. Rigorous evaluation is essential for building trustworthy AI applications.\n\n## Why Evaluation Matters\n\nWithout proper evaluation, you cannot:\n- Know if your model is actually good\n- Catch regressions before users do\n- Make data-driven decisions about model improvements\n- Meet regulatory and compliance requirements\n\n## Evaluation Framework\n\n```python\nfrom dataclasses import dataclass, field\nfrom typing import Callable, Optional\nimport statistics\n\n@dataclass\nclass EvalExample:\n    \"\"\"Single evaluation example.\"\"\"\n    id: str\n    input: str\n    expected_output: str\n    metadata: dict = field(default_factory=dict)\n\n@dataclass\nclass EvalResult:\n    \"\"\"Result for a single evaluation.\"\"\"\n    example_id: str\n    model_output: str\n    score: float\n    metrics: dict = field(default_factory=dict)\n    passed: bool = True\n    notes: str = \"\"\n\nclass Evaluator:\n    \"\"\"RAGAS: RAG Evaluation Framework evaluator.\"\"\"\n    \n    def __init__(self, model_fn: Callable, metrics: list[Callable]):\n        self.model_fn = model_fn\n        self.metrics = metrics\n    \n    def evaluate_single(self, example: EvalExample) -> EvalResult:\n        \"\"\"Evaluate one example.\"\"\"\n        output = self.model_fn(example.input)\n        \n        scores = {}\n        for metric in self.metrics:\n            score = metric(output, example.expected_output)\n            scores[metric.__name__] = score\n        \n        overall_score = statistics.mean(scores.values()) if scores else 0.0\n        \n        return EvalResult(\n            example_id=example.id,\n            model_output=output,\n            score=overall_score,\n            metrics=scores,\n            passed=overall_score >= 0.7\n        )\n    \n    def evaluate_dataset(self, examples: list[EvalExample]) -> dict:\n        \"\"\"Evaluate a full dataset.\"\"\"\n        results = [self.evaluate_single(ex) for ex in examples]\n        \n        scores = [r.score for r in results]\n        passed = [r for r in results if r.passed]\n        failed = [r for r in results if not r.passed]\n        \n        return {\n            \"total\": len(results),\n            \"passed\": len(passed),\n            \"failed\": len(failed),\n            \"pass_rate\": len(passed) / len(results),\n            \"avg_score\": statistics.mean(scores),\n            \"min_score\": min(scores),\n            \"max_score\": max(scores),\n            \"p50\": statistics.median(scores),\n            \"results\": results\n        }\n```\n\n## Key Metrics Implementation\n\n```python\nfrom openai import OpenAI\nimport re\n\nclient = OpenAI()\n\ndef rouge_l_score(prediction: str, reference: str) -> float:\n    \"\"\"Compute ROUGE-L similarity.\"\"\"\n    pred_tokens = set(prediction.lower().split())\n    ref_tokens = set(reference.lower().split())\n    \n    if not ref_tokens:\n        return 0.0\n    \n    intersection = pred_tokens & ref_tokens\n    precision = len(intersection) / max(len(pred_tokens), 1)\n    recall = len(intersection) / len(ref_tokens)\n    \n    if precision + recall == 0:\n        return 0.0\n    return 2 * precision * recall / (precision + recall)\n\ndef llm_judge_score(prediction: str, reference: str, criteria: str = \"quality\") -> float:\n    \"\"\"Use GPT-4 as an automated judge.\"\"\"\n    prompt = f\"\"\"Rate the following AI response on a scale of 1-10.\n\nCriteria: {criteria}\n\nReference answer: {reference}\n\nAI response: {prediction}\n\nRating (just the number 1-10):\"\"\"\n    \n    resp = client.chat.completions.create(\n        model=\"gpt-4o-mini\",\n        messages=[{\"role\": \"user\", \"content\": prompt}],\n        temperature=0,\n        max_tokens=5\n    )\n    \n    try:\n        score = float(re.findall(r'\\d+', resp.choices[0].message.content)[0])\n        return min(max(score / 10, 0), 1.0)\n    except:\n        return 0.5\n\ndef exact_match(prediction: str, reference: str) -> float:\n    \"\"\"Exact string match score.\"\"\"\n    return 1.0 if prediction.strip().lower() == reference.strip().lower() else 0.0\n```\n\n## Running Evaluations\n\n```python\n# Create test dataset\ntest_examples = [\n    EvalExample(\n        id=\"test_001\",\n        input=\"What is the capital of France?\",\n        expected_output=\"Paris\",\n        metadata={\"category\": \"geography\", \"difficulty\": \"easy\"}\n    ),\n    EvalExample(\n        id=\"test_002\", \n        input=\"Explain how neural networks learn\",\n        expected_output=\"Neural networks learn through backpropagation...\",\n        metadata={\"category\": \"ml_concepts\", \"difficulty\": \"medium\"}\n    ),\n]\n\n# Define model function\ndef my_model(input_text: str) -> str:\n    resp = client.chat.completions.create(\n        model=\"gpt-4o-mini\",\n        messages=[{\"role\": \"user\", \"content\": input_text}],\n        temperature=0,\n        max_tokens=500\n    )\n    return resp.choices[0].message.content\n\n# Create evaluator with metrics\nevaluator = Evaluator(\n    model_fn=my_model,\n    metrics=[rouge_l_score, exact_match]\n)\n\n# Run evaluation\nresults = evaluator.evaluate_dataset(test_examples)\nprint(f\"Pass rate: {results['pass_rate']:.1%}\")\nprint(f\"Average score: {results['avg_score']:.3f}\")\nprint(f\"Failed: {results['failed']} / {results['total']}\")\n```\n\n## Continuous Evaluation in CI/CD\n\n```yaml\n# .github/workflows/eval.yml\nname: LLM Evaluation\n\non: [push, pull_request]\n\njobs:\n  evaluate:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - name: Run evaluations\n        run: python -m eval.run_suite\n        env:\n          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}\n          PASS_THRESHOLD: \"0.8\"\n      - name: Post results\n        uses: actions/github-script@v7\n        with:\n          script: |\n            const results = require('./eval_results.json')\n            github.rest.issues.createComment({...})\n```\n\n## Best Practices\n\n1. **Separate test sets** — never evaluate on training data\n2. **Track over time** — catch regressions early\n3. **Human spot-check** — automated metrics miss subtleties\n4. **Diverse examples** — cover edge cases and failure modes\n5. **Version test suites** — track test suite changes separately\n\n## Resources\n\n- RAGAS documentation: https://docs.ragas.io\n- Eleuther AI lm-evaluation-harness: https://github.com/EleutherAI/lm-evaluation-harness\n- HELM benchmark: https://crfm.stanford.edu/helm/",
+    "level": "intermediate",
+    "category": "ai-evaluation",
+    "tags": [
+      "evaluation",
+      "llm",
+      "benchmarks",
+      "quality",
+      "testing"
+    ],
+    "estimated_minutes": 12,
+    "related_tools": [
+      "python",
+      "openai",
+      "ragas"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  },
+  {
+    "id": 1550,
+    "slug": "retry-logic-for-llms-production-patterns-zgnre5",
+    "title": "Retry Logic for LLMs: Production Patterns",
+    "subtitle": "Implementing robust retry strategies for LLM API calls",
+    "summary": "Retry Logic for LLMs: Production Patterns  Overview  Implementing robust retry strategies for LLM API calls. This guide provides complete, production-ready implementation.  Key Concepts  Understanding retry logic for llms: production patterns require",
+    "content": "# Retry Logic for LLMs: Production Patterns\n\n## Overview\n\nImplementing robust retry strategies for LLM API calls. This guide provides complete, production-ready implementation.\n\n## Key Concepts\n\nUnderstanding retry logic for llms: production patterns requires:\n\n1. **Core principles** of llm patterns\n2. **Practical patterns** for llm\n3. **Production considerations** for deployment\n4. **Testing strategies** for reliability\n\n## Setup\n\n```bash\npip install openai python python-dotenv pydantic fastapi\nexport OPENAI_API_KEY=\"sk-...\"\n```\n\n## Implementation\n\n```python\nfrom openai import OpenAI\nfrom pydantic import BaseModel\nfrom typing import Optional, Any\nimport json\n\nclient = OpenAI()\n\nclass Config(BaseModel):\n    model: str = \"gpt-4o-mini\"\n    temperature: float = 0.3\n    max_tokens: int = 2000\n\nclass RetryLogicforLLMsProductionPatterns(object):\n    \"\"\"\n    Retry Logic for LLMs: Production Patterns\n    \n    Implementing robust retry strategies for LLM API calls\n    Tags: llm, patterns, production, tenacity\n    \"\"\"\n    \n    def __init__(self, config: Optional[Config] = None):\n        self.config = config or Config()\n        self.client = OpenAI()\n        self.context = {}\n    \n    def process(self, query: str, **kwargs) -> dict:\n        \"\"\"Main processing method.\"\"\"\n        \n        system_msg = f\"\"\"You are an expert in {category.replace(/-/g,' ')}, \n        specializing in {tags[0].replace(/-/g,' ')}.\n        Be precise, practical, and production-focused.\n        Topic context: {title}\"\"\"\n        \n        response = self.client.chat.completions.create(\n            model=self.config.model,\n            messages=[\n                {\"role\": \"system\", \"content\": system_msg},\n                {\"role\": \"user\", \"content\": query}\n            ],\n            temperature=self.config.temperature,\n            max_tokens=self.config.max_tokens\n        )\n        \n        return {\n            \"output\": response.choices[0].message.content,\n            \"tokens\": response.usage.total_tokens,\n            \"model\": self.config.model\n        }\n    \n    def analyze(self, content: str, criteria: list[str] = None) -> dict:\n        \"\"\"Analyze content against specific criteria.\"\"\"\n        criteria_str = \", \".join(criteria or [\"quality\", \"accuracy\", \"completeness\"])\n        \n        response = self.client.chat.completions.create(\n            model=self.config.model,\n            messages=[{\n                \"role\": \"user\",\n                \"content\": f\"Analyze this content for {criteria_str}:\\n\\n{content}\"\n            }],\n            temperature=0.1,\n            max_tokens=1000\n        )\n        \n        return {\n            \"analysis\": response.choices[0].message.content,\n            \"criteria\": criteria_str\n        }\n\n# Initialize and use\ninstance = RetryLogicforLLMsProductionPatterns()\nresult = instance.process(f\"Implement a production {title.toLowerCase()} solution\")\nprint(result[\"output\"])\n```\n\n## Advanced Pattern: Streaming\n\n```python\nfrom fastapi import FastAPI\nfrom fastapi.responses import StreamingResponse\nimport asyncio\n\napp = FastAPI()\ninstance = RetryLogicforLLMsProductionPatterns()\n\n@app.post(\"/stream\")\nasync def stream_response(query: str):\n    \"\"\"Stream AI response for better UX.\"\"\"\n    \n    async def generate():\n        stream = client.chat.completions.create(\n            model=\"gpt-4o-mini\",\n            messages=[{\"role\": \"user\", \"content\": query}],\n            stream=True,\n            max_tokens=1000\n        )\n        \n        for chunk in stream:\n            if chunk.choices[0].delta.content:\n                yield chunk.choices[0].delta.content\n    \n    return StreamingResponse(generate(), media_type=\"text/plain\")\n\n@app.post(\"/process\")\nasync def process_endpoint(query: str):\n    return instance.process(query)\n```\n\n## Testing\n\n```python\nimport pytest\n\n@pytest.fixture\ndef instance():\n    return RetryLogicforLLMsProductionPatterns(Config(model=\"gpt-4o-mini\"))\n\ndef test_basic_process(instance):\n    result = instance.process(\"Test query\")\n    assert \"output\" in result\n    assert isinstance(result[\"output\"], str)\n    assert len(result[\"output\"]) > 0\n\ndef test_analysis(instance):\n    result = instance.analyze(\"Sample content for analysis\")\n    assert \"analysis\" in result\n```\n\n## Best Practices\n\n- **Validate inputs** before sending to AI\n- **Handle rate limits** with exponential backoff  \n- **Cache responses** for repeated queries\n- **Log all interactions** for debugging and improvement\n- **Monitor costs** and set billing alerts\n- **Test edge cases** including empty inputs and long texts\n\n## Performance Tips\n\n| Optimization | Impact | Implementation |\n|-------------|--------|----------------|\n| Prompt compression | -30% tokens | Remove unnecessary words |\n| Response caching | -80% API calls | Redis with TTL |\n| Batch processing | -50% latency | Group similar requests |\n| Model selection | -70% cost | Use mini for simple tasks |\n\n## Resources\n\n- OpenAI docs: https://platform.openai.com/docs\n- python documentation\n- Production AI patterns guide",
+    "level": "intermediate",
+    "category": "llm-patterns",
+    "tags": [
+      "llm",
+      "patterns",
+      "production",
+      "tenacity",
+      "python"
+    ],
+    "estimated_minutes": 15,
+    "related_tools": [
+      "python",
+      "python"
+    ],
+    "is_featured": false,
+    "published_at": null,
+    "title_en": null,
+    "subtitle_en": null,
+    "summary_en": null,
+    "content_en": null,
+    "en_status": null
+  }
+]
