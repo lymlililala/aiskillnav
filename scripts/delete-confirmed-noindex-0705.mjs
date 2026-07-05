@@ -50,8 +50,32 @@ const missing = deletable.filter((s) => !foundSlugs.has(s));
 console.log(`DB 命中: ${rows.length} 行` + (missing.length ? `；DB 已不存在: ${missing.length}（${missing.join(', ')}）` : ''));
 
 const backupPath = `output/deleted-tutorials-noindex-0705.json`;
-writeFileSync(backupPath, JSON.stringify(rows, null, 2));
-console.log(`备份已写入: ${backupPath}`);
+if (rows.length > 0) {
+  writeFileSync(backupPath, JSON.stringify(rows, null, 2));
+  console.log(`备份已写入: ${backupPath}`);
+} else {
+  console.log(`DB 无匹配行（可能已删），跳过备份写入以免覆盖既有备份 ${backupPath}`);
+}
+
+// 线上自检：精确匹配（拆出 slug 全等比对，避免子串误判，如 langgraph-stateful-agent
+// 会被 langgraph-stateful-agents-tutorial-2026 的 `includes` 误命中）
+async function verifyOnline(targets) {
+  const set = new Set(targets);
+  for (const name of ['sitemap-zh.xml', 'sitemap-en.xml']) {
+    const xml = await (await fetch('https://aiskillnav.com/' + name)).text();
+    const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
+    const tutSlugs = new Set(
+      locs.filter((l) => l.includes('/tutorials/')).map((l) => l.split('/tutorials/')[1])
+    );
+    const hit = [...set].filter((s) => tutSlugs.has(s)); // 全等，非子串
+    console.log(`  ${name}: 精确命中已删 slug ${hit.length}${hit.length ? ' → ' + hit.join(', ') : ' ✓'}`);
+  }
+  // HTTP 抽检首个已删 slug 应为 404
+  if (targets[0]) {
+    const r = await fetch('https://aiskillnav.com/tutorials/' + targets[0], { redirect: 'manual' });
+    console.log(`  HTTP /tutorials/${targets[0]} → ${r.status}${r.status === 404 ? ' ✓' : ' ⚠️ 期望 404'}`);
+  }
+}
 
 if (!COMMIT) {
   console.log('\n[dry-run] 未删除。确认无误后加 --commit 执行删除。');
@@ -71,3 +95,7 @@ for (let i = 0; i < deletable.length; i += 20) {
   deleted += j.length;
 }
 console.log(`\n✅ 已删除 ${deleted} 行。`);
+
+// 6) 线上自检（sitemap 精确匹配 + HTTP 404）
+console.log('\n线上自检:');
+await verifyOnline(deletable);
