@@ -114,6 +114,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang={lang} suppressHydrationWarning data-theme={themeToApply}>
       <head>
+        {/* Google AdSense — 站点所有权验证 + 广告投放 */}
+        <script
+          async
+          src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6592832176305007'
+          crossOrigin='anonymous'
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `
