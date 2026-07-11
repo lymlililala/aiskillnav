@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getMcpBySlug, getRelatedMcp } from '@/features/mcp/api/service';
+import { INDEX_MCP_SLUGS } from '@/features/mcp/index-allowlist';
 import { getTutorialsByTool } from '@/features/tutorials/api/service';
 import { fakeMcpServers } from '@/constants/mock-api-mcp';
 import { Icons } from '@/components/icons';
@@ -14,11 +15,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const server = await getMcpBySlug(slug);
   if (!server) return { title: 'MCP Server 不存在' };
+  // 薄目录页太多（2300 条，描述中位 45 字）：仅白名单内的页可索引，其余 noindex（仍 follow 让内链权重流动）
+  const noindex = !INDEX_MCP_SLUGS.has(server.slug);
   return {
     title: `${server.name} MCP Server — 安装教程与使用指南`,
     description: server.description,
     keywords: server.tags,
-    alternates: { canonical: `https://aiskillnav.com/mcp/${server.slug}` }
+    alternates: { canonical: `https://aiskillnav.com/mcp/${server.slug}` },
+    ...(noindex ? { robots: { index: false, follow: true } } : {})
   };
 }
 

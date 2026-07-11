@@ -5,6 +5,8 @@ import { slugify } from '@/lib/slug';
 import { SKILL_CATEGORIES } from '@/features/skills/categories';
 import { MODEL_SERIES } from '@/features/models/series';
 import { NOINDEX_TUTORIAL_SLUGS } from '@/features/tutorials/noindex-slugs';
+import { INDEX_MCP_SLUGS } from '@/features/mcp/index-allowlist';
+import { INDEX_AGENT_SLUGS } from '@/features/agents/index-allowlist';
 import { getPublishedEnglishTutorials } from '@/features/tutorials/api/service';
 import { getPublishedEnglishNews } from '@/features/news/api/service';
 import { getPublishedEnglishUseCases } from '@/features/usecases/api/service';
@@ -217,7 +219,10 @@ export async function getSitemapEntries(): Promise<MetadataRoute.Sitemap> {
       }
     }));
 
-    const uniqMcp = Array.from(new Map(allMcp.map((m) => [m.slug, m])).values());
+    // 仅收录白名单内的 MCP 详情页（薄目录页太多，名单外已 noindex，须与 robots meta 一致）
+    const uniqMcp = Array.from(new Map(allMcp.map((m) => [m.slug, m])).values()).filter((m) =>
+      INDEX_MCP_SLUGS.has(m.slug)
+    );
     const mcpPages: MetadataRoute.Sitemap = uniqMcp.map((m) => ({
       url: `${BASE_URL}/mcp/${m.slug}`,
       lastModified: m.created_at ? new Date(m.created_at) : now,
@@ -234,7 +239,9 @@ export async function getSitemapEntries(): Promise<MetadataRoute.Sitemap> {
           }
         : {})
     }));
-    const enMcpPages: MetadataRoute.Sitemap = [...enMcpSlugs].map((slug) => ({
+    const enMcpPages: MetadataRoute.Sitemap = [...enMcpSlugs]
+      .filter((slug) => INDEX_MCP_SLUGS.has(slug))
+      .map((slug) => ({
       url: `${BASE_URL}/en/mcp/${slug}`,
       lastModified: now,
       changeFrequency: 'monthly' as const,
@@ -299,7 +306,7 @@ export async function getSitemapEntries(): Promise<MetadataRoute.Sitemap> {
 
     const uniqAgentSlugs = Array.from(
       new Set(allAgents.map((a) => slugify(a.name)).filter(Boolean))
-    );
+    ).filter((s) => INDEX_AGENT_SLUGS.has(s));
     const agentPages: MetadataRoute.Sitemap = uniqAgentSlugs.map((s) => ({
       url: `${BASE_URL}/agents/${s}`,
       lastModified: now,
@@ -313,7 +320,9 @@ export async function getSitemapEntries(): Promise<MetadataRoute.Sitemap> {
           }
         : {})
     }));
-    const enAgentPages: MetadataRoute.Sitemap = [...enAgentSlugs].map((s) => ({
+    const enAgentPages: MetadataRoute.Sitemap = [...enAgentSlugs]
+      .filter((s) => INDEX_AGENT_SLUGS.has(s))
+      .map((s) => ({
       url: `${BASE_URL}/en/agents/${s}`,
       lastModified: now,
       changeFrequency: 'monthly' as const,

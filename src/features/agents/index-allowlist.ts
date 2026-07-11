@@ -1,0 +1,47 @@
+/**
+ * Agents 可索引白名单：薄目录页(217, 描述中位62字), 仅保留有价值的少数。slug=slugify(name)。
+ * 生成依据：is_featured ∪ GSC(过去3个月有点击或曝光≥3)。名单外的详情页输出 robots noindex 并从 sitemap 排除。
+ * 可逆：加回 slug 即恢复收录。2026-07-11 生成。
+ */
+export const INDEX_AGENT_SLUGS: ReadonlySet<string> = new Set([
+  'autogen',
+  'botpress',
+  'browser-use',
+  'chatdev',
+  'claude-computer-use',
+  'comicsmaker-ai',
+  'coze',
+  'coze-扣子',
+  'crewai',
+  'cursor',
+  'devin',
+  'devin-cognition-ai',
+  'dify',
+  'friday',
+  'genia',
+  'genspark',
+  'github-copilot-x',
+  'gpt-researcher',
+  'heygen',
+  'kling-ai',
+  'langgraph',
+  'manus',
+  'microsoft-copilot-studio',
+  'n8n-ai-agent',
+  'notion-ai',
+  'novelai',
+  'openclaw',
+  'openhands',
+  'openhands-opendevin',
+  'perplexity-ai',
+  'playwright-mcp',
+  'runway-gen-3',
+  'sierra-ai',
+  'sudowrite',
+  'teal',
+  '即梦-ai',
+  '彩云小梦',
+  '触站-ai-漫画',
+  '超级简历',
+  '飞书妙记'
+]);

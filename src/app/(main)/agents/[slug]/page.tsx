@@ -5,6 +5,7 @@ import PageContainer from '@/components/layout/page-container';
 import { Icons } from '@/components/icons';
 import { Badge } from '@/components/ui/badge';
 import { getAgentBySlug, getRelatedAgents } from '@/features/agents/api/service';
+import { INDEX_AGENT_SLUGS } from '@/features/agents/index-allowlist';
 import { getUseCasesByTool } from '@/features/usecases/api/service';
 import { slugify } from '@/lib/slug';
 
@@ -33,11 +34,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const agent = await getAgentBySlug(slug);
   if (!agent) return { title: 'Agent 不存在' };
   const url = `https://aiskillnav.com/agents/${slug}`;
+  // 薄目录页太多（217 条，描述中位 62 字）：仅白名单内的页可索引，其余 noindex（仍 follow）
+  const noindex = !INDEX_AGENT_SLUGS.has(slugify(agent.name));
   return {
     title: `${agent.name} — AI Agent 介绍与同类对比`,
     description: agent.description,
     keywords: agent.tags,
     alternates: { canonical: url },
+    ...(noindex ? { robots: { index: false, follow: true } } : {}),
     openGraph: {
       type: 'website',
       url,
