@@ -1861,4 +1861,13 @@ export const NOINDEX_TUTORIAL_SLUGS: ReadonlySet<string> = new Set([
   'zero-shot-prompting-complete-guide-with-examples-2026-1ws4m1',
   'zero-trust-architecture-ai-guide-2025',
   'zero-trust-security-ai-implementation-2025',
+  // 批次5（2026-07-11 存活扫描）：编造跑分的模型API指南（fabricated benchmark），
+  // AdSense/E-E-A-T 高危，noindex。共 7 篇。
+  'command-r-api-complete-guide-2026-setup-features-best-practices-crch8',
+  'gpt-4o-vs-claude-35-sonnet-which-is-better-for-coding-tasks-2026-hnidut',
+  'grok-3-api-complete-guide-2026-setup-features-best-practices-3bo5t',
+  'llama-4-api-complete-guide-2026-setup-features-best-practices-hrh0a',
+  'mistral-large-3-api-complete-guide-2026-setup-features-best-practices-k89ew',
+  'phi-4-api-complete-guide-2026-setup-features-best-practices-ti35f',
+  'qwen-3-72b-api-complete-guide-2026-setup-features-best-practices-yt0zb',
 ]);
