@@ -89,6 +89,14 @@ export const INDEX_BOOST_LINKS: IndexBoostLink[] = [
     label: 'Groq API 开发者指南与快速入门'
   },
   {
+    href: '/tutorials/mistral-large-3-api-complete-guide-2026-setup-features-best-practices-k89ew',
+    label: 'Mistral Large 3 API 完整指南：设置与最佳实践'
+  },
+  {
+    href: '/tutorials/notion-ai-knowledge-management-team-workflow',
+    label: 'Notion AI 知识管理：打造真正被使用的公司 Wiki'
+  },
+  {
     href: '/tutorials/voice-activity-detection-python-guide-2026',
     label: 'Voice Activity Detection (VAD) Python 实战'
   },
