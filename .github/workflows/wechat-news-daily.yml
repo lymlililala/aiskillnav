@@ -2,10 +2,15 @@ name: WeChat News Daily
 
 # 每天采集公众号增量 + 生成热点资讯（news 表）。
 # 重任务（限频 API 多次调用），跑在 GitHub Actions 而非 Vercel（函数 5 分钟上限不够）。
+#
+# 2026-07-22 起暂停定时运行：AdSense 以"低价值内容"拒审，news 详情页只有摘要无正文（薄页），
+# 已全量 noindex 并移出 sitemap。管线保留 workflow_dispatch 供手动/dry-run；
+# 待管线能产出完整正文（而非仅摘要）后，恢复 schedule 并逐条把 slug 加入
+# src/features/news/index-allowlist.ts 白名单恢复收录。
 on:
-  schedule:
-    # 每天 UTC 14:07（北京 22:07）。只采当天新文，错开整点（GitHub 整点排队最堵、延迟最久）。
-    - cron: '7 14 * * *'
+  # schedule:
+  #   # 每天 UTC 14:07（北京 22:07）。只采当天新文，错开整点（GitHub 整点排队最堵、延迟最久）。
+  #   - cron: '7 14 * * *'
   workflow_dispatch:
     inputs:
       dry_run:
