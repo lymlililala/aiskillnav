@@ -147,5 +147,30 @@ export const INDEX_BOOST_LINKS: IndexBoostLink[] = [
   {
     href: '/news/ai-automation-jobs-future-of-work-2025',
     label: '世界经济论坛《未来就业报告2025》解读'
+  },
+  // ── 2026-07-22 标签中枢页（新上线，促收录） ──
+  {
+    href: '/tags/developer-tools',
+    label: '开发者工具 MCP Server 合集'
+  },
+  {
+    href: '/tags/browser-automation',
+    label: '浏览器自动化 MCP Server 合集'
+  },
+  {
+    href: '/tags/databases',
+    label: '数据库 MCP Server 合集'
+  },
+  {
+    href: '/tags/llm',
+    label: 'LLM 大模型实战教程与资源'
+  },
+  {
+    href: '/tags/python',
+    label: 'Python AI 开发教程与工具'
+  },
+  {
+    href: '/tags/comparison',
+    label: 'AI 工具对比评测合集'
   }
 ];

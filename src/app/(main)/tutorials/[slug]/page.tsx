@@ -5,6 +5,7 @@ import { getTutorialBySlug, getRelatedTutorials } from '@/features/tutorials/api
 import { NOINDEX_TUTORIAL_SLUGS } from '@/features/tutorials/noindex-slugs';
 import { getMcpSlugSet } from '@/features/mcp/api/service';
 import { matchPillarTopics } from '@/features/tutorials/topics';
+import { findTagPageForTag } from '@/features/tags/registry';
 import { extractFaq, buildFaqJsonLd } from '@/features/tutorials/faq';
 import { Icons } from '@/components/icons';
 import { Badge } from '@/components/ui/badge';
@@ -76,6 +77,14 @@ const LEVEL_CONFIG: Record<string, { label: string; color: string }> = {
   advanced: { label: '高级', color: 'text-violet-600 bg-violet-500/10 border-violet-500/20' }
 };
 
+function formatDate(s: string) {
+  return new Date(s).toLocaleDateString('zh-CN', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+}
+
 function renderMarkdown(md: string): string {
   if (!md) return '';
   return md
@@ -130,6 +139,8 @@ export default async function TutorialDetailPage({ params }: Props) {
   ]);
 
   const level = LEVEL_CONFIG[tutorial.level];
+  // tutorials 表当前无 updated_at 列；防御性读取，未来加列后自动生效（与 en_status 同模式）
+  const updatedAt = (tutorial as { updated_at?: string | null }).updated_at;
   // 该教程命中的主题集群（pillar），用于"所属主题"回流链
   const topics = matchPillarTopics(tutorial.tags, tutorial.title);
   const html = renderMarkdown(tutorial.content);
@@ -146,6 +157,9 @@ export default async function TutorialDetailPage({ params }: Props) {
     headline: tutorial.title,
     description: tutorial.summary,
     keywords: tutorial.tags.join(', '),
+    // noindex 名单内的教程 published_at 会置空，防御性跳过
+    ...(tutorial.published_at ? { datePublished: tutorial.published_at } : {}),
+    ...(updatedAt ? { dateModified: updatedAt } : {}),
     author: {
       '@type': 'Organization',
       name: 'AI Skill Navigation',
@@ -226,19 +240,42 @@ export default async function TutorialDetailPage({ params }: Props) {
               <Icons.clock className='h-3.5 w-3.5' />约 {tutorial.estimated_minutes} 分钟
             </span>
           </div>
+          <div className='flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground'>
+            <span className='flex items-center gap-1'>
+              <Icons.userPen className='h-3.5 w-3.5' />
+              AI Skill Navigation 编辑团队
+            </span>
+            {tutorial.published_at && (
+              <span className='flex items-center gap-1'>
+                <Icons.calendar className='h-3.5 w-3.5' />
+                发布于 {formatDate(tutorial.published_at)}
+              </span>
+            )}
+            {updatedAt && <span>更新于 {formatDate(updatedAt)}</span>}
+          </div>
           <h1 className='text-2xl font-bold leading-tight md:text-3xl'>{tutorial.title}</h1>
           <p className='text-base text-muted-foreground'>{tutorial.subtitle}</p>
           <p className='text-sm leading-relaxed text-muted-foreground'>{tutorial.summary}</p>
           <div className='flex flex-wrap gap-1.5'>
-            {tutorial.tags.map((tag) => (
-              <Link
-                key={tag}
-                href={`/tutorials?tut_cat=${encodeURIComponent(tutorial.category)}`}
-                className='rounded-md bg-muted/50 border px-2 py-0.5 text-xs text-muted-foreground hover:border-primary/30 hover:text-foreground transition-colors'
-              >
-                {tag}
-              </Link>
-            ))}
+            {tutorial.tags.map((tag) => {
+              // 芯片分流：命中支柱主题 → topic 页；命中标签注册表 → 标签中枢页；否则维持分类筛选
+              const topic = matchPillarTopics([tag], '', 1)[0];
+              const hub = findTagPageForTag(tag);
+              const href = topic
+                ? `/tutorials/topic/${topic.slug}`
+                : hub
+                  ? `/tags/${hub.slug}`
+                  : `/tutorials?tut_cat=${encodeURIComponent(tutorial.category)}`;
+              return (
+                <Link
+                  key={tag}
+                  href={href}
+                  className='rounded-md bg-muted/50 border px-2 py-0.5 text-xs text-muted-foreground hover:border-primary/30 hover:text-foreground transition-colors'
+                >
+                  {tag}
+                </Link>
+              );
+            })}
           </div>
           <div className='border-b' />
         </header>

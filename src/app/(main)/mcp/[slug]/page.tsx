@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { getMcpBySlug, getRelatedMcp } from '@/features/mcp/api/service';
 import { INDEX_MCP_SLUGS } from '@/features/mcp/index-allowlist';
 import { mcpDisplayName } from '@/features/mcp/display-name';
+import { findTagPageForTag } from '@/features/tags/registry';
 import { getTutorialsByTool } from '@/features/tutorials/api/service';
 import { fakeMcpServers } from '@/constants/mock-api-mcp';
 import { Icons } from '@/components/icons';
@@ -67,6 +68,26 @@ const CATEGORY_CONFIG: Record<string, { label: string; color: string; bg: string
     color: 'text-pink-600 dark:text-pink-400',
     bg: 'bg-pink-500/10 border-pink-500/20'
   }
+};
+
+// 「什么是 X」简介块的类目引导文案（独有 description 在页首展示，此处只给类目级背景，避免页内重复）
+const CATEGORY_INTRO: Record<string, (name: string) => string> = {
+  filesystem: (n) =>
+    `${n} 是一个文件系统类 MCP Server，让 Claude、Cursor 等 AI 助手在授权目录内读写文件、浏览代码库。适合让 AI 直接处理本地项目文件、批量整理文档或生成代码。`,
+  database: (n) =>
+    `${n} 是一个数据库类 MCP Server，让 AI 助手用自然语言查询和分析数据库。无需手写 SQL 即可完成取数、报表生成与数据探索，适合数据分析与运营场景。`,
+  browser: (n) =>
+    `${n} 是一个浏览器自动化类 MCP Server，让 AI 助手打开真实浏览器执行点击、填表、截图与抓取。常用于端到端测试、网页数据采集与重复性网页操作自动化。`,
+  devtools: (n) =>
+    `${n} 是一个开发者工具类 MCP Server，把开发流程中的操作（查文档、跑脚本、查日志、调 API 等）暴露给 AI 助手调用，让 Claude、Cursor 直接参与开发工作流。`,
+  productivity: (n) =>
+    `${n} 是一个效率工具类 MCP Server，把日程、任务、笔记、消息等生产力工具接入 AI 助手，让 Claude、Cursor 帮你自动处理日常协作事务。`,
+  search: (n) =>
+    `${n} 是一个搜索类 MCP Server，让 AI 助手实时联网检索最新信息，突破模型训练数据的时间限制，适合研究、监控与事实核查场景。`,
+  ai: (n) =>
+    `${n} 是一个 AI 模型类 MCP Server，把模型能力（推理、生成、多模态处理等）以标准 MCP 协议暴露给 AI 助手编排调用。`,
+  default: (n) =>
+    `${n} 是一个 MCP Server，通过 Model Context Protocol 把外部工具与数据源能力以标准协议暴露给 Claude、Cursor 等 AI 助手调用。`
 };
 
 function ConfigSection({ install_cmd, name }: { install_cmd?: string; name: string }) {
@@ -201,18 +222,33 @@ export default async function McpDetailPage({ params }: Props) {
           <p className='text-base leading-relaxed text-muted-foreground'>{server.description}</p>
 
           <div className='flex flex-wrap gap-1.5'>
-            {server.tags.map((tag) => (
-              <Link
-                key={tag}
-                href={`/mcp?mcp_search=${encodeURIComponent(tag)}`}
-                className='rounded-md bg-muted/50 border px-2 py-0.5 text-xs text-muted-foreground hover:border-primary/30 hover:text-foreground transition-colors'
-              >
-                {tag}
-              </Link>
-            ))}
+            {server.tags.map((tag) => {
+              const hub = findTagPageForTag(tag);
+              return (
+                <Link
+                  key={tag}
+                  href={hub ? `/tags/${hub.slug}` : `/mcp?mcp_search=${encodeURIComponent(tag)}`}
+                  className='rounded-md bg-muted/50 border px-2 py-0.5 text-xs text-muted-foreground hover:border-primary/30 hover:text-foreground transition-colors'
+                >
+                  {tag}
+                </Link>
+              );
+            })}
           </div>
           <div className='border-b' />
         </header>
+
+        {/* 简介：关键词 H2 + 类目引导（独有 description 保持在页首，此处不重复） */}
+        <section className='space-y-3'>
+          <h2 className='text-base font-semibold'>
+            什么是 {mcpDisplayName(server.name)} MCP Server？
+          </h2>
+          <p className='text-sm leading-relaxed text-muted-foreground'>
+            {(CATEGORY_INTRO[server.category] ?? CATEGORY_INTRO.default)(
+              mcpDisplayName(server.name)
+            )}
+          </p>
+        </section>
 
         {/* Install & Config */}
         <ConfigSection install_cmd={server.install_cmd} name={server.name} />

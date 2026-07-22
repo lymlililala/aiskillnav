@@ -1,10 +1,12 @@
 import type { MetadataRoute } from 'next';
 import { getSupabaseAdmin } from '@/lib/supabase';
 import { PILLAR_TOPICS } from '@/features/tutorials/topics';
+import { TAG_PAGES } from '@/features/tags/registry';
 import { slugify } from '@/lib/slug';
 import { SKILL_CATEGORIES } from '@/features/skills/categories';
 import { MODEL_SERIES } from '@/features/models/series';
 import { NOINDEX_TUTORIAL_SLUGS } from '@/features/tutorials/noindex-slugs';
+import { INDEX_NEWS_SLUGS } from '@/features/news/index-allowlist';
 import { INDEX_MCP_SLUGS } from '@/features/mcp/index-allowlist';
 import { INDEX_AGENT_SLUGS } from '@/features/agents/index-allowlist';
 import { getPublishedEnglishTutorials } from '@/features/tutorials/api/service';
@@ -192,32 +194,38 @@ export async function getSitemapEntries(): Promise<MetadataRoute.Sitemap> {
         }
       }));
 
-    const newsPages: MetadataRoute.Sitemap = uniqNews.map((n) => ({
-      url: `${BASE_URL}/news/${n.slug}`,
-      lastModified: new Date(n.published_at),
-      changeFrequency: 'monthly' as const,
-      priority: 0.87,
-      ...(enNewsSlugs.has(n.slug)
-        ? {
-            alternates: {
-              languages: {
-                'zh-CN': `${BASE_URL}/news/${n.slug}`,
-                en: `${BASE_URL}/en/news/${n.slug}`
+    // 仅收录白名单内的 news 详情页（薄摘要页默认 noindex，须与 robots meta 保持一致，
+    // 不向 Google 提交名单外页面，避免 GSC「已提交但被 noindex」冲突）
+    const newsPages: MetadataRoute.Sitemap = uniqNews
+      .filter((n) => INDEX_NEWS_SLUGS.has(n.slug))
+      .map((n) => ({
+        url: `${BASE_URL}/news/${n.slug}`,
+        lastModified: new Date(n.published_at),
+        changeFrequency: 'monthly' as const,
+        priority: 0.87,
+        ...(enNewsSlugs.has(n.slug)
+          ? {
+              alternates: {
+                languages: {
+                  'zh-CN': `${BASE_URL}/news/${n.slug}`,
+                  en: `${BASE_URL}/en/news/${n.slug}`
+                }
               }
             }
-          }
-        : {})
-    }));
+          : {})
+      }));
 
-    const enNewsPages: MetadataRoute.Sitemap = [...enNewsSlugs].map((slug) => ({
-      url: `${BASE_URL}/en/news/${slug}`,
-      lastModified: now,
-      changeFrequency: 'monthly' as const,
-      priority: 0.75,
-      alternates: {
-        languages: { 'zh-CN': `${BASE_URL}/news/${slug}`, en: `${BASE_URL}/en/news/${slug}` }
-      }
-    }));
+    const enNewsPages: MetadataRoute.Sitemap = [...enNewsSlugs]
+      .filter((slug) => INDEX_NEWS_SLUGS.has(slug))
+      .map((slug) => ({
+        url: `${BASE_URL}/en/news/${slug}`,
+        lastModified: now,
+        changeFrequency: 'monthly' as const,
+        priority: 0.75,
+        alternates: {
+          languages: { 'zh-CN': `${BASE_URL}/news/${slug}`, en: `${BASE_URL}/en/news/${slug}` }
+        }
+      }));
 
     // 仅收录白名单内的 MCP 详情页（薄目录页太多，名单外已 noindex，须与 robots meta 一致）
     const uniqMcp = Array.from(new Map(allMcp.map((m) => [m.slug, m])).values()).filter((m) =>
@@ -242,14 +250,14 @@ export async function getSitemapEntries(): Promise<MetadataRoute.Sitemap> {
     const enMcpPages: MetadataRoute.Sitemap = [...enMcpSlugs]
       .filter((slug) => INDEX_MCP_SLUGS.has(slug))
       .map((slug) => ({
-      url: `${BASE_URL}/en/mcp/${slug}`,
-      lastModified: now,
-      changeFrequency: 'monthly' as const,
-      priority: 0.6,
-      alternates: {
-        languages: { 'zh-CN': `${BASE_URL}/mcp/${slug}`, en: `${BASE_URL}/en/mcp/${slug}` }
-      }
-    }));
+        url: `${BASE_URL}/en/mcp/${slug}`,
+        lastModified: now,
+        changeFrequency: 'monthly' as const,
+        priority: 0.6,
+        alternates: {
+          languages: { 'zh-CN': `${BASE_URL}/mcp/${slug}`, en: `${BASE_URL}/en/mcp/${slug}` }
+        }
+      }));
 
     const usecasePages: MetadataRoute.Sitemap = allUseCases.map((u) => ({
       url: `${BASE_URL}/usecases/${u.id}`,
@@ -323,14 +331,14 @@ export async function getSitemapEntries(): Promise<MetadataRoute.Sitemap> {
     const enAgentPages: MetadataRoute.Sitemap = [...enAgentSlugs]
       .filter((s) => INDEX_AGENT_SLUGS.has(s))
       .map((s) => ({
-      url: `${BASE_URL}/en/agents/${s}`,
-      lastModified: now,
-      changeFrequency: 'monthly' as const,
-      priority: 0.6,
-      alternates: {
-        languages: { 'zh-CN': `${BASE_URL}/agents/${s}`, en: `${BASE_URL}/en/agents/${s}` }
-      }
-    }));
+        url: `${BASE_URL}/en/agents/${s}`,
+        lastModified: now,
+        changeFrequency: 'monthly' as const,
+        priority: 0.6,
+        alternates: {
+          languages: { 'zh-CN': `${BASE_URL}/agents/${s}`, en: `${BASE_URL}/en/agents/${s}` }
+        }
+      }));
 
     dynamicPages = [
       ...tutorialPages,
@@ -422,6 +430,35 @@ export async function getSitemapEntries(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'weekly' as const,
       priority: 0.9
     })),
+    // 标签中枢页（跨类型聚合，独立流量入口；中英镜像）
+    { url: `${BASE_URL}/tags`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${BASE_URL}/en/tags`, lastModified: now, changeFrequency: 'weekly', priority: 0.6 },
+    ...TAG_PAGES.flatMap((t) => [
+      {
+        url: `${BASE_URL}/tags/${t.slug}`,
+        lastModified: now,
+        changeFrequency: 'weekly' as const,
+        priority: 0.75,
+        alternates: {
+          languages: {
+            'zh-CN': `${BASE_URL}/tags/${t.slug}`,
+            en: `${BASE_URL}/en/tags/${t.slug}`
+          }
+        }
+      },
+      {
+        url: `${BASE_URL}/en/tags/${t.slug}`,
+        lastModified: now,
+        changeFrequency: 'weekly' as const,
+        priority: 0.65,
+        alternates: {
+          languages: {
+            'zh-CN': `${BASE_URL}/tags/${t.slug}`,
+            en: `${BASE_URL}/en/tags/${t.slug}`
+          }
+        }
+      }
+    ]),
     // skills 分类聚合页
     ...SKILL_CATEGORIES.map((c) => ({
       url: `${BASE_URL}/skills/category/${c.slug}`,
