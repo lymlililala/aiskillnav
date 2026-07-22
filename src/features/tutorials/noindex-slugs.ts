@@ -1002,7 +1002,6 @@ export const NOINDEX_TUTORIAL_SLUGS: ReadonlySet<string> = new Set([
   'vector-database-comparison-2025-pinecone-weaviate',
   'vector-databases-production-guide-2025',
   'vercel-ai-sdk-vs-langchainjs-which-is-better-for-nextjs-ai-apps-2026-a2eixa',
-  'voice-activity-detection-python-guide-2026',
   'windsurf-ai-ide-complete-guide-2026',
   'xiaohongshu-ai-operation-growth-guide-2026',
   // 批次4（2026-07-11 GSC 交叉核对）：已发布但完全零曝光(不在 GSC top-1000)的索引僵尸中文教程，
@@ -1065,7 +1064,6 @@ export const NOINDEX_TUTORIAL_SLUGS: ReadonlySet<string> = new Set([
   'ai-climate-change-environmental-monitoring',
   'ai-climate-sustainability-applications-2025',
   'ai-clinical-trial-research-2025',
-  'ai-cloud-cost-optimization-strategies',
   'ai-cloud-native-development-kubernetes',
   'ai-cloud-security-posture-management',
   'ai-code-debugger-tool-lb713w',
@@ -1650,7 +1648,6 @@ export const NOINDEX_TUTORIAL_SLUGS: ReadonlySet<string> = new Set([
   'litellm-vs-portkeyai-which-is-better-for-llm-api-gateway-2026-uxbx03',
   'llama-4-scout-2026-04-whats-new-and-how-to-use-it-6js8f',
   'llm-agent-world-cup-live-commentary-2026-agt4k9',
-  'llm-api-cost-optimization-guide-2026',
   'llm-cost-optimization-bh0sb1',
   'llm-cost-optimization-strategies-2025',
   'llm-fine-tuning-domain-specific-2025',
@@ -1867,7 +1864,6 @@ export const NOINDEX_TUTORIAL_SLUGS: ReadonlySet<string> = new Set([
   'gpt-4o-vs-claude-35-sonnet-which-is-better-for-coding-tasks-2026-hnidut',
   'grok-3-api-complete-guide-2026-setup-features-best-practices-3bo5t',
   'llama-4-api-complete-guide-2026-setup-features-best-practices-hrh0a',
-  'mistral-large-3-api-complete-guide-2026-setup-features-best-practices-k89ew',
   'phi-4-api-complete-guide-2026-setup-features-best-practices-ti35f',
-  'qwen-3-72b-api-complete-guide-2026-setup-features-best-practices-yt0zb',
+  'qwen-3-72b-api-complete-guide-2026-setup-features-best-practices-yt0zb'
 ]);

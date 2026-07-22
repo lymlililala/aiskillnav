@@ -1,0 +1,79 @@
+{
+  "when": "2026-07-22",
+  "note": "GSC 0715-0722 优化前的 news 原始行（fields-medal / wef / rxbrain）",
+  "before": {
+    "fields-medal-leak-2026-wang-deng-n9masd": {
+      "id": 628,
+      "slug": "fields-medal-leak-2026-wang-deng-n9masd",
+      "title": "菲尔兹奖名单提前泄露：王虹、邓煜两位中国数学家或同届获奖",
+      "summary": "2026年7月14日，国际数学家大会（ICM 2026）官网因前端代码漏洞，提前泄露了本届菲尔兹奖得主名单。泄露名单显示，中国数学家王虹（Hong Wang）和邓煜（Yu Deng）与John Pardon、Jacob Tsimerman共同获奖。ICM已修复漏洞，但数据已被保存。若7月23日官方确认，这将是首次有两位中国数学家同届获得菲尔兹奖，王虹也将成为第三位女性获奖者。\n\n## 泄露细节\n- 漏洞源于官网日程接口`eventSnapshot`，返回了所有数据，包括标记为`HIDDEN`的条目。\n- 用户通过`curl`命令抓取，搜索`HIDDEN`关键词即可获取四位获奖者姓名。\n- 同一接口还泄露了算盘奖、陈省身奖、高斯奖等其他奖项得主。\n- 消息在知乎等平台扩散后，预测市场Polymarket上四人获奖概率飙升至98%以上。\n\n## 王虹：破解挂谷猜想的90后北大校友\n- 1991年生于广西桂林，2007年以653分考入北京大学地球与空间物理系，后转入数学系，2011年获学士学位。\n- 赴法获巴黎综合理工学院工程师学位和巴黎萨克雷大学硕士学位，2019年于MIT获博士学位，师从Larry Guth。\n- 现任纽约大学柯朗数学研究所教授，2025年成为法国高等科学研究所（IHES）首位女性永久教授。\n- 2025年与Joshua Zahl合作解决三维挂谷猜想（Kakeya conjecture），该猜想困扰数学界百年，与调和分析、数论等领域紧密相关。\n- 曾获塞勒姆奖、ICCM数学金奖、奥斯特洛夫斯基奖。\n\n## 邓煜：攻克希尔伯特第六问题的IMO金牌得主\n- 1989年生于深圳，2006年IMO金牌得主（世界并列第六），保送北大，2009年转学至MIT获本科学位。\n- 2015年于普林斯顿大学获博士学位，师从Alexandru D. Ionescu。\n- 现任芝加哥大学数学教授。\n- 2024-2025年与马骁、Zaher Hani合作解决狭义希尔伯特第六问题，从微观粒子系统严格推导出宏观玻尔兹曼方程，被认为是125年来对该问题最重要的回应。\n- ICM官网此前已将希尔伯特第六问题标注为“部分解决”，并重点介绍其工作。\n\n## 历史意义与背景\n- 若名单确认，中国将成为继美国、法国、英国、俄国后，第五个有两位数学家同届获奖的国家。\n- 王虹和邓煜均为北京大学2007级校友，在北大完成本科教育后赴美深造。\n- 此前华裔菲尔兹奖得主仅丘成桐（1982）和陶哲轩（2006），但均未在中国大陆接受本科教育。\n- 2025年10月，两人已共同获得世界华人数学家大会（ICCM）数学金奖。\n- 本届菲尔兹奖因泄露事件备受关注，也被视为人类数学家与AI竞争时代的标志性事件。",
+      "source_url": "",
+      "source_name": "综合整理",
+      "category": "行业",
+      "tags": [
+        "fields medal",
+        "mathematics",
+        "china",
+        "wang hong",
+        "deng yu",
+        "icm 2026"
+      ],
+      "status": "published",
+      "is_featured": false,
+      "published_at": "2026-07-14T15:39:38.816+00:00",
+      "created_at": "2026-07-14T15:39:47.096448+00:00",
+      "updated_at": "2026-07-14T15:39:47.096448+00:00",
+      "title_en": "Fields Medal List Leaked Early: Two Chinese Mathematicians Wang Hong and Deng Yu May Win in Same Year",
+      "summary_en": "On July 14, 2026, the official website of the International Congress of Mathematicians (ICM 2026) leaked the list of this year's Fields Medal winners due to a front-end code vulnerability. The leaked list shows that Chinese mathematicians Hong Wang and Yu Deng, along with John Pardon and Jacob Tsimerman, are the recipients. ICM has fixed the vulnerability, but the data has been preserved. If officially confirmed on July 23, this will be the first time two Chinese mathematicians win the Fields Medal in the same year, and Wang Hong will become the third female laureate.\n\n## Leak Details\n- The vulnerability originated from the website's schedule API `eventSnapshot`, which returned all data, including entries marked as `HIDDEN`.\n- Users fetched the data via `curl` command and searched for the `HIDDEN` keyword to obtain the names of the four winners.\n- The same interface also leaked winners of other awards such as the Chern Medal, Gauss Prize, and others.\n- After the news spread on platforms like Zhihu, the prediction market Polymarket saw the probability of these four winning surge to over 98%.\n\n## Hong Wang: Post-90s Peking University Alumna Who Solved the Kakeya Conjecture\n- Born in 1991 in Guilin, Guangxi. In 2007, she scored 653 points in the college entrance exam and was admitted to Peking University's Department of Geophysics and Space Physics, later transferring to the Department of Mathematics. She earned her bachelor's degree in 2011.\n- She studied in France, obtaining an engineering degree from École Polytechnique and a master's degree from Université Paris-Saclay. In 2019, she earned her PhD from MIT under the supervision of Larry Guth.\n- She is currently a professor at the Courant Institute of Mathematical Sciences, New York University. In 2025, she became the first female permanent professor at the Institut des Hautes Études Scientifiques (IHES) in France.\n- In 2025, together with Joshua Zahl, she solved the three-dimensional Kakeya conjecture, a problem that had puzzled mathematicians for a century and is closely related to harmonic analysis, number theory, and other fields.\n- She has received the Salem Prize, the ICCM Mathematics Gold Medal, and the Ostrowski Prize.\n\n## Yu Deng: IMO Gold Medalist Who Solved Hilbert's Sixth Problem\n- Born in 1989 in Shenzhen. He won a gold medal at the 2006 International Mathematical Olympiad (tied for sixth place worldwide) and was admitted to Peking University. In 2009, he transferred to MIT, where he earned his bachelor's degree.\n- In 2015, he earned his PhD from Princeton University under the supervision of Alexandru D. Ionescu.\n- He is currently a professor of mathematics at the University of Chicago.\n- In 2024-2025, together with Xiao Ma and Zaher Hani, he solved the weak Hilbert's sixth problem, rigorously deriving the macroscopic Boltzmann equation from microscopic particle systems. This is considered the most significant response to the problem in 125 years.\n- The ICM website had previously marked Hilbert's sixth problem as \"partially solved\" and highlighted his work.\n\n## Historical Significance and Background\n- If the list is confirmed, China will become the fifth country, after the United States, France, the United Kingdom, and Russia, to have two mathematicians win the Fields Medal in the same year.\n- Both Wang Hong and Yu Deng are alumni of Peking University's class of 2007, having completed their undergraduate education at PKU before pursuing further studies in the United States.\n- Previously, the only ethnic Chinese Fields Medalists were Shing-Tung Yau (1982) and Terence Tao (2006), but neither received their undergraduate education in mainland China.\n- In October 2025, the two jointly received the ICCM Mathematics Gold Medal at the World Congress of Chinese Mathematicians.\n- This year's Fields Medal has drawn significant attention due to the leak, and it is also seen as a landmark event in the era of competition between human mathematicians and AI.",
+      "en_status": "published"
+    },
+    "ai-automation-jobs-future-of-work-2025": {
+      "id": 255,
+      "slug": "ai-automation-jobs-future-of-work-2025",
+      "title": "AI与就业2025：世界经济论坛新报告显示净增就业岗位，尽管面临重大颠覆",
+      "summary": "世界经济论坛《未来就业报告》发现，到2027年，人工智能将创造7800万个新岗位，同时淘汰6800万个岗位。分析哪些岗位风险最大、哪些在增长，以及员工和企业应如何准备。",
+      "source_url": "https://weforum.org/publications/future-of-jobs-2025",
+      "source_name": "World Economic Forum",
+      "category": "Research",
+      "tags": [
+        "future-of-work",
+        "ai-employment",
+        "automation",
+        "wef",
+        "workforce"
+      ],
+      "status": "published",
+      "is_featured": true,
+      "published_at": "2025-04-12T09:00:00+00:00",
+      "created_at": "2026-05-27T07:05:54.052059+00:00",
+      "updated_at": "2026-05-27T07:05:54.052059+00:00",
+      "title_en": "AI and Employment 2025: New WEF Report Shows Net Job Creation Despite Significant Disruption",
+      "summary_en": "World Economic Forum Future of Jobs Report finds AI creates 78M new jobs while displacing 68M by 2027. Analysis of which roles are most at risk, which are growing, and how workers and companies should prepare.",
+      "en_status": "published"
+    },
+    "tencent-rxbrain-embodied-ai-model-cmr547": {
+      "id": 645,
+      "slug": "tencent-rxbrain-embodied-ai-model-cmr547",
+      "title": "腾讯发布具身世界认知基座模型RxBrain，统一推理与视觉想象",
+      "summary": "7月15日，腾讯Robotics X实验室联合腾讯混元发布并开源两款具身智能基座模型：具身VLM基座模型Hy-Embodied-VLM-1.0和具身世界认知基座模型Hy-Embodied-RxBrain-1.0。前者基于混元A3B架构，以1/10计算量达到上一代旗舰模型性能；后者在单一模型中统一文本、图像、视频的理解与生成，实现语言推理与视觉目标想象的协同。\n\n## 模型架构与能力\n- **Hy-Embodied-VLM-1.0**：第二代具身VLM基座模型，从物理空间状态理解、动作-变化理解、时序和自适应推理三个层次构建能力，增强场景感知、行动分析规划、导航等。基于混元A3B开发，在37个评测任务上综合得分65.6，接近上一代A32B旗舰模型，显著优于同等规模竞品。\n- **Hy-Embodied-RxBrain-1.0**：具身世界认知基座模型，采用模态路由的Mixture-of-Transformers架构，让语言推理与视觉目标想象围绕同一任务协同。语言负责任务分解、行动逻辑与约束；视觉目标图像描述每一步应达到的中间状态和最终状态，共同为下游动作模型提供更完整的条件。\n\n## 训练数据与评测\n- **训练数据**：RxBrain基于超过5万小时高质量具身数据训练，包括第一视角数据、真实机器人数据和仿真数据，经质量筛选后构建约2.1亿条训练样本，覆盖四种粒度（连续动作状态想象、原子动作规划、高层子任务规划、最终目标状态想象）。\n- **评测基准**：团队构建RxBrain-Bench，包含具身VQA、世界状态预测和联合子目标规划三个递进任务。在联合规划任务上，RxBrain取得0.68综合规划得分，优于模块化方案（如Cosmos3-Nano的0.521）。真机三项操作任务平均成功率87%，超过π0与π0.5。\n\n## 开源与影响\n两个模型均已开源，开发者可在GitHub和Hugging Face下载部署。此次发布为具身智能领域提供了新的基础模型支撑，有望推动机器人从“感知-行动”向“认知-推理-规划”的范式升级。",
+      "source_url": "",
+      "source_name": "综合整理",
+      "category": "模型",
+      "tags": [
+        "tencent",
+        "embodied-ai",
+        "rxbrain",
+        "vlm",
+        "open-source"
+      ],
+      "status": "published",
+      "is_featured": false,
+      "published_at": "2026-07-16T15:45:57.11+00:00",
+      "created_at": "2026-07-16T15:46:03.864007+00:00",
+      "updated_at": "2026-07-16T15:46:03.864007+00:00",
+      "title_en": "Tencent Releases Embodied World Cognition Foundation Model RxBrain, Unifying Reasoning and Visual Imagination",
+      "summary_en": "On July 15, Tencent Robotics X Lab, in collaboration with Tencent Hunyuan, released and open-sourced two embodied intelligence foundation models: Hy-Embodied-VLM-1.0 and Hy-Embodied-RxBrain-1.0. The former, based on the Hunyuan A3B architecture, achieves the performance of the previous flagship model with 1/10 the computation; the latter unifies understanding and generation of text, images, and video in a single model, enabling synergy between language reasoning and visual target imagination.\n\n## Model Architecture and Capabilities\n- **Hy-Embodied-VLM-1.0**: A second-generation embodied VLM foundation model, building capabilities across three levels: physical space state understanding, action-change understanding, and temporal and adaptive reasoning, enhancing scene perception, action analysis and planning, and navigation. Based on Hunyuan A3B, it achieves a comprehensive score of 65.6 on 37 evaluation tasks, approaching the previous flagship A32B model and significantly outperforming competitors of similar scale.\n- **Hy-Embodied-RxBrain-1.0**: An embodied world cognition foundation model, adopting a modality-routed Mixture-of-Transformers architecture that aligns language reasoning and visual target imagination around the same task. Language handles task decomposition, action logic, and constraints; visual target images describe the intermediate and final states to be achieved at each step, jointly providing more complete conditions for downstream action models.\n\n## Training Data and Evaluation\n- **Training Data**: RxBrain is trained on over 50,000 hours of high-quality embodied data, including first-person view data, real robot data, and simulation data. After quality filtering, approximately 210 million training samples are constructed, covering four granularities (continuous action state imagination, atomic action planning, high-level subtask planning, and final target state imagination).\n- **Evaluation Benchmark**: The team built RxBrain-Bench, comprising three progressive tasks: embodied VQA, world state prediction, and joint subgoal planning. On the joint planning task, RxBrain achieves a comprehensive planning score of 0.68, outperforming modular solutions (e.g., Cosmos3-Nano's 0.521). The average success rate on three real-robot manipulation tasks is 87%, surpassing π0 and π0.5.\n\n## Open Source and Impact\nBoth models are open-sourced, and developers can download and deploy them on GitHub and Hugging Face. This release provides new foundation model support for the embodied intelligence field, potentially driving the paradigm shift from \"perception-action\" to \"cognition-reasoning-planning\" in robotics.",
+      "en_status": "published"
+    }
+  }
+}

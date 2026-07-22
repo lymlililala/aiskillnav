@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getMcpBySlug } from '@/features/mcp/api/service';
+import { mcpDisplayName } from '@/features/mcp/display-name';
 
 type Props = { params: Promise<{ slug: string }> };
 type EnMcp = {
@@ -24,11 +25,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!m || m.en_status !== 'published') return { title: 'Not found' };
   const enUrl = `${SITE}/en/mcp/${slug}`;
   return {
-    title: `${m.name} | MCP Servers`,
+    title: `${mcpDisplayName(m.name)} MCP Server — Install & Setup Guide`,
     description: m.description_en ?? undefined,
     alternates: { canonical: enUrl, languages: { 'zh-CN': `${SITE}/mcp/${slug}`, en: enUrl } },
     openGraph: {
-      title: m.name,
+      title: `${mcpDisplayName(m.name)} MCP Server`,
       description: m.description_en ?? undefined,
       url: enUrl,
       type: 'website',

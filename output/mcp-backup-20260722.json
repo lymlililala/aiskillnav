@@ -1,0 +1,60 @@
+{
+  "when": "2026-07-22",
+  "note": "MCP 充实前原始行",
+  "before": {
+    "rchanllc-joltsms-mcp-server": {
+      "slug": "rchanllc-joltsms-mcp-server",
+      "name": "rchanllc/joltsms-mcp-server",
+      "description": "提供专属的美国真实SIM卡电话号码，接收入站短信，轮询消息并提取OTP验证码。专为",
+      "description_en": "Provision dedicated real-SIM US phone numbers, receive inbound SMS, poll for messages, and extract OTP codes. Built for",
+      "en_status": "published",
+      "install_cmd": null,
+      "stars": 0
+    },
+    "areweai-tsgram-mcp": {
+      "slug": "areweai-tsgram-mcp",
+      "name": "areweai/tsgram-mcp",
+      "description": "TSgram：在手机上用TypeScript访问本地工作区的Telegram + Claude。随时随地阅读、编写和感受代码！",
+      "description_en": "TSgram: Telegram + Claude with local workspace access on your phone in typescript. Read, write, and vibe code on the go!",
+      "en_status": "published",
+      "install_cmd": null,
+      "stars": 0
+    },
+    "whenlabs-org-when": {
+      "slug": "whenlabs-org-when",
+      "name": "WhenLabs-org/when",
+      "description": "开发者工具包：自动检测AI上下文文件的堆栈，捕获端口冲突，验证.env模式，发现文档漂移",
+      "description_en": "Developer toolkit: auto-detect stack for AI context files, catch port conflicts, validate .env schemas, spot docs drift,",
+      "en_status": "published",
+      "install_cmd": null,
+      "stars": 0
+    },
+    "wopee-io-wopee-mcp": {
+      "slug": "wopee-io-wopee-mcp",
+      "name": "Wopee-io/wopee-mcp",
+      "description": "用于Web应用自主测试的调度AI代理，打开真实浏览器，执行测试用例，并报告通过/失败结果。",
+      "description_en": "Autonomous testing for web apps dispatch AI agents that open real browsers, execute test cases, and report pass/fail wit",
+      "en_status": "published",
+      "install_cmd": null,
+      "stars": 0
+    },
+    "mobile-next-mobile-mcp": {
+      "slug": "mobile-next-mobile-mcp",
+      "name": "mobile-next/mobile-mcp",
+      "description": "用于Android/iOS应用和设备自动化、开发以及应用抓取的MCP服务器。支持模拟器/仿真器/物理设备。",
+      "description_en": "MCP Server for Android/iOS application and device automation, development and app scraping. Simulator/Emulator/Physical",
+      "en_status": "published",
+      "install_cmd": null,
+      "stars": 0
+    },
+    "firecrawl-mcp": {
+      "slug": "firecrawl-mcp",
+      "name": "Firecrawl",
+      "description": "强大的网页爬取和提取 MCP Server，支持单页抓取、整站爬取、结构化数据提取和网站地图生成。自动处理 JS 渲染、登录态、反爬机制，是 Agent 进行深度网页数据收集的利器。",
+      "description_en": "A powerful web scraping and extraction MCP Server that supports single-page scraping, whole-site crawling, structured data extraction, and sitemap generation. It automatically handles JS rendering, login states, and anti-scraping mechanisms, making it an ideal tool for agents to perform in-depth web data collection.",
+      "en_status": "published",
+      "install_cmd": "npx firecrawl-mcp",
+      "stars": 4800
+    }
+  }
+}

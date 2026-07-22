@@ -82,5 +82,62 @@ export const INDEX_BOOST_LINKS: IndexBoostLink[] = [
   {
     href: '/news/multimodal-ai-tools-explained-use-cases-2025',
     label: '多模态 AI 工具详解：落地场景与价值'
+  },
+  // ── 2026-07-22 GSC(0715-0722) 批次：高曝光深排名/新发布关键词页 ──
+  {
+    href: '/tutorials/groq-api-developer-guide-and-quick-start-2026-pv6asd',
+    label: 'Groq API 开发者指南与快速入门'
+  },
+  {
+    href: '/tutorials/voice-activity-detection-python-guide-2026',
+    label: 'Voice Activity Detection (VAD) Python 实战'
+  },
+  {
+    href: '/tutorials/enterprise-generative-ai-adoption-playbook-2026',
+    label: '企业级生成式 AI 落地手册：从试点到规模化'
+  },
+  {
+    href: '/tutorials/ai-clinical-documentation-ambient-scribes-2026',
+    label: 'AI 临床文书自动化：Ambient Scribe 指南'
+  },
+  {
+    href: '/tutorials/ai-credit-risk-management-guide-2026',
+    label: 'AI 信用风险管理实战：智能评分与核保'
+  },
+  {
+    href: '/tutorials/ai-data-loss-prevention-dlp-guide-2026',
+    label: 'AI 数据防泄漏（DLP）实战指南'
+  },
+  {
+    href: '/tutorials/llm-api-cost-optimization-guide-2026',
+    label: 'LLM API 成本控制实战：12 个降本方法'
+  },
+  {
+    href: '/tutorials/llm-fallback-strategy-production-2026',
+    label: 'LLM Fallback 降级策略：生产级容错指南'
+  },
+  {
+    href: '/tutorials/ai-cloud-cost-optimization-strategies',
+    label: 'AI 驱动的云成本优化：削减 40% 云账单'
+  },
+  {
+    href: '/mcp/firecrawl-mcp',
+    label: 'Firecrawl MCP Server：网页抓取接入 Claude/Cursor'
+  },
+  {
+    href: '/mcp/rchanllc-joltsms-mcp-server',
+    label: 'JoltSMS MCP Server：Agent 自动接收短信验证码'
+  },
+  {
+    href: '/mcp/mobile-next-mobile-mcp',
+    label: 'Mobile MCP：自然语言驱动移动端 UI 自动化'
+  },
+  {
+    href: '/news/fields-medal-leak-2026-wang-deng-n9masd',
+    label: '菲尔兹奖名单提前泄露：两位中国数学家或同届获奖'
+  },
+  {
+    href: '/news/ai-automation-jobs-future-of-work-2025',
+    label: '世界经济论坛《未来就业报告2025》解读'
   }
 ];

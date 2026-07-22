@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getMcpBySlug, getRelatedMcp } from '@/features/mcp/api/service';
 import { INDEX_MCP_SLUGS } from '@/features/mcp/index-allowlist';
+import { mcpDisplayName } from '@/features/mcp/display-name';
 import { getTutorialsByTool } from '@/features/tutorials/api/service';
 import { fakeMcpServers } from '@/constants/mock-api-mcp';
 import { Icons } from '@/components/icons';
@@ -18,7 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // 薄目录页太多（2300 条，描述中位 45 字）：仅白名单内的页可索引，其余 noindex（仍 follow 让内链权重流动）
   const noindex = !INDEX_MCP_SLUGS.has(server.slug);
   return {
-    title: `${server.name} MCP Server — 安装教程与使用指南`,
+    title: `${mcpDisplayName(server.name)} MCP Server — 安装教程与使用指南`,
     description: server.description,
     keywords: server.tags,
     alternates: { canonical: `https://aiskillnav.com/mcp/${server.slug}` },
@@ -366,7 +367,9 @@ export default async function McpDetailPage({ params }: Props) {
                   <span className='text-sm font-semibold font-mono group-hover:text-primary transition-colors'>
                     {m.name}
                   </span>
-                  <span className='line-clamp-2 text-xs text-muted-foreground'>{m.description}</span>
+                  <span className='line-clamp-2 text-xs text-muted-foreground'>
+                    {m.description}
+                  </span>
                 </Link>
               ))}
             </div>
@@ -388,7 +391,9 @@ export default async function McpDetailPage({ params }: Props) {
                     <span className='font-medium line-clamp-1 group-hover:text-primary transition-colors'>
                       {t.title}
                     </span>
-                    <p className='text-xs text-muted-foreground mt-0.5 line-clamp-1'>{t.subtitle}</p>
+                    <p className='text-xs text-muted-foreground mt-0.5 line-clamp-1'>
+                      {t.subtitle}
+                    </p>
                   </div>
                   <Icons.chevronRight className='h-4 w-4 shrink-0 text-muted-foreground mt-0.5' />
                 </Link>
