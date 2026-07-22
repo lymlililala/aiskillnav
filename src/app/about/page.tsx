@@ -29,9 +29,7 @@ export default function AboutPage() {
           <h1 className='text-foreground text-3xl font-bold tracking-tight sm:text-4xl'>
             关于我们
           </h1>
-          <p className='text-muted-foreground mt-4 text-lg'>
-            一站式 AI Agent 工具导航与学习平台
-          </p>
+          <p className='text-muted-foreground mt-4 text-lg'>一站式 AI Agent 工具导航与学习平台</p>
         </div>
 
         <div className='space-y-8'>
@@ -90,14 +88,33 @@ export default function AboutPage() {
           </section>
 
           <section className='bg-card rounded-2xl border p-8 shadow-sm'>
-            <h2 className='text-foreground mb-4 text-xl font-semibold'>内容与质量</h2>
+            <h2 className='text-foreground mb-4 text-xl font-semibold'>内容如何生产</h2>
             <p className='text-muted-foreground text-lg leading-relaxed'>
-              我们的教程与资讯由编辑团队结合多方公开信息综合整理与原创撰写，并经过质量审核后发布，
-              力求准确、客观、有信息密度。如发现内容有误或需要更新，欢迎随时
-              <Link href='/contact' className='text-primary hover:underline'>
-                联系我们
-              </Link>
-              。
+              选题由编辑团队策划：从官方发布、技术社区和实际使用反馈中，筛选对开发者真正有价值的主题。
+              初稿借助 AI
+              工具完成以提高效率和覆盖面，每篇内容发布前都经过编辑团队逐篇审核——核对事实、
+              检查代码示例、删减空洞内容——合格后才上线。资讯类内容综合自公开报道与官方公告，页面内均标注来源。
+              我们如实说明这一流程，也持续投入提升审核深度；发现疏漏欢迎随时指出。
+            </p>
+          </section>
+
+          <section className='bg-card rounded-2xl border p-8 shadow-sm'>
+            <h2 className='text-foreground mb-4 text-xl font-semibold'>收录标准</h2>
+            <p className='text-muted-foreground text-lg leading-relaxed'>
+              导航中收录的工具、Agent 与 MCP 服务需满足：仍在积极维护；有真实可用的核心功能，
+              而非演示或空壳；有清晰的文档或使用说明；不存在仿冒、欺诈或夸大宣传。收录免费、不按付费排序，
+              收录也不代表我们为其背书。若发现已收录项目停更、变质或不再符合标准，请告诉我们，我们会更新或下架。
+            </p>
+          </section>
+
+          <section className='bg-card rounded-2xl border p-8 shadow-sm'>
+            <h2 className='text-foreground mb-4 text-xl font-semibold'>纠错与更新</h2>
+            <p className='text-muted-foreground text-lg leading-relaxed'>
+              AI 领域变化很快，内容难免滞后或出错。如果你发现教程、资讯或收录信息有误， 请发邮件至{' '}
+              <a href='mailto:contact@aiskillnav.com' className='text-primary hover:underline'>
+                contact@aiskillnav.com
+              </a>
+              ，附上页面地址和正确信息的依据（如官方文档链接），核实后我们会尽快修正。
             </p>
           </section>
 
@@ -111,7 +128,11 @@ export default function AboutPage() {
               >
                 contact@aiskillnav.com
               </a>
-              ，我们会尽快回复。
+              ，或查看
+              <Link href='/contact' className='text-primary hover:underline'>
+                联系页面
+              </Link>
+              了解不同类型事项的处理方式。
             </p>
           </section>
         </div>

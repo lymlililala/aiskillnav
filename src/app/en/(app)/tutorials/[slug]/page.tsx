@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getTutorialBySlug, type EnglishTutorial } from '@/features/tutorials/api/service';
+import { NOINDEX_TUTORIAL_SLUGS } from '@/features/tutorials/noindex-slugs';
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -10,6 +11,14 @@ export const revalidate = 3600;
 
 const SITE = 'https://aiskillnav.com';
 
+function formatDate(s: string) {
+  return new Date(s).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const t = (await getTutorialBySlug(slug)) as EnglishTutorial | null;
@@ -17,10 +26,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const enUrl = `${SITE}/en/tutorials/${slug}`;
   const zhUrl = `${SITE}/tutorials/${slug}`;
+  // 与中文详情页一致：noindex 名单内的教程（仍 follow，让内链权重流动），随名单移除而恢复
+  const noindex = NOINDEX_TUTORIAL_SLUGS.has(slug);
   return {
     title: `${t.title_en}`,
     description: t.summary_en ?? undefined,
     keywords: t.tags,
+    ...(noindex ? { robots: { index: false, follow: true } } : {}),
     alternates: {
       canonical: enUrl,
       languages: { 'zh-CN': zhUrl, en: enUrl, 'x-default': zhUrl }
@@ -88,6 +100,8 @@ export default async function EnTutorialDetailPage({ params }: Props) {
   if (!t || !t.content_en || t.en_status !== 'published') notFound();
 
   const enUrl = `${SITE}/en/tutorials/${slug}`;
+  // tutorials 表当前无 updated_at 列；防御性读取，未来加列后自动生效
+  const updatedAt = (t as { updated_at?: string | null }).updated_at;
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -95,7 +109,9 @@ export default async function EnTutorialDetailPage({ params }: Props) {
     description: t.summary_en,
     inLanguage: 'en',
     url: enUrl,
-    datePublished: t.published_at,
+    // noindex 名单内的教程 published_at 会置空，防御性跳过
+    ...(t.published_at ? { datePublished: t.published_at } : {}),
+    ...(updatedAt ? { dateModified: updatedAt } : {}),
     author: { '@type': 'Organization', name: 'AI Skill Navigation' },
     publisher: { '@type': 'Organization', name: 'AI Skill Navigation' }
   };
@@ -129,6 +145,12 @@ export default async function EnTutorialDetailPage({ params }: Props) {
 
       <h1 className='text-3xl font-bold leading-tight tracking-tight'>{t.title_en}</h1>
       {t.subtitle_en && <p className='mt-3 text-lg text-muted-foreground'>{t.subtitle_en}</p>}
+
+      <div className='mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground'>
+        <span>By AI Skill Navigation Editorial Team</span>
+        {t.published_at && <span>Published {formatDate(t.published_at)}</span>}
+        {updatedAt && <span>Updated {formatDate(updatedAt)}</span>}
+      </div>
 
       <div
         className='mt-8 text-[15px]'

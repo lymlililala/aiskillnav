@@ -15,10 +15,22 @@ export const metadata: Metadata = {
 };
 
 const REASONS = [
-  { title: '商务合作', desc: '内容合作、推广、工具收录与联合运营。' },
-  { title: '内容纠错', desc: '发现教程、资讯或数据有误，欢迎指正，我们会及时核实更新。' },
-  { title: '产品建议', desc: '对网站功能、分类或体验有任何想法，欢迎反馈。' },
-  { title: '工具提交', desc: '推荐优质的 AI 工具 / Agent / MCP 服务，请附上链接与简介。' }
+  {
+    title: '内容纠错',
+    desc: '发现教程、资讯或收录信息有误：请附上页面链接、出错位置，以及正确信息的依据（官方文档、公告链接等）。纠错类邮件会优先处理，核实后尽快修正。'
+  },
+  {
+    title: '收录申请',
+    desc: '推荐 AI 工具 / Agent / MCP 服务：请附官网链接、一句话简介和所属类别。收录免费，但需通过质量审核（仍在维护、功能真实、文档清晰），审核周期约 1–2 周，不保证收录。'
+  },
+  {
+    title: '商务合作',
+    desc: '内容合作、推广或联合运营：请在邮件中说明合作形式、大致预算和时间安排。信息越具体，我们评估和回复越快。'
+  },
+  {
+    title: '建议与反馈',
+    desc: '对网站功能、分类或阅读体验的任何想法，直接写信告诉我们就好，无需特定格式。'
+  }
 ];
 
 export default function ContactPage() {
@@ -51,12 +63,17 @@ export default function ContactPage() {
             contact@aiskillnav.com
           </a>
           <p className='text-muted-foreground mt-4 text-sm leading-relaxed'>
-            我们通常会在 1–3 个工作日内回复。
+            我们通常会在 1–3 个工作日内回复；内容纠错优先处理。
+            <br />
+            收录申请需走完审核流程，周期约 1–2 周，请耐心等待。
           </p>
         </section>
 
-        {/* 可联系的事项 */}
-        <div className='mt-8 grid gap-4 sm:grid-cols-2'>
+        {/* 联系前必读 */}
+        <p className='text-muted-foreground mt-10 mb-4 text-center text-sm'>
+          联系前必读：不同事项需要的信息不同，按说明提供能帮我们更快处理。
+        </p>
+        <div className='grid gap-4 sm:grid-cols-2'>
           {REASONS.map((r) => (
             <div key={r.title} className='bg-card rounded-2xl border p-6 shadow-sm'>
               <h2 className='text-foreground mb-2 text-base font-semibold'>{r.title}</h2>
@@ -66,11 +83,18 @@ export default function ContactPage() {
         </div>
 
         <p className='text-muted-foreground mt-10 text-center text-sm'>
-          也可以先看看{' '}
+          也可以先了解：
           <Link href='/about' className='text-primary hover:underline'>
             关于我们
-          </Link>{' '}
-          了解平台。
+          </Link>
+          {' · '}
+          <Link href='/privacy-policy' className='text-primary hover:underline'>
+            隐私政策
+          </Link>
+          {' · '}
+          <Link href='/terms' className='text-primary hover:underline'>
+            服务条款
+          </Link>
         </p>
       </div>
     </div>

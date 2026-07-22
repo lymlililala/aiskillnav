@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import PageContainer from '@/components/layout/page-container';
 import { getNewsBySlug, getRelatedNews } from '@/features/news/api/service';
+import { INDEX_NEWS_SLUGS } from '@/features/news/index-allowlist';
 import { getTutorialsByTags } from '@/features/tutorials/api/service';
 import { Icons } from '@/components/icons';
 import { Badge } from '@/components/ui/badge';
@@ -15,9 +16,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const item = await getNewsBySlug(slug);
   if (!item) return { title: '资讯不存在' };
+  // 薄摘要页默认 noindex（仍 follow，让内链权重流动），仅白名单内 slug 可收录
+  const noindex = !INDEX_NEWS_SLUGS.has(slug);
   return {
     title: item.title,
     description: item.summary,
+    ...(noindex ? { robots: { index: false, follow: true } } : {}),
     alternates: {
       canonical: `https://aiskillnav.com/news/${slug}`,
       ...((item as { en_status?: string }).en_status === 'published'
@@ -79,9 +83,12 @@ export default async function NewsDetailPage({ params }: Props) {
     description: item.summary,
     datePublished: item.published_at,
     keywords: item.tags.join(', '),
+    // author 署名为站点主体而非 source_name（原始来源），避免"综合整理"类值被当作作者实体；
+    // 页面正文中的"来源：xxx"展示保持不变
     author: {
       '@type': 'Organization',
-      name: item.source_name
+      name: 'AI Skill Navigation',
+      url: 'https://aiskillnav.com'
     },
     publisher: {
       '@type': 'Organization',
